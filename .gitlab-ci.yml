@@ -7,7 +7,6 @@ stages:
 
 build terraform image:
   stage: build-docker
-  #image: docker:latest
   image: 
     name: hashicorp/terraform:$TERRAFORM_VERSION
     entrypoint: [""]
@@ -15,6 +14,11 @@ build terraform image:
     - terraform --version
     - terraform --help
 
+workflow:
+  rules:
+    - if $CI_COMMIT_BRANCH =~ /develop/
+      script:
+        - echo "I did run from develop branch"
 #deploy to test:
 #  stage: test
 #  environment: test
