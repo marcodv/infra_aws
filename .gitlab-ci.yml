@@ -13,7 +13,7 @@ build terraform image:
   #  - docker:dind
   script:
     #- docker run hashicorp/terraform:"$TERRAFORM_VERSION"
-    - terraform -version
+    - terraform -help
 
 
 
