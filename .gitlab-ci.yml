@@ -9,12 +9,16 @@ build terraform image:
   stage: build-docker
   #image: docker:latest
   image: hashicorp/terraform:$TERRAFORM_VERSION
+  entrypoint: [""]
+
+  before_script:
+    - terraform -help
+
   #services:
   #  - docker:dind
   script:
     #- docker run hashicorp/terraform:"$TERRAFORM_VERSION"
-    - terraform -help
-
+    - terraform -init
 
 
 #deploy to test:
