@@ -8,7 +8,7 @@ stages:
 build terraform image:
   stage: build-docker
   #image: docker:latest
-  image: terraform:$TERRAFORM_VERSION
+  image: hashicorp/terraform:$TERRAFORM_VERSION
   #services:
   #  - docker:dind
   script:
