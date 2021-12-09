@@ -1,3 +1,5 @@
+variables:
+  TERRAFORM_VERSION: "1.1.0"
 stages:
   - build-docker
 #  - test
@@ -9,7 +11,7 @@ build terraform image:
   services:
     - docker:dind
   script:
-    - docker build -t hello .
+    - docker run hashicorp/terraform:"$TERRAFORM_VERSION"
 
 
 
