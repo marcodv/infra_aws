@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "test-bucket-1" {
-  bucket = "test-bucket-1-${var.environment}-${var.aws_region}"
+  bucket = "test-bucket-1-${var.environment}-${var.aws_region}".id
   acl    = "private"
 
   versioning {
@@ -28,7 +28,7 @@ resource "aws_s3_bucket_public_access_block" "test-bucket-1" {
 }
 
 resource "aws_s3_bucket" "test-bucket-2" {
-  bucket = "test-bucket-2-${var.environment}-${var.aws_region}"
+  bucket = "test-bucket-2-${var.environment}-${var.aws_region}".id
   acl    = "private"
 
   versioning {
@@ -57,7 +57,7 @@ resource "aws_s3_bucket_public_access_block" "test-bucket-2" {
 }
 
 resource "aws_s3_bucket" "test-bucket-3" {
-  bucket = "test-bucket-3-${var.environment}-${var.aws_region}"
+  bucket = "test-bucket-3-${var.environment}-${var.aws_region}".id
   acl    = "private"
 
 
