@@ -2,7 +2,7 @@ variables:
   TERRAFORM_VERSION: "1.1.0"
 stages:
   - lintsec
-
+  - test_stage
 
 seclinttf:
   stage: lintsec
@@ -13,3 +13,7 @@ seclinttf:
     - echo "Running security scanning on terraform project"
     - tfsec eu-west-1
   allow_failure: true
+
+checking_test_stage:
+  stage: test_stage
+  script: echo "This stage is run even thoug the previous one failed "
