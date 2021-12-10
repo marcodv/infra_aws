@@ -2,19 +2,31 @@ variables:
   TERRAFORM_VERSION: "1.1.0"
 stages:
   - lintsec
-  - test_stage
+  - validate
 
-seclinttf:
+tfseclint:
   stage: lintsec
   image:
     name: aquasec/tfsec:latest
     entrypoint: [""]
   script:
     - echo "Running security scanning on terraform project"
-    - tfsec eu-west-1
+    - tfsec test-s3
   allow_failure: true
 
-checking_test_stage:
-  stage: test_stage
-  needs: [seclinttf]
-  script: echo "This stage is run even thoug the previous one failed "
+terraform_stage:
+  stage: validate
+  needs: [tfseclint]
+  image: 
+    name: hashicorp/terraform:$TERRAFORM_VERSION
+    entrypoint: 
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+      - 'AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}' 
+      - 'AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}'
+  before_script:
+    - rm -rf *.terraform*
+    - terraform --version
+    - terraform init
+  script: 
+    - terraform validate
