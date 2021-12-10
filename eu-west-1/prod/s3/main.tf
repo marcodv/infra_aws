@@ -4,7 +4,7 @@ resource "aws_s3_bucket" "test-bucket-1" {
 
   tags = {
     Environment = "${var.environment}"
-    region      = ${var.aws_region}
+    region      = "${var.aws_region}"
   }
 }
 resource "aws_s3_bucket" "test-bucket-2" {
