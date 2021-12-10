@@ -17,15 +17,15 @@ build_b:
 
 test_a:
   stage: test
+  needs: [build_a]
   script:
-    - echo "This job tests something. It will only run when all jobs in the"
-    - echo "build stage are complete."
+    - echo "This job tests something. This job depends from the TEST A phase"
 
 test_b:
   stage: test
+  needs: [build_b]
   script:
-    - echo "This job tests something else. It will only run when all jobs in the"
-    - echo "build stage are complete too. It will start at about the same time as test_a."
+    - echo "This job tests something. This job depends from the TEST B phase"
 
 deploy_a:
   stage: deploy
