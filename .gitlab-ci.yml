@@ -35,5 +35,12 @@ terraform_validate:
 terraform_plan:
   stage: plan
   needs: [terraform_validate]
+  image: 
+    name: hashicorp/terraform:$TERRAFORM_VERSION
+    entrypoint: 
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+      - 'AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}' 
+      - 'AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}'
   script:
     - terraform plan 
