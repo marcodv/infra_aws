@@ -18,7 +18,7 @@ resource "aws_s3_bucket" "prod-bucket-1" {
 }
 
 resource "aws_s3_bucket_public_access_block" "prod-bucket-1" {
-  bucket = "prod-bucket-1-${var.environment}-${var.aws_region}".id
+  bucket = aws_s3_bucket.prod-bucket-1.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -46,7 +46,7 @@ resource "aws_s3_bucket" "prod-bucket-2" {
 }
 
 resource "aws_s3_bucket_public_access_block" "prod-bucket-2" {
-  bucket = "prod-bucket-2-${var.environment}-${var.aws_region}".id
+  bucket = aws_s3_bucket.prod-bucket-2.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -74,7 +74,7 @@ resource "aws_s3_bucket" "prod-bucket-3" {
 }
 
 resource "aws_s3_bucket_public_access_block" "prod-bucket-3" {
-  bucket = "prod-bucket-3-${var.environment}-${var.aws_region}".id
+  bucket = aws_s3_bucket.prod-bucket-3.id
 
   block_public_acls       = true
   block_public_policy     = true
