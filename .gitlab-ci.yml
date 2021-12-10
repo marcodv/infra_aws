@@ -1,55 +1,15 @@
+variables:
+  TERRAFORM_VERSION: "1.1.0"
 stages:
-  - build
-  - test
-  - e2etest
-  - deploy
+  - lintsec
 
-image: alpine
 
-build_a:
-  stage: build
+seclinttf:
+  stage: lintsec
+  image:
+    name: aquasec/tfsec:latest
+    entrypoint: [""]
   script:
-    - echo "This job builds something."
-
-build_b:
-  stage: build
-  script:
-    - echo "This job builds something else."
-
-test_a:
-  stage: test
-  needs: [build_a]
-  script:
-    - echo "This job tests something. This job depends from the TEST A phase"
-
-test_b:
-  stage: test
-  needs: [build_b]
-  script:
-    - echo "This job tests something. This job depends from the TEST B phase"
-
-e2etest_a:
-  stage: e2etest
-  needs: [build_a]
-  script:
-    - echo "This is E2E stage. This job depends from the TEST A stage"
-
-e2etest_b:
-  stage: e2etest
-  needs: [build_b]
-  script:
-    - echo "This is E2E stage. This job depends from the TEST B stage"
-
-deploy_a:
-  stage: deploy
-  needs: [test_a, e2etest_a]
-  script:
-    - echo "This job deploys something. It will only run when all jobs in the"
-    - echo "test stage complete."
-
-deploy_b:
-  stage: deploy
-  needs: [test_b, e2etest_b]
-  script:
-    - echo "This job deploys something else. It will only run when all jobs in the"
-    - echo "test stage complete. It will start at about the same time as deploy_a."
+    - echo "Running security scanning on terraform project"
+    - tfsec eu-west-1
+  
