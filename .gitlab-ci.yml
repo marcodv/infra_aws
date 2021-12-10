@@ -1,6 +1,7 @@
 stages:
   - build
   - test
+  - e2etest
   - deploy
 
 image: alpine
@@ -26,6 +27,18 @@ test_b:
   needs: [build_b]
   script:
     - echo "This job tests something. This job depends from the TEST B phase"
+
+e2etest_a:
+  stage: e2etest
+  needs: [build_a]
+  script:
+    - echo "This is E2E stage. This job depends from the TEST A stage"
+
+e2etest_b:
+  stage: e2etest
+  needs: [build_b]
+  script:
+    - echo "This is E2E stage. This job depends from the TEST B stage"
 
 deploy_a:
   stage: deploy
