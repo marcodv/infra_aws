@@ -14,7 +14,7 @@ tfseclint:
     - tfsec test-s3
   allow_failure: true
 
-terraform_stage:
+terraform_validate:
   stage: validate
   needs: [tfseclint]
   image: 
@@ -30,3 +30,14 @@ terraform_stage:
     - terraform init
   script: 
     - terraform validate
+
+terraform_plan:
+  stage: plan
+  needs: [validate]
+  script:
+    - terraform plan -out "planfile"
+  dependencies:
+    - validate
+  artifacts:
+    paths:
+      - planfile
