@@ -22,6 +22,7 @@ resource "aws_s3_bucket_public_access_block" "prod-bucket-1" {
 
   block_public_acls   = true
   block_public_policy = true
+  ignore_public_acls  = false
 }
 
 resource "aws_s3_bucket" "prod-bucket-2" {
@@ -43,11 +44,13 @@ resource "aws_s3_bucket" "prod-bucket-2" {
   }
 }
 
-resource "aws_s3_bucket_public_access_block" "prod-bucket-12" {
+resource "aws_s3_bucket_public_access_block" "prod-bucket-2" {
   bucket = "prod-bucket-2-${var.environment}-${var.aws_region}".id
 
   block_public_acls   = true
   block_public_policy = true
+  ignore_public_acls  = false
+
 }
 
 resource "aws_s3_bucket" "prod-bucket-3" {
@@ -73,4 +76,6 @@ resource "aws_s3_bucket_public_access_block" "prod-bucket-3" {
 
   block_public_acls   = true
   block_public_policy = true
+  ignore_public_acls  = false
+  
 }
