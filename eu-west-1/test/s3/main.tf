@@ -1,14 +1,16 @@
-resource "aws_s3_bucket" "test-bucket-1" {
-  bucket = "test-bucket-1-${var.environment}-${var.aws_region}".id
+provider "aws" {
+  profile                 = "test"
+  shared_credentials_file = "/Users/marcodivincenzo/.aws/credentials"
+  region                  = "eu-west-1"
+}
+
+resource "aws_s3_bucket" "bucket" {
+  count  = length(var.bucket_name)
+  bucket = "${var.bucket_name[count.index]}-${var.environment}-${var.aws_region}"
   acl    = "private"
 
   versioning {
     enabled = true
-  }
-
-  logging {
-    target_bucket = aws_s3_bucket.log_bucket.id
-    target_prefix = "log/"
   }
 
   tags = {
@@ -17,67 +19,9 @@ resource "aws_s3_bucket" "test-bucket-1" {
   }
 }
 
-resource "aws_s3_bucket_public_access_block" "test-bucket-1" {
-  bucket = aws_s3_bucket.test-bucket-1.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-
-}
-
-resource "aws_s3_bucket" "test-bucket-2" {
-  bucket = "test-bucket-2-${var.environment}-${var.aws_region}".id
-  acl    = "private"
-
-  versioning {
-    enabled = true
-  }
-
-  logging {
-    target_bucket = aws_s3_bucket.log_bucket.id
-    target_prefix = "log/"
-  }  
-
-  tags = {
-    Environment = "${var.environment}"
-    region      = "${var.aws_region}"
-  }
-}
-
-resource "aws_s3_bucket_public_access_block" "test-bucket-2" {
-  bucket = aws_s3_bucket.test-bucket-2.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-
-}
-
-resource "aws_s3_bucket" "test-bucket-3" {
-  bucket = "test-bucket-3-${var.environment}-${var.aws_region}".id
-  acl    = "private"
-
-
-  versioning {
-    enabled = true
-  }
-
-  logging {
-    target_bucket = aws_s3_bucket.log_bucket.id
-    target_prefix = "log/"
-  }
-
-  tags = {
-    Environment = "${var.environment}"
-    region      = "${var.aws_region}"
-  }
-}
-
-resource "aws_s3_bucket_public_access_block" "test-bucket-3" {
-  bucket = aws_s3_bucket.test-bucket-3.id
+resource "aws_s3_bucket_public_access_block" "bucketacl" {
+  count  = length(var.bucket_name)
+  bucket = "${var.bucket_name[count.index]}-${var.environment}-${var.aws_region}"
 
   block_public_acls       = true
   block_public_policy     = true
