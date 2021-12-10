@@ -12,4 +12,4 @@ seclinttf:
   script:
     - echo "Running security scanning on terraform project"
     - tfsec eu-west-1
-  
+  allow_failure: true
