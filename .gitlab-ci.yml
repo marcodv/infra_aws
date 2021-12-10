@@ -16,4 +16,5 @@ seclinttf:
 
 checking_test_stage:
   stage: test_stage
+  needs: [seclinttf]
   script: echo "This stage is run even thoug the previous one failed "
