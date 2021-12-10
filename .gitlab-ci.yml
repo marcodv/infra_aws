@@ -16,9 +16,8 @@ build terraform image:
 
 workflow:
   rules:
-    - if $CI_COMMIT_BRANCH =~ /develop/
-      script:
-        - echo "I did run from develop branch"
+    - if $CI_COMMIT_BRANCH == "develop"
+      script: echo "I did run from develop branch"
 #deploy to test:
 #  stage: test
 #  environment: test
