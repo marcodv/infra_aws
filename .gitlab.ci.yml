@@ -1,0 +1,29 @@
+variables:
+  TERRAFORM_VERSION: "1.1.0"
+stages:
+  - build-docker
+  - test
+  - deploy
+#  - test
+#  - production
+
+run_terraform:
+  stage: build-docker
+  image: 
+    name: hashicorp/terraform:$TERRAFORM_VERSION
+    entrypoint: [""]
+  script: 
+    - terraform --version
+
+- test_a
+#workflow:
+  #rules:
+    #- if: $CI_COMMIT_BRANCH == "develop"
+      #script: echo "I did run from develop branch"
+#deploy to test:
+#  stage: test
+#  environment: test
+
+#deploy to prod:
+#  stage: prod
+#  environment: prod
