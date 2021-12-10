@@ -3,6 +3,7 @@ variables:
 stages:
   - lintsec
   - validate
+  - plan
 
 tfseclint:
   stage: lintsec
