@@ -29,12 +29,14 @@ test_b:
 
 deploy_a:
   stage: deploy
+  needs: [test_a]
   script:
     - echo "This job deploys something. It will only run when all jobs in the"
     - echo "test stage complete."
 
 deploy_b:
   stage: deploy
+  needs: [test_b]
   script:
     - echo "This job deploys something else. It will only run when all jobs in the"
     - echo "test stage complete. It will start at about the same time as deploy_a."
