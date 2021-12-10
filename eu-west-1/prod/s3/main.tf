@@ -1,8 +1,6 @@
-resource "aws_s3_bucket" "test-bucket-1" {
-  bucket = "test-bucket-1-${var.environment}-${var.aws_region}"
+resource "aws_s3_bucket" "prod-bucket-1" {
+  bucket = "prod-bucket-1-${var.environment}-${var.aws_region}"
   acl    = "private"
-  block_public_acls   = true
-  block_public_policy = true
 
   versioning {
     enabled = true
@@ -19,11 +17,16 @@ resource "aws_s3_bucket" "test-bucket-1" {
   }
 }
 
-resource "aws_s3_bucket" "test-bucket-2" {
-  bucket = "test-bucket-2-${var.environment}-${var.aws_region}"
-  acl    = "private"
+resource "aws_s3_bucket_public_access_block" "prod-bucket-1" {
+  bucket = "prod-bucket-1-${var.environment}-${var.aws_region}".id
+
   block_public_acls   = true
   block_public_policy = true
+}
+
+resource "aws_s3_bucket" "prod-bucket-2" {
+  bucket = "prod-bucket-2-${var.environment}-${var.aws_region}"
+  acl    = "private"
 
   versioning {
     enabled = true
@@ -40,12 +43,17 @@ resource "aws_s3_bucket" "test-bucket-2" {
   }
 }
 
-resource "aws_s3_bucket" "test-bucket-3" {
-  bucket = "test-bucket-3-${var.environment}-${var.aws_region}"
-  acl    = "private"
+resource "aws_s3_bucket_public_access_block" "prod-bucket-12" {
+  bucket = "prod-bucket-2-${var.environment}-${var.aws_region}".id
+
   block_public_acls   = true
   block_public_policy = true
-  
+}
+
+resource "aws_s3_bucket" "prod-bucket-3" {
+  bucket = "prod-bucket-3-${var.environment}-${var.aws_region}"
+  acl    = "private"
+
   versioning {
     enabled = true
   }
@@ -58,4 +66,11 @@ resource "aws_s3_bucket" "test-bucket-3" {
     Environment = "${var.environment}"
     region      = "${var.aws_region}"
   }
+}
+
+resource "aws_s3_bucket_public_access_block" "prod-bucket-3" {
+  bucket = "prod-bucket-3-${var.environment}-${var.aws_region}".id
+
+  block_public_acls   = true
+  block_public_policy = true
 }
