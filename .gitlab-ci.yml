@@ -34,6 +34,7 @@ plan:
   needs: [validate]
   script: 
     - terraform plan -out "planfile.json"
+    - terraform show -json planfile.json
   dependencies:
     - validate
   artifacts:
