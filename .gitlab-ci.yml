@@ -21,7 +21,7 @@ stages:
 
 terraform_validate:
   stage: validate
-  needs: [tfseclint]
+  #needs: [tfseclint]
   image: 
     name: $GITLAB_INFRA_REGISTRY/$INFRA_AWS/terraform:$TERRAFORM_VERSION
     entrypoint: 
