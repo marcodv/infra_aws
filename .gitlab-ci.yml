@@ -8,7 +8,6 @@ before_script:
 stages:
   - lintsec
   - validate
-  - plan
 
 tfseclint:
   stage: lintsec
@@ -33,21 +32,8 @@ terraform_validate:
   before_script:
     - rm -rf *.terraform*
     - terraform --version
-    - pwd
     - terraform init 
   script: 
-    - pwd
     - terraform validate 
+    - terrafor plan
 
-terraform_plan:
-  stage: plan
-  needs: [terraform_validate]
-  image: 
-    name: $GITLAB_INFRA_REGISTRY/noah-energy/infra_aws/terraform:$TERRAFORM_VERSION
-    entrypoint: 
-      - '/usr/bin/env'
-      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-      - 'AWS_SECRET_ACCESS_KEY=${AWS_ACCESS_KEY_ID_TEST_ENV}' 
-      - 'AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_TEST_ENV}'
-  script:
-    - terraform plan 
