@@ -12,6 +12,7 @@ docker_login:
 
 tfseclint:
   stage: lintsec
+  needs: [docker_login]
   image:
     name: aquasec/tfsec:latest
     entrypoint: [""]
