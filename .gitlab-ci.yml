@@ -1,6 +1,3 @@
-variables:
-  TF_ROOT: ${CI_PROJECT_DIR}
-
 stages:
   #- lintsec
   - validate
@@ -23,8 +20,6 @@ terraform_validate:
     entrypoint: 
       - '/usr/bin/env'
       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-      - 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_TEST_ENV' 
-      - 'export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_TEST_ENV'
   before_script:
     - 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_TEST_ENV' 
     - 'export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_TEST_ENV'
@@ -33,4 +28,5 @@ terraform_validate:
   script: 
     - terraform validate 
     - terraform plan
+    - terraform apply -auto-approve
 

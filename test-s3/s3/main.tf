@@ -1,9 +1,3 @@
-/* provider "aws" {
-  profile                 = "test"
-  shared_credentials_file = "/Users/marcodivincenzo/.aws/credentials"
-  region                  = "eu-west-1"
-} */
-
 provider "aws" {
   region = "eu-west-1"
 }
