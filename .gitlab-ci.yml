@@ -1,9 +1,14 @@
 variables:
   TERRAFORM_VERSION: "1.1.0"
 stages:
+  - registry_login 
   - lintsec
   - validate
   - plan
+
+docker_login:
+  stage: registry_login
+  script: docker login $GITLAB_INFRA_REGISTRY -u marco202 -p $GITLAB_INFRA_REGITRY_TOKEN
 
 tfseclint:
   stage: lintsec
