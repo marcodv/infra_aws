@@ -10,12 +10,13 @@ stages:
 
 docker_login:
   stage: registry_login
-  image: 
-    name: docker:20
-    entrypoint: ["/bin/sh", "-c"]
+  image: docker:latest
+  services:
+    - docker:dind
   script: 
     - docker info 
     - echo "$GITLAB_INFRA_REGISTRY $GITLAB_INFRA_REGITRY_TOKEN"
+    - docker login $GITLAB_INFRA_REGISTRY -u marco202 -p $GITLAB_INFRA_REGITRY_TOKEN
 
 tfseclint:
   stage: lintsec
