@@ -1,10 +1,6 @@
 variables:
   TF_ROOT: ${CI_PROJECT_DIR}
 
-before_script:
-  - cd ${TF_ROOT}
-  - echo ${TF_ROOT}
-
 stages:
   #- lintsec
   - validate
