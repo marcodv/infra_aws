@@ -1,20 +1,15 @@
 variables:
   TERRAFORM_VERSION: "1.1.0"
   DOCKER_HOST: tcp://docker:2378
+
+before_script:
+  - docker login $GITLAB_INFRA_REGISTRY -u marco202 -p $GITLAB_INFRA_REGITRY_TOKEN
+  
 stages:
   - registry_login 
   - lintsec
   - validate
   - plan
-
-docker_login:
-  stage: registry_login
-  image: 
-    name: docker:20
-    entrypoint: ["/bin/sh", "-c"]
-  script: 
-    - echo $GITLAB_INFRA_REGISTRY
-    - docker login $GITLAB_INFRA_REGISTRY -u marco202 -p $GITLAB_INFRA_REGITRY_TOKEN
 
 tfseclint:
   stage: lintsec
