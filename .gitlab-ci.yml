@@ -33,7 +33,7 @@ plan:
   stage: plan
   needs: [validate]
   script: 
-    - terraform plan -out "planfile"
+    - terraform plan -out "planfile.json"
   dependencies:
     - validate
   artifacts:
