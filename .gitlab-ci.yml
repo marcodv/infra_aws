@@ -3,26 +3,17 @@ variables:
   DOCKER_HOST: tcp://docker:2378
 
 stages:
-  - registry_login 
+  #- registry_login 
   - lintsec
   - validate
   - plan
 
-docker_login:
-  stage: registry_login
-  image: docker:latest
-  services:
-    - docker:dind
-  script: 
-    - docker info 
-    - echo "$GITLAB_INFRA_REGISTRY $GITLAB_INFRA_REGITRY_TOKEN"
-    - docker login $GITLAB_INFRA_REGISTRY -u marco202 -p $GITLAB_INFRA_REGITRY_TOKEN
-
 tfseclint:
   stage: lintsec
-  needs: [docker_login]
+  #needs: [docker_login]
   image:
-    name: aquasec/tfsec:latest
+    #name: aquasec/tfsec:latest
+    name: $GITLAB_INFRA_REGISTRY/noah-energy/infra_aws/tfsec:0.62.0
     entrypoint: [""]
   script:
     - echo "Running security scanning on terraform project"
