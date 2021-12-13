@@ -3,6 +3,7 @@ variables:
 
 before_script:
   - cd ${TF_ROOT}
+  - echo ${TF_ROOT}
 
 stages:
   - lintsec
@@ -27,8 +28,8 @@ terraform_validate:
     entrypoint: 
       - '/usr/bin/env'
       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-      - 'AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}' 
-      - 'AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}'
+      - 'AWS_SECRET_ACCESS_KEY=${AWS_ACCESS_KEY_ID_TEST_ENV}' 
+      - 'AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_TEST_ENV}'
   before_script:
     - rm -rf *.terraform*
     - terraform --version
