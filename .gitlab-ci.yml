@@ -1,18 +1,14 @@
 variables:
   TERRAFORM_VERSION: "1.1.0"
-  DOCKER_HOST: tcp://docker:2378
 
 stages:
-  #- registry_login 
   - lintsec
   - validate
   - plan
 
 tfseclint:
   stage: lintsec
-  #needs: [docker_login]
   image:
-    #name: aquasec/tfsec:latest
     name: $GITLAB_INFRA_REGISTRY/noah-energy/infra_aws/tfsec:0.62.0
     entrypoint: [""]
   script:
@@ -24,7 +20,7 @@ terraform_validate:
   stage: validate
   needs: [tfseclint]
   image: 
-    name: hashicorp/terraform:$TERRAFORM_VERSION
+    name: $GITLAB_INFRA_REGISTRY/noah-energy/infra_aws/:$TERRAFORM_VERSION
     entrypoint: 
       - '/usr/bin/env'
       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
@@ -41,7 +37,7 @@ terraform_plan:
   stage: plan
   needs: [terraform_validate]
   image: 
-    name: hashicorp/terraform:$TERRAFORM_VERSION
+    name: $GITLAB_INFRA_REGISTRY/noah-energy/infra_aws/:$TERRAFORM_VERSION
     entrypoint: 
       - '/usr/bin/env'
       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
