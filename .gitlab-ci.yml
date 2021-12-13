@@ -8,6 +8,7 @@ stages:
 
 docker_login:
   stage: registry_login
+  image: docker:20
   script: docker login $GITLAB_INFRA_REGISTRY -u marco202 -p $GITLAB_INFRA_REGITRY_TOKEN
 
 tfseclint:
