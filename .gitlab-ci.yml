@@ -4,7 +4,7 @@ variables:
 
 before_script:
   - docker login $GITLAB_INFRA_REGISTRY -u marco202 -p $GITLAB_INFRA_REGITRY_TOKEN
-  
+
 stages:
   - registry_login 
   - lintsec
@@ -13,7 +13,6 @@ stages:
 
 tfseclint:
   stage: lintsec
-  needs: [docker_login]
   image:
     name: aquasec/tfsec:latest
     entrypoint: [""]
