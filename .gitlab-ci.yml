@@ -20,7 +20,7 @@ terraform_validate:
   stage: validate
   needs: [tfseclint]
   image: 
-    name: $GITLAB_INFRA_REGISTRY/noah-energy/infra_aws/:$TERRAFORM_VERSION
+    name: $GITLAB_INFRA_REGISTRY/noah-energy/infra_aws/terraform:$TERRAFORM_VERSION
     entrypoint: 
       - '/usr/bin/env'
       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
@@ -37,7 +37,7 @@ terraform_plan:
   stage: plan
   needs: [terraform_validate]
   image: 
-    name: $GITLAB_INFRA_REGISTRY/noah-energy/infra_aws/:$TERRAFORM_VERSION
+    name: $GITLAB_INFRA_REGISTRY/noah-energy/infra_aws/terraform:$TERRAFORM_VERSION
     entrypoint: 
       - '/usr/bin/env'
       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
