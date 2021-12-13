@@ -14,10 +14,3 @@ variable "bucket_name" {
   type        = list(string)
   default     = ["test-1", "test-2", "test-3"]
 }
-
-variable "AWS_ACCESS_KEY_ID_TEST_ENV" {
-  type = string
-}
-variable "AWS_SECRET_ACCESS_KEY_TEST_ENV" {
-  type = string
-}

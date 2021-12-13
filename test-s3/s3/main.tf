@@ -6,8 +6,8 @@
 
 provider "aws" {
   region                  = "${var.region}"
-  access_key              = "${var.AWS_ACCESS_KEY_ID_TEST_ENV}"
-  secret_key              = "${var.AWS_SECRET_ACCESS_KEY_TEST_ENV}"
+  access_key              = "${AWS_ACCESS_KEY_ID}"
+  secret_key              = "${AWS_SECRET_ACCESS_KEY}"
 }
 
 resource "aws_s3_bucket" "bucket" {
