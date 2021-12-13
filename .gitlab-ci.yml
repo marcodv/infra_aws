@@ -35,5 +35,5 @@ terraform_validate:
     - terraform init 
   script: 
     - terraform validate 
-    - terrafor plan
+    - terraform plan
 
