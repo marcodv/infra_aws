@@ -10,7 +10,7 @@ before_script:
 
 stages:
   #- lintsec
-  - validate
+  #- validate
   - plan
 
 #tfseclint:
@@ -23,15 +23,15 @@ stages:
 #    - tfsec .
 #  allow_failure: true
 
-validate:
-  stage: validate
-  script: 
-    - terraform init 
-    - terraform validate
+#validate:
+#  stage: validate
+#  script: 
+#    - terraform init 
+#    - terraform validate
 
 plan:
   stage: plan
-  needs: [validate]
+  #needs: [validate]
   script: 
     - ls -al
     - rm -rf *.terraform
