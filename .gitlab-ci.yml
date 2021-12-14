@@ -38,8 +38,6 @@ plan:
     - terraform init -backend-config="bucket=tfstate-infra-test"
     - terraform plan -out "planfile.json"
     - terraform show -json planfile.json > planfile_human.json
-  dependencies:
-    - validate
   artifacts:
     paths:
       - planfile_human.json
