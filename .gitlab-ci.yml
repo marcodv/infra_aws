@@ -7,7 +7,6 @@ image:
 before_script:
   - 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_TEST_ENV' 
   - 'export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_TEST_ENV'
-  - terraform init 
 
 stages:
   #- lintsec
@@ -27,16 +26,18 @@ stages:
 validate:
   stage: validate
   script: 
+    - terraform init 
     - terraform validate
 
 plan:
   stage: plan
   needs: [validate]
   script: 
+    - terraform init -backend-config="dynamodb_table=stateLockingTf" -backend-config="bucket=tfstate-infra-test"
     - terraform plan -out "planfile.json"
-    - terraform show -json planfile.json
+    - terraform show -json planfile.json > planfile_human.json
   dependencies:
     - validate
   artifacts:
     paths:
-      - planfile.json
+      - planfile_human.json
