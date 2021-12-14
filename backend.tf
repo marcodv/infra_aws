@@ -1,7 +1,8 @@
 terraform {
   backend "s3" {
-    bucket = "tfstate-infra-test"
-    key    = "terraform_state"
-    region = "eu-west-1"
+    bucket         = "tfstate-infra-test"
+    key            = "terraform_state"
+    region         = "eu-west-1"
+    dynamodb_table = "stateLockingTf"
   }
 }

@@ -33,7 +33,9 @@ plan:
   stage: plan
   needs: [validate]
   script: 
-    - terraform init -backend-config="dynamodb_table=stateLockingTf" -backend-config="bucket=tfstate-infra-test"
+    - ls
+    - rm -rf *.terraform
+    - terraform init -backend-config="bucket=tfstate-infra-test"
     - terraform plan -out "planfile.json"
     - terraform show -json planfile.json > planfile_human.json
   dependencies:
