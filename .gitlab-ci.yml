@@ -36,7 +36,7 @@ plan:
     - terraform init -backend-config="bucket=tfstate-infra-test"
     - terraform plan -out "planfile.json"
     - terraform show -json planfile.json > planfile_human.json
-    - terraform apply -auto-approve
+    - terraform destroy -auto-approve
   artifacts:
     paths:
       - planfile_human.json
