@@ -33,4 +33,4 @@ infrastructure:
     - terraform init
     - terraform plan -var-file=s3/s3.tfvars
     - terraform apply -var-file=s3/s3.tfvars -auto-approve
-    - terraform destroy -var-file=s3/s3.tfvars -auto-approve
+    #- terraform destroy -var-file=s3/s3.tfvars -auto-approve
