@@ -1,42 +1,34 @@
-image: 
-  name: $GITLAB_INFRA_REGISTRY/$INFRA_AWS/terraform:$TERRAFORM_VERSION
-  entrypoint: 
-    - '/usr/bin/env'
-    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+# Include variables and stages
+# from noah-pipelines-templates project 
+include:
+  - project: 'noah-energy/noah-pipelines-templates'
+    file:    'variables.yml'
+  - project: 'noah-energy/noah-pipelines-templates'
+    file:    'terraform_tmpl.yml'
 
-before_script:
-  - 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_TEST_ENV' 
-  - 'export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_TEST_ENV'
-
+# Stage availables for this pipeline
 stages:
-  #- lintsec
-  #- validate
-  - plan
+  - run-security-scan 
+  - infrastructure
 
-#tfseclint:
-#  stage: lintsec
-#  image:
-#    name: $GITLAB_INFRA_REGISTRY/$INFRA_AWS/tfsec:$TFSEC_VERSION
-#    entrypoint: [""]
-#  script:
-#    - echo "Running security scanning on terraform project"
-#    - tfsec .
-#  allow_failure: true
-
-#validate:
-#  stage: validate
-#  script: 
-#    - terraform init 
-#    - terraform validate
-
-plan:
-  stage: plan
-  #needs: [validate]
+# Runs tfsec module scan from noah-pipelines-templates project
+run-security-scan:
+  stage: run-security-scan
+  extends: .module_security_scan
+  variables:
+    PATH_TO_SCAN: "test-s3/s3"
   script: 
-    - terraform init -backend-config="bucket=tfstate-infra-test"
-    - terraform plan -out "planfile.json"
-    - terraform show -json planfile.json > planfile_human.json
-    - terraform destroy -auto-approve
-  artifacts:
-    paths:
-      - planfile_human.json
+    - echo "Starting Terraform module security scan"
+
+# Run terraform template job from noah-pipelines-templates project
+infrastructure:
+  stage: infrastructure
+  extends: .terraform
+  variables:
+    AWS_PROFILE_ENV: $TF_USER_TEST_ENV
+  script:
+    - echo "Testing s3 bucket module creation"
+    - cd test-s3/
+    - pwd
+    - terraform init
+    - terraform plan 
