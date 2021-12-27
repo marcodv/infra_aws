@@ -31,4 +31,4 @@ infrastructure:
     - cd test-s3/
     - pwd
     - terraform init
-    - terraform plan 
+    - terraform plan -var-file=s3/s3.tfvars
