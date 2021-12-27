@@ -1,2 +1,2 @@
-environment = "test"
-aws_region  = "eu-west-1"
+bucketName = "noah-test-bucket-marco"
+

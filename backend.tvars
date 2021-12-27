@@ -1,0 +1,3 @@
+bucket         = "tfstate-infra-test"
+key            = "terraform_state/terraform.tfstate"
+dynamodb_table = "stateLockingTf"
