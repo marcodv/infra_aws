@@ -16,7 +16,7 @@ run-security-scan:
   stage: run-security-scan
   extends: .module_security_scan
   variables:
-    PATH_TO_SCAN: "environment/test/"
+    PATH_TO_SCAN: "environments/test/"
   script: 
     - echo "Starting Terraform module security scan"
 
@@ -28,9 +28,9 @@ infrastructure:
     AWS_PROFILE_ENV: $TF_USER_TEST_ENV
   script:
     - echo "Testing s3 bucket module creation"
-    - cd environment/test/
+    - cd environments/test/
     - pwd
     - terraform init
-    - terraform plan -var-file=s3/s3.tfvars
-    - terraform apply -var-file=s3/s3.tfvars -auto-approve
+    - terraform plan -var-file=test.tfvars
+    - terraform apply -var-file=test.tfvars -auto-approve
     #- terraform destroy -var-file=s3/s3.tfvars -auto-approve
