@@ -5,6 +5,6 @@ resource "aws_vpc" "main" {
   tags = {
     Resource    = "vpc"
     Environment = "${var.environment}"
-    Name        = "${var.environment}-vpc"
+    Name        = "vpc-${var.environment}-environment"
   }
 }
