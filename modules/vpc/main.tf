@@ -114,6 +114,7 @@ resource "aws_security_group" "default" {
   vpc_id      = aws_vpc.vpc.id
   depends_on  = [aws_vpc.vpc]
   ingress {
+    description = "Allow inboud from VPC"
     from_port = "0"
     to_port   = "0"
     protocol  = "-1"
@@ -121,6 +122,7 @@ resource "aws_security_group" "default" {
   }
 
   egress {
+    description = "Allow outboud from VPC"
     from_port = "0"
     to_port   = "0"
     protocol  = "-1"
