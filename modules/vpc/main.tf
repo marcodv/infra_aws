@@ -84,11 +84,13 @@ resource "aws_route_table" "public" {
     Environment = "${var.environment}"
   }
 }
+
 resource "aws_route" "public_internet_gateway" {
   route_table_id         = aws_route_table.public.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.ig.id
 }
+
 resource "aws_route" "private_nat_gateway" {
   route_table_id         = aws_route_table.private.id
   destination_cidr_block = "0.0.0.0/0"
@@ -101,6 +103,7 @@ resource "aws_route_table_association" "public" {
   subnet_id      = element(aws_subnet.public_subnet.*.id, count.index)
   route_table_id = aws_route_table.public.id
 }
+
 resource "aws_route_table_association" "private" {
   count          = length(var.private_subnets_cidr)
   subnet_id      = element(aws_subnet.private_subnet.*.id, count.index)
@@ -113,20 +116,39 @@ resource "aws_security_group" "default" {
   description = "Default security group to allow inbound/outbound from the VPC"
   vpc_id      = aws_vpc.vpc.id
   depends_on  = [aws_vpc.vpc]
+
   ingress {
-    description = "Allow inboud from VPC"
-    from_port = "0"
-    to_port   = "0"
-    protocol  = "-1"
-    self      = true
+    description = "Allow SSH connection"
+    from_port = 22
+    to_port   = 22
+    protocol  = "tcp"
+    // This means, all ip address are allowed to ssh ! 
+    // Do not do it in the production. 
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "Allow HTTP connection"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "Denied inboud from VPC"
+    from_port   = "0"
+    to_port     = "0"
+    protocol    = "-1"
+    self        = true
   }
 
   egress {
     description = "Allow outboud from VPC"
-    from_port = "0"
-    to_port   = "0"
-    protocol  = "-1"
-    self      = "true"
+    from_port   = "0"
+    to_port     = "0"
+    protocol    = "-1"
+    self        = "true"
   }
   tags = {
     Name        = "Default sg for ${var.environment} environment"
