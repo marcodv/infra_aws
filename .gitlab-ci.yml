@@ -32,5 +32,5 @@ infrastructure:
     - pwd
     - terraform init
     - terraform plan -var-file=test.tfvars
-    - terraform destroy -var-file=test.tfvars -auto-approve
+    - terraform apply -var-file=test.tfvars -auto-approve
     #- terraform destroy -var-file=s3/s3.tfvars -auto-approve
