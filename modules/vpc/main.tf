@@ -118,7 +118,7 @@ resource "aws_security_group" "default" {
   depends_on  = [aws_vpc.vpc]
 
   ingress {
-    description = "Allow SSH connection"
+    description = "Allow SSH connections"
     from_port = 22
     to_port   = 22
     protocol  = "tcp"
@@ -127,8 +127,9 @@ resource "aws_security_group" "default" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  //Allow HTTP Connection 
   ingress {
-    description = "Allow HTTP connection"
+    description = "Allow HTTP connections"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -136,19 +137,21 @@ resource "aws_security_group" "default" {
   }
 
   ingress {
-    description = "Denied inboud from VPC"
+    description = "Denied inboud connections"
     from_port   = "0"
     to_port     = "0"
     protocol    = "-1"
     self        = true
   }
 
+  // Without this section no incoming connection from VPC
   egress {
     description = "Allow outboud from VPC"
     from_port   = "0"
     to_port     = "0"
     protocol    = "-1"
     self        = "true"
+    cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
     Name        = "Default sg for ${var.environment} environment"
