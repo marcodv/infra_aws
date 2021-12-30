@@ -11,4 +11,5 @@ module "networking" {
   source = "../../modules/vpc/"
 
   environment = var.environment
+  cidr_block  = var.cidr_block
 }
