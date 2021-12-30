@@ -15,7 +15,7 @@ resource "aws_vpc" "vpc" {
 resource "aws_internet_gateway" "ig" {
   vpc_id = aws_vpc.vpc.id
   tags = {
-    Name        = "${var.environment}-igw"
+    Name        = "igw-${var.environment}-enrivonment"
     Environment = "${var.environment}"
   }
 }
@@ -109,7 +109,7 @@ resource "aws_route_table_association" "private" {
 
 /*==== VPC's Default Security Group ======*/
 resource "aws_security_group" "default" {
-  name        = "default-sg-${var.environment}"
+  name        = "default-sg-${var.environment}-environment"
   description = "Default security group to allow inbound/outbound from the VPC"
   vpc_id      = aws_vpc.vpc.id
   depends_on  = [aws_vpc.vpc]
@@ -129,6 +129,7 @@ resource "aws_security_group" "default" {
     self      = "true"
   }
   tags = {
+    Name        = "Default sg for ${var.environment} environment"
     Environment = "${var.environment}"
   }
 }
