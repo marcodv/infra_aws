@@ -119,9 +119,9 @@ resource "aws_security_group" "default" {
 
   ingress {
     description = "Allow SSH connection"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
+    from_port = 22
+    to_port   = 22
+    protocol  = "tcp"
     // This means, all ip address are allowed to ssh ! 
     // Do not do it in the production. 
     cidr_blocks = ["0.0.0.0/0"]
@@ -144,10 +144,11 @@ resource "aws_security_group" "default" {
   }
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = -1
-    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow outboud from VPC"
+    from_port   = "0"
+    to_port     = "0"
+    protocol    = "-1"
+    self        = "true"
   }
   tags = {
     Name        = "Default sg for ${var.environment} environment"
