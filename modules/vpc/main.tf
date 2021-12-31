@@ -111,8 +111,8 @@ resource "aws_route_table_association" "private" {
 }
 
 /*==== VPC's Default Security Group ======*/
-resource "aws_security_group" "default" {
-  name        = "default-sg-${var.environment}-environment"
+resource "aws_security_group" "vpc_sg" {
+  name        = "default-sg-vpc-${var.environment}-environment"
   description = "Default security group to allow inbound/outbound from the VPC"
   vpc_id      = aws_vpc.vpc.id
   depends_on  = [aws_vpc.vpc]
@@ -146,7 +146,7 @@ resource "aws_security_group" "default" {
 
   // Without this section no incoming connection from VPC
   egress {
-    description = "Allow outboud from VPC"
+    description = "Allow outboud connections"
     from_port   = "0"
     to_port     = "0"
     protocol    = "-1"
@@ -156,5 +156,55 @@ resource "aws_security_group" "default" {
   tags = {
     Name        = "Default sg for ${var.environment} environment"
     Environment = "${var.environment}"
+  }
+}
+
+/*==== ALB Security Group ======*/
+resource "aws_security_group" "alb_sg" {
+  name        = "default-sg-alb-${var.environment}-environment"
+  description = "Default security group to allow inbound/outbound from the ALB"
+  vpc_id      = aws_vpc.vpc.id
+  depends_on  = [aws_vpc.vpc]
+
+  ingress {
+    description = "Allow SSH connections to ALB"
+    from_port = 22
+    to_port   = 22
+    protocol  = "tcp"
+    // This means, all ip address are allowed to ssh ! 
+    // Do not do it in the production. 
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  //Allow HTTP Connection 
+  ingress {
+    description = "Allow HTTP connections to ALB"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "Denied inboud connections to ALB"
+    from_port   = "0"
+    to_port     = "0"
+    protocol    = "-1"
+    self        = true
+  }
+
+  // Without this section no incoming connection from VPC
+  egress {
+    description = "Allow outboud connections from ALB"
+    from_port   = "0"
+    to_port     = "0"
+    protocol    = "-1"
+    self        = "true"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name        = "Default sg for ALB in ${var.environment} environment"
+    Environment = "${var.environment}"
+    Resource    = "alb"
   }
 }

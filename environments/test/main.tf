@@ -20,3 +20,12 @@ module "networking" {
   private_subnets_cidr = var.private_subnets_cidr
   availability_zones   = var.availability_zones
 }
+
+module "lb" {
+  source = "../../modules/alb"
+
+  environment       = var.environment
+  public_subnet_alb = module.networking.test_env_public_subnets_id
+  sg_alb            = module.networking.alb_sg
+  vpc_id            = module.networking.vpc_id
+}
