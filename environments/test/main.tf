@@ -50,9 +50,11 @@ module "db" {
 
   source = "../../modules/database"
 
-  environment = var.environment
-  azs         = var.availability_zones
-  db_subnets  = module.networking.private_subnets_id
-  db_sg       = module.networking.db_sg
-  vpc_id      = module.networking.vpc_id
+  environment        = var.environment
+  azs                = var.availability_zones
+  db_subnets         = module.networking.private_subnets_id
+  db_sg              = module.networking.db_sg
+  vpc_id             = module.networking.vpc_id
+  db_master_password = var.db_master_password
+  db_master_username = var.db_master_username
 }
