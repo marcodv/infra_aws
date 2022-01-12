@@ -1,12 +1,10 @@
 resource "aws_vpc" "vpc" {
-  cidr_block           = var.cidr_block
+  cidr_block           = var.vpc_cidr_block
   instance_tenancy     = "default"
   enable_dns_hostnames = "true"
 
   tags = {
-    Name        = "vpc-${var.environment}-environment"
-    Environment = "${var.environment}"
-    Resource    = "vpc-${var.environment}"
+    Name = "vpc-${var.environment}-environment"
   }
 }
 
@@ -15,29 +13,30 @@ resource "aws_vpc" "vpc" {
 resource "aws_internet_gateway" "ig" {
   vpc_id = aws_vpc.vpc.id
   tags = {
-    Name        = "igw-${var.environment}-enrivonment"
-    Environment = "${var.environment}"
+    Name = "igw-${var.environment}-enrivonment"
   }
 }
 
 /* Elastic IP for NAT */
 resource "aws_eip" "nat_eip" {
   vpc        = true
+  count      = length(var.public_subnets_cidr)
   depends_on = [aws_internet_gateway.ig]
+
   tags = {
-    Name        = "nat_eip-${var.environment}-environment"
-    Environment = "${var.environment}"
+    Name = "nat-eip-${element(var.availability_zones, count.index)}-${var.environment}-environment"
   }
 }
 
 /* NAT */
 resource "aws_nat_gateway" "nat" {
-  allocation_id = aws_eip.nat_eip.id
-  subnet_id     = element(aws_subnet.public_subnet.*.id, 0)
-  depends_on    = [aws_internet_gateway.ig]
+  depends_on    = [aws_internet_gateway.ig, aws_subnet.public_subnet]
+  count         = length(var.public_subnets_cidr)
+  subnet_id     = element(aws_subnet.public_subnet.*.id, count.index)
+  allocation_id = element(aws_eip.nat_eip.*.id, count.index)
+
   tags = {
-    Name        = "nat-${var.environment}-environment"
-    Environment = "${var.environment}"
+    Name = "nat-${element(var.availability_zones, count.index)}-${var.environment}-environment"
   }
 }
 
@@ -48,9 +47,9 @@ resource "aws_subnet" "public_subnet" {
   cidr_block              = element(var.public_subnets_cidr, count.index)
   availability_zone       = element(var.availability_zones, count.index)
   map_public_ip_on_launch = true
+
   tags = {
-    Name        = "public-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
-    Environment = "${var.environment}"
+    Name = "public-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
   }
 }
 
@@ -61,27 +60,37 @@ resource "aws_subnet" "private_subnet" {
   cidr_block              = element(var.private_subnets_cidr, count.index)
   availability_zone       = element(var.availability_zones, count.index)
   map_public_ip_on_launch = false
+
   tags = {
-    Name        = "private-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
-    Environment = "${var.environment}"
+    Name = "private-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
   }
 }
+
+/* DB Subnets */
+/*resource "aws_subnet" "db_subnets" {
+  vpc_id                  = aws_vpc.vpc.id
+  count                   = length(var.private_subnets_cidr)
+  cidr_block              = element(var.private_subnets_cidr, count.index)
+  availability_zone       = element(var.availability_zones, count.index)
+  map_public_ip_on_launch = false
+} */
 
 /* Routing table for private subnet */
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.vpc.id
+  count  = length(var.private_subnets_cidr)
+
   tags = {
-    Name        = "private-route-table-${var.environment}-environment"
-    Environment = "${var.environment}"
+    Name = "private-route-table-${element(var.availability_zones, count.index)}-${var.environment}-environment"
   }
 }
 
 /* Routing table for public subnet */
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.vpc.id
+
   tags = {
-    Name        = "public-route-table-${var.environment}-environment"
-    Environment = "${var.environment}"
+    Name = "public-route-table-${var.environment}-environment"
   }
 }
 
@@ -92,9 +101,10 @@ resource "aws_route" "public_internet_gateway" {
 }
 
 resource "aws_route" "private_nat_gateway" {
-  route_table_id         = aws_route_table.private.id
+  count                  = length(aws_subnet.private_subnet)
+  nat_gateway_id         = element(aws_nat_gateway.nat.*.id, count.index)
+  route_table_id         = element(aws_route_table.private.*.id, count.index)
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.nat.id
 }
 
 /* Route table associations */
@@ -107,104 +117,228 @@ resource "aws_route_table_association" "public" {
 resource "aws_route_table_association" "private" {
   count          = length(var.private_subnets_cidr)
   subnet_id      = element(aws_subnet.private_subnet.*.id, count.index)
-  route_table_id = aws_route_table.private.id
-}
-
-/*==== VPC's Default Security Group ======*/
-resource "aws_security_group" "vpc_sg" {
-  name        = "default-sg-vpc-${var.environment}-environment"
-  description = "Default security group to allow inbound/outbound from the VPC"
-  vpc_id      = aws_vpc.vpc.id
-  depends_on  = [aws_vpc.vpc]
-
-  ingress {
-    description = "Allow SSH connections"
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
-    // This means, all ip address are allowed to ssh ! 
-    // Do not do it in the production. 
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  //Allow HTTP Connection 
-  ingress {
-    description = "Allow HTTP connections"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "Denied inboud connections"
-    from_port   = "0"
-    to_port     = "0"
-    protocol    = "-1"
-    self        = true
-  }
-
-  // Without this section no incoming connection from VPC
-  egress {
-    description = "Allow outboud connections"
-    from_port   = "0"
-    to_port     = "0"
-    protocol    = "-1"
-    self        = "true"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  tags = {
-    Name        = "Default sg for ${var.environment} environment"
-    Environment = "${var.environment}"
-  }
+  route_table_id = element(aws_route_table.private.*.id, count.index)
 }
 
 /*==== ALB Security Group ======*/
 resource "aws_security_group" "alb_sg" {
-  name        = "default-sg-alb-${var.environment}-environment"
-  description = "Default security group to allow inbound/outbound from the ALB"
+  name        = "alb-sg-${var.environment}-environment"
+  description = "ALB sg to allow inbound/outbound"
   vpc_id      = aws_vpc.vpc.id
   depends_on  = [aws_vpc.vpc]
 
-  ingress {
-    description = "Allow SSH connections to ALB"
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
-    // This means, all ip address are allowed to ssh ! 
-    // Do not do it in the production. 
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  // Block to create ingress rules
+  dynamic "ingress" {
+    iterator = port
+    for_each = var.alb_ingress_rule
 
-  //Allow HTTP Connection 
-  ingress {
-    description = "Allow HTTP connections to ALB"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "Denied inboud connections to ALB"
-    from_port   = "0"
-    to_port     = "0"
-    protocol    = "-1"
-    self        = true
+    content {
+      description = "Port ${port.value} rule"
+      from_port   = port.value
+      to_port     = port.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
   }
 
   // Without this section no incoming connection from VPC
   egress {
-    description = "Allow outboud connections from ALB"
+    description = "Allow ALL Protocols outboud"
     from_port   = "0"
     to_port     = "0"
     protocol    = "-1"
-    self        = "true"
+    self        = true
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
-    Name        = "Default sg for ALB in ${var.environment} environment"
-    Environment = "${var.environment}"
-    Resource    = "alb"
+    Name = "ALB sg ${var.environment} environment"
+  }
+}
+
+/*==== Bastion Security Group ======*/
+resource "aws_security_group" "bastions_sg" {
+  name        = "bastions-sg-${var.environment}-environment"
+  description = "Bastion sg to allow inbound/outbound"
+  vpc_id      = aws_vpc.vpc.id
+  depends_on  = [aws_vpc.vpc]
+
+  // Block to create ingress rules
+  dynamic "ingress" {
+    iterator = port
+    for_each = var.bastion_ingress_rule
+
+    content {
+      description = "Port ${port.value} rule"
+      from_port   = port.value
+      to_port     = port.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+
+  // Without this section no incoming connection from VPC
+  egress {
+    description = "Allow ALL Protocols outboud"
+    from_port   = "0"
+    to_port     = "0"
+    protocol    = "-1"
+    self        = true
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "SG Bastions ${var.environment} environment"
+  }
+}
+
+/*==== Private instances Security Group ======*/
+resource "aws_security_group" "private_instances_sg" {
+  name        = "private-instances-sg-${var.environment}-environment"
+  description = "Private instances sg to allow inbound/outbound"
+  vpc_id      = aws_vpc.vpc.id
+  depends_on  = [aws_vpc.vpc, aws_security_group.bastions_sg]
+
+  // Block to create ingress rules
+  dynamic "ingress" {
+    iterator = port
+    for_each = var.private_instances_ingress_rule
+
+    content {
+      description = "Port ${port.value} rule"
+      from_port   = port.value
+      to_port     = port.value
+      protocol    = "tcp"
+      cidr_blocks = var.public_subnets_cidr
+    }
+  }
+
+  // Without this section no incoming connection from VPC
+  egress {
+    description = "Allow ALL Protocols outboud"
+    from_port   = "0"
+    to_port     = "0"
+    protocol    = "-1"
+    self        = true
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "SG private instances in ${var.environment} environment"
+  }
+}
+
+/*==== RDS Security Group ======*/
+resource "aws_security_group" "db_sg" {
+  name        = "db-sg-${var.environment}-environment"
+  description = "DB sg to allow inbound/outbound"
+  vpc_id      = aws_vpc.vpc.id
+  depends_on  = [aws_vpc.vpc]
+
+  // Block to create ingress rules
+  dynamic "ingress" {
+    iterator = port
+    for_each = var.acl_db_rule
+
+    content {
+      description = "Port ${port.value} rule"
+      from_port   = port.value
+      to_port     = port.value
+      protocol    = "tcp"
+      cidr_blocks = var.private_subnets_cidr
+    }
+  }
+
+  // Without this section no incoming connection from VPC
+  egress {
+    description = "Allow ALL Protocols outboud"
+    from_port   = "0"
+    to_port     = "0"
+    protocol    = "-1"
+    self        = true
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "SG DB for ${var.environment} environment"
+  }
+}
+
+/*==== Bastions for each AZ ======*/
+resource "aws_instance" "bastions" {
+  depends_on             = [aws_security_group.bastions_sg]
+  count                  = length(var.public_subnets_cidr)
+  ami                    = var.bastions-ami
+  availability_zone      = element(var.availability_zones, count.index)
+  subnet_id              = element(aws_subnet.public_subnet.*.id, count.index)
+  key_name               = "bastion-ssh-key-${var.environment}"
+  vpc_security_group_ids = [aws_security_group.bastions_sg.id]
+  instance_type          = "t2.micro"
+
+  tags = {
+    Name = "Bastion-${element(var.availability_zones, count.index)}"
+  }
+}
+
+/*==== ACL for Public subnet ======*/
+resource "aws_network_acl" "acl_public_subnet" {
+  vpc_id     = aws_vpc.vpc.id
+  depends_on = [aws_vpc.vpc, aws_subnet.public_subnet]
+  count      = length(var.public_subnets_cidr)
+  subnet_ids = ["${element(aws_subnet.public_subnet.*.id, count.index)}"]
+
+  dynamic "ingress" {
+    for_each = var.acl_public_subnet_rule.ingress_rule
+
+    content {
+      protocol   = "tcp"
+      rule_no    = ingress.value.rule_no
+      action     = "allow"
+      cidr_block = "0.0.0.0/0"
+      from_port  = ingress.value.from_port
+      to_port    = ingress.value.to_port
+    }
+  }
+
+  egress {
+    protocol   = "-1"
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 0
+    to_port    = 0
+  }
+
+  tags = {
+    Name = "Public subnet in ${element(var.availability_zones, count.index)}"
+  }
+}
+
+/*==== ACL for Private subnet ======*/
+resource "aws_network_acl" "acl_private_subnet" {
+  vpc_id     = aws_vpc.vpc.id
+  depends_on = [aws_vpc.vpc, aws_subnet.private_subnet]
+  count      = length(var.private_subnets_cidr)
+  subnet_ids = ["${element(aws_subnet.private_subnet.*.id, count.index)}"]
+
+  dynamic "ingress" {
+    for_each = var.acl_private_subnet_rule.ingress_rule
+    content {
+      protocol   = "tcp"
+      rule_no    = ingress.value.rule_no
+      action     = "allow"
+      cidr_block = "0.0.0.0/0"
+      from_port  = ingress.value.from_port
+      to_port    = ingress.value.to_port
+    }
+  }
+
+  egress {
+    protocol   = "-1"
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 0
+    to_port    = 0
+  }
+
+  tags = {
+    Name = "Private subnet in ${element(var.availability_zones, count.index)}"
   }
 }

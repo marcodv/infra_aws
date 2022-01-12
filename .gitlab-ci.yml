@@ -27,10 +27,13 @@ infrastructure:
   variables:
     AWS_PROFILE_ENV: $TF_USER_TEST_ENV
   script:
-    - echo "Testing s3 bucket module creation"
+    - echo "Creating AWS Infra"
     - cd environments/test/
     - pwd
     - terraform init
-    - terraform plan -var-file=test.tfvars
-    - terraform apply -var-file=test.tfvars -auto-approve
+    - terraform plan -var-file=test.tfvars -var="db_master_username=$POSTGRES_USER_TEST_ENV" -var="db_master_password=$POSTGRES_PASSWORD_TEST_ENV"
+    - terraform apply -var-file=test.tfvars -var="db_master_username=$POSTGRES_USER_TEST_ENV" -var="db_master_password=$POSTGRES_PASSWORD_TEST_ENV" -auto-approve 
     #- terraform destroy -var-file=s3/s3.tfvars -auto-approve
+  rules:
+    - if: $CI_COMMIT_REF_NAME == 'develop'
+  
