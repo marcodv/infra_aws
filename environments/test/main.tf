@@ -32,9 +32,6 @@ module "networking" {
   acl_public_subnet_rule         = var.acl_public_subnet_rule
   acl_private_subnet_rule        = var.acl_private_subnet_rule
   acl_db_rule                    = var.acl_db_rule
-  db_master_password             = var.db_master_password
-  db_master_username             = var.db_master_username
-
 }
 
 module "lb" {
