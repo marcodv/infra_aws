@@ -253,7 +253,8 @@ resource "aws_security_group" "db_sg" {
     to_port     = "0"
     protocol    = "-1"
     self        = true
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.private_subnets_cidr
+    
   }
   tags = {
     Name = "SG DB for ${var.environment} environment"

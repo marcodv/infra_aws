@@ -93,4 +93,6 @@ resource "aws_alb" "alb" {
   load_balancer_type = "application"
   idle_timeout       = "300"
 
+  drop_invalid_header_fields = true
+
 }
