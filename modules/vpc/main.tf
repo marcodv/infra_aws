@@ -67,13 +67,17 @@ resource "aws_subnet" "private_subnet" {
 }
 
 /* DB Subnets */
-/*resource "aws_subnet" "db_subnets" {
+resource "aws_subnet" "db_subnets" {
   vpc_id                  = aws_vpc.vpc.id
-  count                   = length(var.private_subnets_cidr)
-  cidr_block              = element(var.private_subnets_cidr, count.index)
+  count                   = length(var.db_subnets_cidr)
+  cidr_block              = element(var.db_subnets_cidr, count.index)
   availability_zone       = element(var.availability_zones, count.index)
   map_public_ip_on_launch = false
-} */
+
+tags = {
+    Name = "db-private-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
+  }
+} 
 
 /* Routing table for private subnet */
 resource "aws_route_table" "private" {
@@ -195,7 +199,7 @@ resource "aws_security_group" "private_instances_sg" {
   name        = "private-instances-sg-${var.environment}-environment"
   description = "Private instances sg to allow inbound/outbound"
   vpc_id      = aws_vpc.vpc.id
-  depends_on  = [aws_vpc.vpc, aws_security_group.bastions_sg]
+  depends_on  = [aws_vpc.vpc]
 
   // Block to create ingress rules
   dynamic "ingress" {
@@ -235,13 +239,14 @@ resource "aws_security_group" "db_sg" {
   // Block to create ingress rules
   dynamic "ingress" {
     iterator = port
-    for_each = var.acl_db_rule
+    for_each = var.sg_db_rule
 
     content {
       description = "Port ${port.value} rule"
       from_port   = port.value
       to_port     = port.value
       protocol    = "tcp"
+      // Allow connection only FROM private subnets
       cidr_blocks = var.private_subnets_cidr
     }
   }
@@ -253,27 +258,43 @@ resource "aws_security_group" "db_sg" {
     to_port     = "0"
     protocol    = "-1"
     self        = true
+    // Allow outbound only TO private subnets
     cidr_blocks = var.private_subnets_cidr
-    
+
   }
+
   tags = {
     Name = "SG DB for ${var.environment} environment"
   }
 }
 
-/*==== Bastions for each AZ ======*/
-resource "aws_instance" "bastions" {
-  depends_on             = [aws_security_group.bastions_sg]
-  count                  = length(var.public_subnets_cidr)
-  ami                    = var.bastions-ami
-  availability_zone      = element(var.availability_zones, count.index)
-  subnet_id              = element(aws_subnet.public_subnet.*.id, count.index)
-  key_name               = "bastion-ssh-key-${var.environment}"
-  vpc_security_group_ids = [aws_security_group.bastions_sg.id]
-  instance_type          = "t2.micro"
+/*==== EKS Security Group ======*/
+resource "aws_security_group" "eks_sg" {
+  name        = "eks-sg-${var.environment}-environment"
+  description = "EKS sg to allow inbound/outbound"
+  vpc_id      = aws_vpc.vpc.id
+  depends_on  = [aws_vpc.vpc]
 
+  # Inbound Rule
+  ingress { 
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  // Without this section no incoming connection from VPC
+  egress {
+    description = "Allow ALL Protocols outboud"
+    from_port   = "0"
+    to_port     = "0"
+    protocol    = "-1"
+    self        = true
+    cidr_blocks = var.private_subnets_cidr
+
+  }
   tags = {
-    Name = "Bastion-${element(var.availability_zones, count.index)}"
+    Name = "SG EKS for ${var.environment} environment"
   }
 }
 
@@ -307,7 +328,7 @@ resource "aws_network_acl" "acl_public_subnet" {
   }
 
   tags = {
-    Name = "Public subnet in ${element(var.availability_zones, count.index)}"
+    Name = "Public subnet ACL in ${element(var.availability_zones, count.index)}"
   }
 }
 
@@ -340,6 +361,39 @@ resource "aws_network_acl" "acl_private_subnet" {
   }
 
   tags = {
-    Name = "Private subnet in ${element(var.availability_zones, count.index)}"
+    Name = "Private subnet ACL in ${element(var.availability_zones, count.index)}"
+  }
+}
+
+/*==== ACL for DB Private subnet ======*/
+resource "aws_network_acl" "acl_db_private_subnet" {
+  vpc_id     = aws_vpc.vpc.id
+  depends_on = [aws_vpc.vpc, aws_subnet.db_subnets]
+  count      = length(var.db_subnets_cidr)
+  subnet_ids = ["${element(aws_subnet.db_subnets.*.id, count.index)}"]
+
+  dynamic "ingress" {
+    for_each = var.acl_db_rule.ingress_rule
+    content {
+      protocol   = "tcp"
+      rule_no    = ingress.value.rule_no
+      action     = "allow"
+      cidr_block = "0.0.0.0/0"
+      from_port  = ingress.value.from_port
+      to_port    = ingress.value.to_port
+    }
+  }
+
+  egress {
+    protocol   = "-1"
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 0
+    to_port    = 0
+  }
+
+  tags = {
+    Name = "DB ACL ${element(var.availability_zones, count.index)}"
   }
 }

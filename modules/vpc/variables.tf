@@ -14,10 +14,12 @@ variable "bastion_ingress_rule" {}
 
 variable "private_instances_ingress_rule" {}
 
-variable "bastions-ami" {}
-
 variable "acl_public_subnet_rule" {}
 
 variable "acl_private_subnet_rule" {}
 
 variable "acl_db_rule" {}
+
+variable "db_subnets_cidr" {}
+
+variable "sg_db_rule" {}

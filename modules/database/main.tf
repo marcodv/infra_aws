@@ -24,7 +24,7 @@ resource "aws_db_parameter_group" "pg_db" {
 
 /* DB group name */
 resource "aws_db_subnet_group" "subnet_group_name" {
-  name       = "${var.environment} environment private subnets"
+  name       = "${var.environment} environment db private subnets"
   subnet_ids = var.db_subnets
 }
 
@@ -36,7 +36,7 @@ resource "aws_db_instance" "db" {
   engine                 = "postgres"
   engine_version         = "13.3"
   instance_class         = "db.t4g.micro"
-  name                   = "mydb2"
+  name                   = "mydb2" // change db name to something else
   username               = var.db_master_username
   password               = var.db_master_password
   parameter_group_name   = aws_db_parameter_group.pg_db.name
@@ -49,4 +49,4 @@ resource "aws_db_instance" "db" {
   tags = {
     Name = "db-${var.environment}-environment"
   }
-}
+} 

@@ -31,10 +31,20 @@ variable "acl_private_subnet_rule" {
   type = map(any)
 }
 
-variable "acl_db_rule" {
-  type = list(number)
-}
+variable "acl_db_rule" {}
 
 variable "db_master_password" {}
 
 variable "db_master_username" {}
+
+variable "eks_cluster_role" {
+  type    = string
+  default = ""
+}
+
+variable "db_private_subnets_cidr" {
+  type = list(string)
+  default = []
+}
+
+variable "sg_db_rule" {}

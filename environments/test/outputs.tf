@@ -22,7 +22,15 @@ output "private_subnets_id" {
   value = module.networking.private_subnets_id
 }
 
-output "azs_subnets" {
+output "db_subnets_id" {
+  value = module.networking.db_private_subnets_id
+}
+
+output "db_subnets_cidr" {
+  value = module.networking.db_private_subnets_cidr
+}
+
+output "azs" {
   value = module.networking.azs_public_subnet
 }
 
@@ -38,6 +46,26 @@ output "db_sg" {
   value = module.networking.db_sg
 }
 
-output "rds-endpoint" {
+output "db-endpoint" {
   value = module.db.db-endpoint
+}
+
+output "eks_sg" {
+  value = module.networking.eks_sg
+}
+
+output "eks_subnets" {
+  value = module.networking.private_subnets_id
+}
+
+output "eks_api_endpoint" {
+  value = module.k8s.eks_endpoint
+}
+
+output "eks_role" {
+  value = module.iam.eks_cluster_role
+}
+
+output "bastions_sg" {
+  value = module.networking.bastions_sg
 }
