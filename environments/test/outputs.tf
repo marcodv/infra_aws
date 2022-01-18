@@ -38,34 +38,38 @@ output "alb_sg" {
   value = module.networking.alb_sg
 }
 
-output "target_group" {
-  value = module.lb.target_group_http_id_alb
-}
-
 output "db_sg" {
   value = module.networking.db_sg
-}
-
-output "db-endpoint" {
-  value = module.db.db-endpoint
-}
-
-output "eks_sg" {
-  value = module.networking.eks_sg
 }
 
 output "eks_subnets" {
   value = module.networking.private_subnets_id
 }
 
-output "eks_api_endpoint" {
-  value = module.k8s.eks_endpoint
+output "bastions_sg" {
+  value = module.networking.bastions_sg
+}
+
+output "eks_sg" {
+  value = module.networking.eks_sg
 }
 
 output "eks_role" {
   value = module.iam.eks_cluster_role
 }
 
-output "bastions_sg" {
-  value = module.networking.bastions_sg
+output "target_group" {
+  value = module.lb.target_group_http_id_alb
 }
+
+/*output "db-endpoint" {
+  value = module.db.db-endpoint
+} */
+
+/*output "eks_endpoint" {
+  value = module.k8s.eks_endpoint
+}
+
+output "eks_cluster_id" {
+  value = module.k8s.eks_cluster_id
+} */

@@ -35,15 +35,16 @@ module "networking" {
   db_subnets_cidr                = var.db_private_subnets_cidr
 }
 
+/*
 module "jump_host" {
   source = "../../modules/bastions"
 
   environment         = var.environment
   bastions-ami        = var.bastions-ami
   availability_zones  = var.availability_zones
-  public_subnets_id = module.networking.public_subnets_id
+  public_subnets_id   = module.networking.public_subnets_id
   bastions_sg         = module.networking.bastions_sg
-}
+} */
 
 module "lb" {
   source = "../../modules/alb"
@@ -70,7 +71,7 @@ module "k8s" {
   eks_subnets      = module.networking.private_subnets_id
 }
 
-module "db" {
+/*module "db" {
   source = "../../modules/database"
 
   environment        = var.environment
@@ -80,4 +81,4 @@ module "db" {
   db_subnets         = module.networking.db_private_subnets_id
   db_sg  = module.networking.db_sg
   vpc_id = module.networking.vpc_id
-}
+} */

@@ -49,4 +49,4 @@ resource "aws_db_instance" "db" {
   tags = {
     Name = "db-${var.environment}-environment"
   }
-} 
+}

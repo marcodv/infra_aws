@@ -1,14 +1,14 @@
 resource "aws_vpc" "vpc" {
   cidr_block           = var.vpc_cidr_block
   instance_tenancy     = "default"
-  enable_dns_hostnames = "true"
+  enable_dns_hostnames = true
+  enable_dns_support   = true
 
   tags = {
     Name = "vpc-${var.environment}-environment"
   }
 }
 
-/*==== Subnets ======*/
 /* Internet gateway for the public subnet */
 resource "aws_internet_gateway" "ig" {
   vpc_id = aws_vpc.vpc.id
@@ -34,12 +34,58 @@ resource "aws_nat_gateway" "nat" {
   count         = length(var.public_subnets_cidr)
   subnet_id     = element(aws_subnet.public_subnet.*.id, count.index)
   allocation_id = element(aws_eip.nat_eip.*.id, count.index)
-
+  
   tags = {
     Name = "nat-${element(var.availability_zones, count.index)}-${var.environment}-environment"
   }
 }
 
+/* Routing table for private subnet */
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.vpc.id
+  count  = length(var.private_subnets_cidr)
+
+  tags = {
+    Name = "private-route-table-${element(var.availability_zones, count.index)}-${var.environment}-environment"
+  }
+}
+
+/* Routing table for public subnet */
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.vpc.id
+
+  tags = {
+    Name = "public-route-table-${var.environment}-environment"
+  }
+}
+
+resource "aws_route" "public_internet_gateway" {
+  route_table_id         = aws_route_table.public.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.ig.id
+}
+
+resource "aws_route" "private_nat_gateway" {
+  count                  = length(aws_subnet.private_subnet)
+  nat_gateway_id         = element(aws_nat_gateway.nat.*.id, count.index)
+  route_table_id         = element(aws_route_table.private.*.id, count.index)
+  destination_cidr_block = "0.0.0.0/0" 
+}
+
+/* Route table associations */
+resource "aws_route_table_association" "public" {
+  count          = length(var.public_subnets_cidr)
+  subnet_id      = element(aws_subnet.public_subnet.*.id, count.index)
+  route_table_id = aws_route_table.public.id
+}
+
+resource "aws_route_table_association" "private" {
+  count          = length(var.private_subnets_cidr)
+  subnet_id      = element(aws_subnet.private_subnet.*.id, count.index)
+  route_table_id = element(aws_route_table.private.*.id, count.index)
+}
+
+/*==== Subnets ======*/
 /* Public subnet */
 resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.vpc.id
@@ -74,54 +120,9 @@ resource "aws_subnet" "db_subnets" {
   availability_zone       = element(var.availability_zones, count.index)
   map_public_ip_on_launch = false
 
-tags = {
+  tags = {
     Name = "db-private-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
   }
-} 
-
-/* Routing table for private subnet */
-resource "aws_route_table" "private" {
-  vpc_id = aws_vpc.vpc.id
-  count  = length(var.private_subnets_cidr)
-
-  tags = {
-    Name = "private-route-table-${element(var.availability_zones, count.index)}-${var.environment}-environment"
-  }
-}
-
-/* Routing table for public subnet */
-resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.vpc.id
-
-  tags = {
-    Name = "public-route-table-${var.environment}-environment"
-  }
-}
-
-resource "aws_route" "public_internet_gateway" {
-  route_table_id         = aws_route_table.public.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.ig.id
-}
-
-resource "aws_route" "private_nat_gateway" {
-  count                  = length(aws_subnet.private_subnet)
-  nat_gateway_id         = element(aws_nat_gateway.nat.*.id, count.index)
-  route_table_id         = element(aws_route_table.private.*.id, count.index)
-  destination_cidr_block = "0.0.0.0/0"
-}
-
-/* Route table associations */
-resource "aws_route_table_association" "public" {
-  count          = length(var.public_subnets_cidr)
-  subnet_id      = element(aws_subnet.public_subnet.*.id, count.index)
-  route_table_id = aws_route_table.public.id
-}
-
-resource "aws_route_table_association" "private" {
-  count          = length(var.private_subnets_cidr)
-  subnet_id      = element(aws_subnet.private_subnet.*.id, count.index)
-  route_table_id = element(aws_route_table.private.*.id, count.index)
 }
 
 /*==== ALB Security Group ======*/
@@ -276,25 +277,25 @@ resource "aws_security_group" "eks_sg" {
   depends_on  = [aws_vpc.vpc]
 
   # Inbound Rule
-  ingress { 
+  ingress {
+    description = "EKS Ingress rule"
     from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    to_port     = 65535
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   // Without this section no incoming connection from VPC
   egress {
     description = "Allow ALL Protocols outboud"
-    from_port   = "0"
-    to_port     = "0"
-    protocol    = "-1"
-    self        = true
-    cidr_blocks = var.private_subnets_cidr
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
 
   }
   tags = {
-    Name = "SG EKS for ${var.environment} environment"
+    Name = "SG control plane EKS for ${var.environment} environment"
   }
 }
 
