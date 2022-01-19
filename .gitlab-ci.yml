@@ -33,13 +33,15 @@ build terraform image:
   stage: configure
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   variables:
-    PROFILE_AWS: $TF_USER_TEST_ENV
+    AWS_PROFILE: $TF_USER_TEST_ENV
   script:
     - echo $AWS_REGION
     - echo $CLUSTER_NAME
-    - echo $PROFILE_AWS
-    - aws sts get-caller-identity --profile $PROFILE_AWS
-    - aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME --profile $PROFILE_AWS
+    - echo $AWS_PROFILE
+    - ls -alt .aws
+    - cat .aws/credentials 
+    - aws sts get-caller-identity --profile $AWS_PROFILE
+    - aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME --profile $AWS_PROFILE
   artifacts:
     paths:
       - ~/.kube/config
