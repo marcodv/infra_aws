@@ -16,6 +16,7 @@ build terraform image:
     - docker:dind
   script:
     - docker build -t hello .
+  when: never
 
 
 
