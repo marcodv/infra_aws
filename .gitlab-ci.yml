@@ -31,7 +31,9 @@ build terraform image:
 
 .kube-config-file:
   stage: configure
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  image:    
+    name: amazon/aws-cli
+    entrypoint: [""]
   variables:
     AWS_PROFILE: $TF_USER_TEST_ENV
   script:
