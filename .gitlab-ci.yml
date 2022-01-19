@@ -38,10 +38,8 @@ build terraform image:
     - echo $AWS_REGION
     - echo $CLUSTER_NAME
     - echo $AWS_PROFILE
-    - ls -alt .aws
-    - cat .aws/credentials 
-    - aws sts get-caller-identity --profile $AWS_PROFILE
-    - aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME --profile $AWS_PROFILE
+    - aws sts get-caller-identity
+    - aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
   artifacts:
     paths:
       - ~/.kube/config
