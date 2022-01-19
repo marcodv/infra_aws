@@ -92,3 +92,46 @@ acl_db_rule = {
     to_port   = 5432
   }]
 }
+
+namespaces = [
+  {
+    manage             = "Terraform",
+    name               = "staging"
+    custom_annotations = [{ label = "staging.io/annotation", value = "staging" }]
+    custom_labels      = [{ label = "environment", value = "staging" }]
+  },
+  {
+    manage             = "Terraform",
+    name               = "development"
+    custom_annotations = [{ label = "development.io/annotation", value = "development" }]
+    custom_labels      = [{ label = "environment", value = "development" }]
+  },
+  {
+    manage             = "Terraform",
+    name               = "production"
+    custom_annotations = [{ label = "production.io/annotation", value = "production" }]
+    custom_labels      = [{ label = "environment", value = "production" }]
+  }
+
+]
+
+read_only_eks_dashboard = {
+  users = [/*{
+    userarn  = "arn:aws:iam::848481299679:user/bastiaan@noah.energy"
+    username = "bastiaan@noah.energy"
+    groups   = ["eks-dashboard-limited-access-clusterrole"]
+  }*/]
+}
+
+map_cluster_admin_users = {
+  admins = [{
+    userarn  = "arn:aws:iam::848481299679:user/bastiaan@noah.energy"
+    username = "bastiaan@noah.energy"
+    groups   = ["system:masters", "eks-console-dashboard-full-access-group"]
+    },
+    {
+      userarn  = "arn:aws:iam::848481299679:user/marco@noah.energy"
+      username = "marco@noah.energy"
+      groups   = ["system:masters", "eks-console-dashboard-full-access-group"]
+  }]
+}

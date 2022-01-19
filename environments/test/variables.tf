@@ -43,8 +43,31 @@ variable "eks_cluster_role" {
 }
 
 variable "db_private_subnets_cidr" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 
 variable "sg_db_rule" {}
+
+variable "map_cluster_admin_users" {
+  type = map(any)
+}
+
+variable "read_only_eks_dashboard" {
+  type = map(any)
+}
+
+variable "namespaces" {
+  type = list(object({
+    manage = string
+    name   = string
+    custom_annotations = list(object({
+      label = string
+      value = string
+    }))
+    custom_labels = list(object({
+      label = string
+      value = string
+    }))
+  }))
+}

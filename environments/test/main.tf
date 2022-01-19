@@ -64,11 +64,14 @@ module "iam" {
 module "k8s" {
   source = "../../modules/eks"
 
-  environment      = var.environment
-  vpc_id           = var.vpc_id
-  eks_cluster_role = module.iam.eks_cluster_role
-  eks_sg           = module.networking.eks_sg
-  eks_subnets      = module.networking.private_subnets_id
+  environment             = var.environment
+  vpc_id                  = var.vpc_id
+  map_cluster_admin_users = var.map_cluster_admin_users
+  namespaces              = var.namespaces
+  read_only_eks_dashboard = var.read_only_eks_dashboard
+  eks_cluster_role        = module.iam.eks_cluster_role
+  eks_sg                  = module.networking.eks_sg
+  eks_subnets             = module.networking.private_subnets_id
 }
 
 /*module "db" {

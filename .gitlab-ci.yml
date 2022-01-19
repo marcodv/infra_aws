@@ -33,5 +33,3 @@ infrastructure:
     - terraform init
     - terraform plan -var-file=test.tfvars -var="db_master_username=$POSTGRES_USER_TEST_ENV" -var="db_master_password=$POSTGRES_PASSWORD_TEST_ENV"
     - terraform apply -var-file=test.tfvars -var="db_master_username=$POSTGRES_USER_TEST_ENV" -var="db_master_password=$POSTGRES_PASSWORD_TEST_ENV" -auto-approve 
-
-  
