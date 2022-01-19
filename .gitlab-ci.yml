@@ -38,6 +38,7 @@ build terraform image:
     AWS_PROFILE: $TF_USER_TEST_ENV
   script:
     - cat $AWS_SHARED_CREDENTIALS_FILE
+    - cat $AWS_CONFIG_FILE
     - echo $AWS_REGION
     - echo $CLUSTER_NAME
     - echo $AWS_PROFILE
