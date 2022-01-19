@@ -37,6 +37,7 @@ build terraform image:
   variables:
     AWS_PROFILE: $TF_USER_TEST_ENV
   script:
+    - cat $AWS_SHARED_CREDENTIALS_FILE
     - echo $AWS_REGION
     - echo $CLUSTER_NAME
     - echo $AWS_PROFILE
@@ -47,7 +48,7 @@ build terraform image:
   artifacts:
     paths:
       - ~/.kube/config
-  when: manual
+  # when: manual
 
 test-kube-config-file:
   extends: .kube-config-file
