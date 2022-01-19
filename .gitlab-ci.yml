@@ -35,6 +35,9 @@ build terraform image:
   variables:
     PROFILE_AWS: $TF_USER_TEST_ENV
   script:
+    - echo $AWS_REGION
+    - echo $CLUSTER_NAME
+    - echo $PROFILE_AWS
     - aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME --profile $PROFILE_AWS
   artifacts:
     paths:
