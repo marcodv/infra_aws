@@ -34,13 +34,13 @@ build terraform image:
     PROFILE_AWS: $TF_USER_TEST_ENV
   script:
     - aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME --profile $PROFILE_AWS
-  articacts:
-    kubeconfig:
+  artifacts:
+    paths:
       - ~/.kube/config
   when: manual
 
 test-kube-config-file:
-  extends: kube-config-file
+  extends: .kube-config-file
   variables:
     AWS_REGION: eu-west-1
     CLUSTER_NAME: eks-test-env
@@ -56,7 +56,7 @@ test-kube-config-file:
   when: manual
 
 set_registry_keys_namespace_test:
-  extends: set_registry_keys
+  extends: .set_registry_keys
   dependencies: 
     - test-kube-config-file 
   variables:
