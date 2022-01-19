@@ -38,6 +38,7 @@ build terraform image:
     - echo $AWS_REGION
     - echo $CLUSTER_NAME
     - echo $AWS_PROFILE
+    - unset AWS_SESSION_TOKEN
     - aws configure list
     - aws sts get-caller-identity
     - aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
