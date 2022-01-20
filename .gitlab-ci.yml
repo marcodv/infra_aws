@@ -53,10 +53,10 @@ build terraform image:
     - ls -alt /root/.kube
     - cat /root/.kube/config
     - cp /root/.kube/config kube_config
+    - chmod 777 kube_config
   artifacts:
     expose_as: 'kube_config'
     paths:
-      - /root/.kube/config
       - kube_config
   # when: manual
 
