@@ -72,13 +72,12 @@ test-kube-config-file:
     entrypoint: [""]
   variables:
     CI_DEBUG_TRACE: "true"
-  before_script:
-    - cp kube_config /root/.kube/config
+    KUBE_CONFIG_FILE: "kube_config"
   script:
     # create namespace if it does not exits
-    - kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+    - kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f - --kubeconfig=$KUBE_CONFIG_FILE
     # set docker registry-credentials for set namespace 
-    - kubectl create secret docker-registry registry-credentials --docker-server=https://registry.gitlab.com --docker-username=$KUBE_PULL_USER --docker-password=$KUBE_PULL_SECRET --docker-email=$KUBE_PULL_EMAIL -n $NAMESPACE
+    - kubectl create secret docker-registry registry-credentials --docker-server=https://registry.gitlab.com --docker-username=$KUBE_PULL_USER --docker-password=$KUBE_PULL_SECRET --docker-email=$KUBE_PULL_EMAIL -n $NAMESPACE --kubeconfig=$KUBE_CONFIG_FILE
   # when: manual
 
 set_registry_keys_namespace_test:
