@@ -56,7 +56,7 @@ build terraform image:
     expose_as: 'kube_config'
     paths:
       - /root/.kube/config
-      - kube_onfig
+      - kube_config
   # when: manual
 
 test-kube-config-file:
