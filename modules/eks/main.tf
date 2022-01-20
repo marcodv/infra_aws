@@ -32,7 +32,7 @@ locals {
   // The follow group could be used for Tim to have Read-Only access to the cluster
 
   eks_read_only_dashboard_users = [
-    for user in var.read_only_eks_dashboard.users :
+    for user in var.read_only_eks_users.users :
     {
       userarn  = user.userarn
       username = user.username
@@ -59,8 +59,8 @@ resource "kubernetes_config_map" "aws_auth" {
   groups:
     - system:bootstrappers
     - system:nodes
-    - eks-console-dashboard-full-access-group
-    - eks-dashboard-limited-access-clusterrole
+    - cluster-full-admin-group
+    - cluster-read-only-group
 YAML
 
     mapUsers    = yamlencode(local.k8s_map_users)
