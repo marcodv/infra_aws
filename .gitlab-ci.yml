@@ -39,19 +39,11 @@ build terraform image:
     AWS_PROFILE: $TF_USER_TEST_ENV
     CI_DEBUG_TRACE: "true"
   script:
-    - cat $AWS_SHARED_CREDENTIALS_FILE
-    - cat $AWS_CONFIG_FILE
-    - echo $AWS_REGION
-    - echo $CLUSTER_NAME
-    - echo $AWS_PROFILE
     - unset AWS_SESSION_TOKEN
     - aws configure list
     - aws sts get-caller-identity
     - aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
-    - ls -alt .
-    - ls -alt /root/
-    - ls -alt /root/.kube
-    - cat /root/.kube/config
+
     - cp /root/.kube/config kube_config
     - chmod 777 kube_config
   artifacts:
@@ -69,15 +61,19 @@ test-kube-config-file:
 .set_registry_keys:
   stage: set_keys
   image: 
-    name: bitnami/kubectl:1.22.5
+    name: amazon/aws-cli
     entrypoint: [""]
   variables:
     CI_DEBUG_TRACE: "true"
     KUBE_CONFIG_FILE: "./kube_config"
+  before_script:
+    - curl -LO https://dl.k8s.io/release/v1.23.0/bin/linux/amd64/kubectl
+    - chmod +x kubectl
+    - mkdir -p ~/.local/bin/kubectl
+    - mv ./kubectl ~/.local/bin/kubectl
   script:
     - ls -alt .
-    # - export KUBECONFIG="$(cat kube_config)"
-    # - echo $KUBECONFIG
+
     # create namespace if it does not exits
     - kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f - --kubeconfig=$KUBE_CONFIG_FILE
     # set docker registry-credentials for set namespace 
