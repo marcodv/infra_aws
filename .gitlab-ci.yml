@@ -46,11 +46,15 @@ build terraform image:
     - aws configure list
     - aws sts get-caller-identity
     - aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
+    - ls -alt .
     - ls -alt /root/
     - ls -alt /root/.kube
+    - cat /root/.kube/config
+    - cp /root/.kube/config kubeconfig
   artifacts:
     paths:
       - /root/.kube/config
+      - kubeconfig
   # when: manual
 
 test-kube-config-file:
