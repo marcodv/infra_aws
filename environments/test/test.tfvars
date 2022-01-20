@@ -151,23 +151,23 @@ read_only_user_permissions = [
 ]
 
 read_only_eks_users = {
-  users = [{
+  users = [/*{
     userarn  = "arn:aws:iam::848481299679:user/bastiaan@noah.energy"
     username = "bastiaan@noah.energy"
-    groups   = ["eks-dashboard-limited-access-clusterrole"]
-  }]
+    groups   = ["cluster-read-only-group"]
+  }*/]
 }
 
 map_cluster_admin_users = {
   admins = [
-   /* {
+    {
       userarn  = "arn:aws:iam::848481299679:user/bastiaan@noah.energy"
       username = "bastiaan@noah.energy"
-      groups   = ["system:masters", "eks-console-dashboard-full-access-group"]
-    }, */
+      groups   = ["system:masters", "cluster-full-admin-group"]
+    },
     {
       userarn  = "arn:aws:iam::848481299679:user/marco@noah.energy"
       username = "marco@noah.energy"
-      groups   = ["system:masters", "eks-console-dashboard-full-access-group"]
+      groups   = ["system:masters", "cluster-full-admin-group"]
   }]
 }

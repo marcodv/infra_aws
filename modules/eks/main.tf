@@ -59,8 +59,8 @@ resource "kubernetes_config_map" "aws_auth" {
   groups:
     - system:bootstrappers
     - system:nodes
-    - eks-console-dashboard-full-access-group
-    - eks-dashboard-limited-access-clusterrole
+    - cluster-full-admin-group
+    - cluster-read-only-group
 YAML
 
     mapUsers    = yamlencode(local.k8s_map_users)
