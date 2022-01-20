@@ -43,10 +43,7 @@ infrastructure:
     entrypoint: [""]
   variables:
     AWS_PROFILE: $TF_USER_TEST_ENV
-    CI_DEBUG_TRACE: "true"
   script:
-    - unset AWS_SESSION_TOKEN
-    - aws configure list
     - aws sts get-caller-identity
     - aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
 
@@ -70,24 +67,22 @@ kube-config-file-test-cluster:
     name: amazon/aws-cli
     entrypoint: [""]
   variables:
-    CI_DEBUG_TRACE: "true"
     KUBE_CONFIG_FILE: "./kube_config"
   before_script:
     - curl -LO https://dl.k8s.io/release/v1.23.0/bin/linux/amd64/kubectl
     - chmod +x kubectl
     - mv ./kubectl /usr/bin/kubectl
   script:
-    - ls -alt .
-
     # create namespace if it does not exits
     - kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f - --kubeconfig=$KUBE_CONFIG_FILE
     # set docker registry-credentials for set namespace 
-    - kubectl create secret docker-registry registry-credentials --docker-server=https://registry.gitlab.com --docker-username=$KUBE_PULL_USER --docker-password=$KUBE_PULL_SECRET --docker-email=$KUBE_PULL_EMAIL -n $NAMESPACE --kubeconfig=$KUBE_CONFIG_FILE
+    - kubectl create secret docker-registry registry-credentials --docker-server=https://registry.gitlab.com --docker-username=$KUBE_PULL_USER --docker-password=$KUBE_PULL_SECRET --docker-email=$KUBE_PULL_EMAIL -n $NAMESPACE  --dry-run=client -o yaml | kubectl apply -f - --kubeconfig=$KUBE_CONFIG_FILE
+
   when: manual
 
-set_registry_keys_namespace_test:
-  extends: .set_registry_keys
+set-registry-keys-namespace-test:
+  extends: .set-registry-keys
   dependencies: 
-    - test-kube-config-file 
+    - kube-config-file-test-cluster
   variables:
     NAMESPACE: test
