@@ -32,7 +32,7 @@ locals {
   // The follow group could be used for Tim to have Read-Only access to the cluster
 
   eks_read_only_dashboard_users = [
-    for user in var.read_only_eks_dashboard.users :
+    for user in var.read_only_eks_users.users :
     {
       userarn  = user.userarn
       username = user.username

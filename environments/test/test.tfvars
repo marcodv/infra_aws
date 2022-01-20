@@ -112,23 +112,59 @@ namespaces = [
     custom_annotations = [{ label = "production.io/annotation", value = "production" }]
     custom_labels      = [{ label = "environment", value = "production" }]
   }
-
 ]
 
-read_only_eks_dashboard = {
-  users = [/*{
+cluster_admin_permissions = [
+  {
+    api_groups = [""]
+    resources  = ["nodes", "namespaces", "pods"]
+    verbs      = ["get", "list", "watch", "describe"]
+  },
+  {
+    api_groups = ["apps"]
+    resources  = ["deployments", "daemonsets", "replicasets", "statefulsets"]
+    verbs      = ["get", "list", "watch", "describe"]
+  },
+  {
+    api_groups = ["batch"]
+    resources  = ["cronjobs", "jobs"]
+    verbs      = ["get", "list", "watch", "describe"]
+  }
+]
+
+read_only_user_permissions = [ 
+    {
+    api_groups = [""]
+    resources  = ["nodes", "namespaces"]
+    verbs      = ["get", "list"]
+  },
+  {
+    api_groups = ["apps"]
+    resources  = ["deployments", "daemonsets", "replicasets", "statefulsets"]
+    verbs      = ["get", "list"]
+  },
+  {
+    api_groups = ["batch"]
+    resources  = ["jobs"]
+    verbs      = ["get", "list"]
+  }
+]
+
+read_only_eks_users = {
+  users = [{
     userarn  = "arn:aws:iam::848481299679:user/bastiaan@noah.energy"
     username = "bastiaan@noah.energy"
     groups   = ["eks-dashboard-limited-access-clusterrole"]
-  }*/]
+  }]
 }
 
 map_cluster_admin_users = {
-  admins = [{
-    userarn  = "arn:aws:iam::848481299679:user/bastiaan@noah.energy"
-    username = "bastiaan@noah.energy"
-    groups   = ["system:masters", "eks-console-dashboard-full-access-group"]
-    },
+  admins = [
+   /* {
+      userarn  = "arn:aws:iam::848481299679:user/bastiaan@noah.energy"
+      username = "bastiaan@noah.energy"
+      groups   = ["system:masters", "eks-console-dashboard-full-access-group"]
+    }, */
     {
       userarn  = "arn:aws:iam::848481299679:user/marco@noah.energy"
       username = "marco@noah.energy"
