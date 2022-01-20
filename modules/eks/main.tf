@@ -1,7 +1,3 @@
-data "aws_iam_group" "admin-members" {
-  group_name = "User-manage-eks-cluster"
-}
-
 data "aws_caller_identity" "current" {}
 
 # Create EKS cluster 
@@ -18,6 +14,8 @@ resource "aws_eks_cluster" "eks_cluster" {
   }
 }
 
+// This create a map object with admin and read only users
+// to be added to aws_auth configMap
 locals {
   k8s_admins = [
     for user in var.map_cluster_admin_users.admins :
@@ -27,10 +25,6 @@ locals {
       groups   = user.groups
     }
   ]
-  //k8s_map_users = local.k8s_admins
-
-  // The follow group could be used for Tim to have Read-Only access to the cluster
-
   eks_read_only_dashboard_users = [
     for user in var.read_only_eks_users.users :
     {
@@ -43,9 +37,7 @@ locals {
   k8s_map_users = concat(local.k8s_admins, local.eks_read_only_dashboard_users)
 }
 
-
-
-// aws_auth need to be created before create eks node-group
+// Create accounts in aws_auth configMap
 resource "kubernetes_config_map" "aws_auth" {
   metadata {
     name      = "aws-auth"

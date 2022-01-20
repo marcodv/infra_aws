@@ -152,8 +152,8 @@ read_only_user_permissions = [
 
 read_only_eks_users = {
   users = [/*{
-    userarn  = "arn:aws:iam::848481299679:user/bastiaan@noah.energy"
-    username = "bastiaan@noah.energy"
+    userarn  = "arn:aws:iam::848481299679:user/username@noah.energy"
+    username = "username@noah.energy"
     groups   = ["cluster-read-only-group"]
   }*/]
 }
