@@ -48,7 +48,7 @@ build terraform image:
     - aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
   artifacts:
     paths:
-      - root/.kube/config
+      - /root/.kube/config
   # when: manual
 
 test-kube-config-file:
