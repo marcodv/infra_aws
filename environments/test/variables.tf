@@ -24,20 +24,33 @@ variable "private_instances_ingress_rule" {
 }
 
 variable "acl_public_subnet_rule" {
-  type = map(any)
-  /*type = list(object({
-    rule_no   = number
-    from_port = number
-    to_port   = number
-  })) */
+  type = object({
+    ingress_rule = list(object({
+      rule_no   = number
+      from_port = number
+      to_port   = number
+    }))
+  })
 }
 
 variable "acl_private_subnet_rule" {
-type = map(any)
+  type = object({
+    ingress_rule = list(object({
+      rule_no   = number
+      from_port = number
+      to_port   = number
+    }))
+  })
 }
 
 variable "acl_db_rule" {
-type = map(any)
+  type = object({
+    ingress_rule = list(object({
+      rule_no   = number
+      from_port = number
+      to_port   = number
+    }))
+  })
 }
 
 variable "db_master_password" {
@@ -63,11 +76,23 @@ variable "sg_db_rule" {
 }
 
 variable "map_cluster_admin_users" {
-type = map(any)
+  type = object({
+    admins = list(object({
+      groups   = list(string)
+      userarn  = string
+      username = string
+    }))
+  })
 }
 
 variable "read_only_eks_users" {
-type = map(any)
+  type = object({
+    users = list(object({
+      groups   = list(string)
+      userarn  = string
+      username = string
+    }))
+  })
 }
 
 variable "namespaces" {
@@ -86,29 +111,18 @@ variable "namespaces" {
 }
 
 variable "cluster_admin_permissions" {
-  type = list(any)
+  type = list(object({
+    api_groups = list(string)
+    resources  = list(string)
+    verbs      = list(string)
+  }))
 }
 
 variable "read_only_user_permissions" {
-  type = list(any)
+  type = list(object({
+    api_groups = list(string)
+    resources  = list(string)
+    verbs      = list(string)
+  }))
 }
 
-/*variable "cluster_admin_permissions" {
-  type = list(object({
-    resource_type_empty = list(object({
-      api_groups = list(string)
-      resources  = list(string)
-      verbs      = list(string)
-    })),
-    resources_type_apps = list(object({
-      api_groups = list(string)
-      resources  = list(string)
-      verbs      = list(string)
-    })),
-    resources_type_batch = list(object({
-      api_groups = list(string)
-      resources  = list(string)
-      verbs      = list(string)
-    }))
-  }))
-} */
