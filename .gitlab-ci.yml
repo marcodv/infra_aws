@@ -67,7 +67,9 @@ test-kube-config-file:
 
 .set_registry_keys:
   stage: configure
-  image: bitnami/kubectl:1.22.5
+  image: 
+    name: bitnami/kubectl:1.22.5
+    entrypoint: [""]
   variables:
     CI_DEBUG_TRACE: "true"
   before_script:
@@ -77,7 +79,7 @@ test-kube-config-file:
     - kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
     # set docker registry-credentials for set namespace 
     - kubectl create secret docker-registry registry-credentials --docker-server=https://registry.gitlab.com --docker-username=$KUBE_PULL_USER --docker-password=$KUBE_PULL_SECRET --docker-email=$KUBE_PULL_EMAIL -n $NAMESPACE
-  when: manual
+  # when: manual
 
 set_registry_keys_namespace_test:
   extends: .set_registry_keys
