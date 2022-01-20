@@ -75,9 +75,11 @@ test-kube-config-file:
     CI_DEBUG_TRACE: "true"
     KUBE_CONFIG_FILE: "./kube_config"
   before_script:
+    - ls -alt .
+  script:
+    - ls -alt .
     - export KUBECONFIG="$(cat kube_config)"
     - echo $KUBECONFIG
-  script:
     # create namespace if it does not exits
     - kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
     # set docker registry-credentials for set namespace 
