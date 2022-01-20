@@ -36,6 +36,7 @@ build terraform image:
     entrypoint: [""]
   variables:
     AWS_PROFILE: $TF_USER_TEST_ENV
+    CI_DEBUG_TRACE: "true"
   script:
     - cat $AWS_SHARED_CREDENTIALS_FILE
     - cat $AWS_CONFIG_FILE
@@ -50,11 +51,12 @@ build terraform image:
     - ls -alt /root/
     - ls -alt /root/.kube
     - cat /root/.kube/config
-    - cp /root/.kube/config kubeconfig
+    - cp /root/.kube/config kube_config
   artifacts:
+    expose_as: 'kube_config'
     paths:
       - /root/.kube/config
-      - kubeconfig
+      - kube_onfig
   # when: manual
 
 test-kube-config-file:
@@ -66,6 +68,10 @@ test-kube-config-file:
 .set_registry_keys:
   stage: configure
   image: bitnami/kubectl:1.22.5
+  variables:
+    CI_DEBUG_TRACE: "true"
+  before_script:
+    - cp kube_config /root/.kube/config
   script:
     # create namespace if it does not exits
     - kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
