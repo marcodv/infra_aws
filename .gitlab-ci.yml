@@ -8,6 +8,7 @@ stages:
 #  - test
 #  - production
   - configure
+  - set_keys
 
 build terraform image:
   stage: build-docker
@@ -66,7 +67,7 @@ test-kube-config-file:
     CLUSTER_NAME: eks-test-env
 
 .set_registry_keys:
-  stage: configure
+  stage: set_keys
   image: 
     name: bitnami/kubectl:1.22.5
     entrypoint: [""]
