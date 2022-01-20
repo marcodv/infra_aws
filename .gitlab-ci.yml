@@ -46,6 +46,8 @@ build terraform image:
     - aws configure list
     - aws sts get-caller-identity
     - aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
+    - ls -alt /root/
+    - ls -alt /root/.kube
   artifacts:
     paths:
       - /root/.kube/config
