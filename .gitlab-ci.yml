@@ -10,6 +10,8 @@ include:
 stages:
   - run-security-scan 
   - infrastructure
+  - kube-config
+  - k8s-env
 
 # Runs tfsec module scan from noah-pipelines-templates project
 run-security-scan:
@@ -33,3 +35,54 @@ infrastructure:
     - terraform init
     - terraform plan -var-file=test.tfvars -var="db_master_username=$POSTGRES_USER_TEST_ENV" -var="db_master_password=$POSTGRES_PASSWORD_TEST_ENV"
     - terraform apply -var-file=test.tfvars -var="db_master_username=$POSTGRES_USER_TEST_ENV" -var="db_master_password=$POSTGRES_PASSWORD_TEST_ENV" -auto-approve 
+
+.kube-config-file:
+  stage: kube-config
+  image:    
+    name: amazon/aws-cli
+    entrypoint: [""]
+  variables:
+    AWS_PROFILE: $TF_USER_TEST_ENV
+  script:
+    - aws sts get-caller-identity
+    - aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
+
+    - cp /root/.kube/config kube_config
+    - chmod 777 kube_config
+  artifacts:
+    expose_as: 'kube_config'
+    paths:
+      - kube_config
+  when: manual
+
+kube-config-file-test-cluster:
+  extends: .kube-config-file
+  variables:
+    AWS_REGION: eu-west-1
+    CLUSTER_NAME: eks-test-env
+
+.set-registry-keys:
+  stage: k8s-env
+  image: 
+    name: amazon/aws-cli
+    entrypoint: [""]
+  variables:
+    KUBE_CONFIG_FILE: "./kube_config"
+  before_script:
+    - curl -LO https://dl.k8s.io/release/v1.23.0/bin/linux/amd64/kubectl
+    - chmod +x kubectl
+    - mv ./kubectl /usr/bin/kubectl
+  script:
+    # create namespace if it does not exits
+    - kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f - --kubeconfig=$KUBE_CONFIG_FILE
+    # set docker registry-credentials for set namespace 
+    - kubectl create secret docker-registry registry-credentials --docker-server=https://registry.gitlab.com --docker-username=$KUBE_PULL_USER --docker-password=$KUBE_PULL_SECRET --docker-email=$KUBE_PULL_EMAIL -n $NAMESPACE  --dry-run=client -o yaml | kubectl apply -f - --kubeconfig=$KUBE_CONFIG_FILE
+
+  when: manual
+
+set-registry-keys-namespace-test:
+  extends: .set-registry-keys
+  dependencies: 
+    - kube-config-file-test-cluster
+  variables:
+    NAMESPACE: test
