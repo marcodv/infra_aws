@@ -64,16 +64,16 @@ YAML
 }
 
 
-/*resource "aws_eks_node_group" "node-group-eks" {
-  depends_on = [kubernetes_config_map.aws_auth]
+resource "aws_eks_node_group" "node-group-eks" {
+  depends_on      = [kubernetes_config_map.aws_auth]
   cluster_name    = aws_eks_cluster.eks_cluster.name
   node_group_name = "node-group-${var.environment}-env"
   node_role_arn   = aws_eks_cluster.eks_cluster.role_arn
   subnet_ids      = var.eks_subnets
-  instance_types = ["t2.small"]
+  instance_types  = ["t2.small"]
 
   remote_access {
-    ec2_ssh_key = "bastion-ssh-key-${var.environment}"
+    ec2_ssh_key               = "bastion-ssh-key-${var.environment}"
     source_security_group_ids = [var.eks_sg]
   }
 
@@ -90,5 +90,5 @@ YAML
   # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
   # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
 
-} */
+}
 
