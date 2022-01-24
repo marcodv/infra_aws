@@ -126,3 +126,28 @@ variable "read_only_user_permissions" {
   }))
 }
 
+variable "workers_nodes_instance_type" {
+  type = list(string)
+}
+
+variable "worker_nodes_scaling_config" {
+  type = object({
+    desired_size = number
+    max_size     = number
+    min_size     = number
+  })
+}
+
+variable "worker_nodes_update_config" {
+  type = object({
+    max_unavailable = number
+  })
+}
+
+variable "worker_node_ami_id" {
+  type = string
+}
+
+variable "eks_version" {
+  type = string
+}
