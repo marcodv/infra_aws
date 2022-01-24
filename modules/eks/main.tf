@@ -4,7 +4,7 @@ data "aws_caller_identity" "current" {}
 resource "aws_eks_cluster" "eks_cluster" {
   name     = "eks-${var.environment}-env"
   role_arn = var.eks_cluster_role
-  version  = "1.21"
+  version  = var.eks_version
 
   vpc_config {
     security_group_ids     = [var.eks_sg]
@@ -63,32 +63,37 @@ YAML
   }
 }
 
-
-resource "aws_eks_node_group" "node-group-eks" {
-  depends_on      = [kubernetes_config_map.aws_auth]
+// Create node group for eks
+resource "aws_eks_node_group" "node_group_eks" {
+  //ami_type = var.worker_node_ami_id
+  depends_on      = [kubernetes_config_map.aws_auth] //, aws_launch_template.eks_launch_group_template]
   cluster_name    = aws_eks_cluster.eks_cluster.name
   node_group_name = "node-group-${var.environment}-env"
   node_role_arn   = aws_eks_cluster.eks_cluster.role_arn
   subnet_ids      = var.eks_subnets
-  instance_types  = ["t2.small"]
+  instance_types  = var.workers_nodes_instance_type
 
+  // Remote access doesn't work with launch template
   remote_access {
+    // to rename the ssh keys for workers node
     ec2_ssh_key               = "bastion-ssh-key-${var.environment}"
     source_security_group_ids = [var.eks_sg]
   }
 
   scaling_config {
-    desired_size = 1
-    max_size     = 2
-    min_size     = 1
+    desired_size = var.worker_nodes_scaling_config.desired_size
+    max_size     = var.worker_nodes_scaling_config.max_size
+    min_size     = var.worker_nodes_scaling_config.min_size
   }
 
   update_config {
-    max_unavailable = 1
+    max_unavailable = var.worker_nodes_update_config.max_unavailable
   }
 
-  # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
-  # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
+  /*launch_template {
+    name    = aws_launch_template.eks_launch_group_template.name
+    version = aws_launch_template.eks_launch_group_template.latest_version
+  } */
 
 }
 

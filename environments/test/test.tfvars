@@ -93,6 +93,7 @@ acl_db_rule = {
   }]
 }
 
+// The next vars are related to eks, node-group, launch config 
 namespaces = [
   {
     manage             = "Terraform",
@@ -110,6 +111,18 @@ namespaces = [
     manage             = "Terraform",
     name               = "production"
     custom_annotations = [{ label = "production.io/annotation", value = "production" }]
+    custom_labels      = [{ label = "environment", value = "production" }]
+  },
+  {
+    manage             = "Terraform",
+    name               = "traefik"
+    custom_annotations = [{ label = "production.io/annotation", value = "traefik" }]
+    custom_labels      = [{ label = "environment", value = "production" }]
+  },
+  {
+    manage             = "Terraform",
+    name               = "monitoring"
+    custom_annotations = [{ label = "production.io/annotation", value = "monitoring" }]
     custom_labels      = [{ label = "environment", value = "production" }]
   }
 ]
@@ -132,8 +145,8 @@ cluster_admin_permissions = [
   }
 ]
 
-read_only_user_permissions = [ 
-    {
+read_only_user_permissions = [
+  {
     api_groups = [""]
     resources  = ["nodes", "namespaces"]
     verbs      = ["get", "list"]
@@ -171,3 +184,19 @@ map_cluster_admin_users = {
       groups   = ["system:masters", "cluster-full-admin-group"]
   }]
 }
+
+workers_nodes_instance_type = ["t2.small"]
+
+worker_nodes_scaling_config = {
+  desired_size = 1
+  max_size     = 2
+  min_size     = 1
+}
+
+worker_nodes_update_config = {
+  max_unavailable = 1
+}
+
+worker_node_ami_id = "ami-020452378df41ab4b"
+
+eks_version = 1.21
