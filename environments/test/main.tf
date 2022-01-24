@@ -35,16 +35,15 @@ module "networking" {
   db_subnets_cidr                = var.db_private_subnets_cidr
 }
 
-/*
-module "jump_host" {
+/*module "jump_host" {
   source = "../../modules/bastions"
 
-  environment         = var.environment
-  bastions-ami        = var.bastions-ami
-  availability_zones  = var.availability_zones
-  public_subnets_id   = module.networking.public_subnets_id
-  bastions_sg         = module.networking.bastions_sg
-} */
+  environment        = var.environment
+  bastions-ami       = var.bastions-ami
+  availability_zones = var.availability_zones
+  public_subnets_id  = module.networking.public_subnets_id
+  bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
+}*/
 
 module "lb" {
   source = "../../modules/alb"
@@ -64,16 +63,21 @@ module "iam" {
 module "k8s" {
   source = "../../modules/eks"
 
-  environment                = var.environment
-  vpc_id                     = var.vpc_id
-  map_cluster_admin_users    = var.map_cluster_admin_users
-  namespaces                 = var.namespaces
-  read_only_eks_users        = var.read_only_eks_users
-  cluster_admin_permissions  = var.cluster_admin_permissions
-  read_only_user_permissions = var.read_only_user_permissions
-  eks_cluster_role           = module.iam.eks_cluster_role
-  eks_sg                     = module.networking.eks_sg
-  eks_subnets                = module.networking.private_subnets_id
+  environment                 = var.environment
+  vpc_id                      = var.vpc_id
+  map_cluster_admin_users     = var.map_cluster_admin_users
+  namespaces                  = var.namespaces
+  read_only_eks_users         = var.read_only_eks_users
+  cluster_admin_permissions   = var.cluster_admin_permissions
+  read_only_user_permissions  = var.read_only_user_permissions
+  workers_nodes_instance_type = var.workers_nodes_instance_type
+  worker_nodes_scaling_config = var.worker_nodes_scaling_config
+  worker_nodes_update_config  = var.worker_nodes_update_config
+  worker_node_ami_id          = var.worker_node_ami_id
+  eks_version                 = var.eks_version
+  eks_cluster_role            = module.iam.eks_cluster_role
+  eks_sg                      = module.networking.eks_sg
+  eks_subnets                 = module.networking.private_subnets_id
 }
 
 /*module "db" {

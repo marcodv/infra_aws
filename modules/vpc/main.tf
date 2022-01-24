@@ -295,7 +295,7 @@ resource "aws_security_group" "eks_sg" {
 
   }
   tags = {
-    Name = "SG control plane EKS for ${var.environment} environment"
+    Name = "SG EKS nods for ${var.environment} environment"
   }
 }
 
