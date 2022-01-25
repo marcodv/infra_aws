@@ -11,7 +11,8 @@ provider "aws" {
   region = "eu-west-1"
   default_tags {
     tags = {
-      Environment = var.environment
+      Environment   = var.environment
+      Type_Resource = var.type_resource
     }
   }
 }
@@ -35,7 +36,7 @@ module "networking" {
   db_subnets_cidr                = var.db_private_subnets_cidr
 }
 
-/*module "jump_host" {
+module "jump_host" {
   source = "../../modules/bastions"
 
   environment        = var.environment
@@ -43,7 +44,7 @@ module "networking" {
   availability_zones = var.availability_zones
   public_subnets_id  = module.networking.public_subnets_id
   bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
-}*/
+}
 
 module "lb" {
   source = "../../modules/alb"
@@ -80,7 +81,7 @@ module "k8s" {
   eks_subnets                 = module.networking.private_subnets_id
 }
 
-/*module "db" {
+module "db" {
   source = "../../modules/database"
 
   environment        = var.environment
@@ -90,4 +91,4 @@ module "k8s" {
   db_subnets         = module.networking.db_private_subnets_id
   db_sg  = module.networking.db_sg
   vpc_id = module.networking.vpc_id
-} */
+}

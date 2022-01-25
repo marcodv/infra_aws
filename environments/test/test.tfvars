@@ -1,4 +1,5 @@
 environment                    = "test"
+type_resource                  = "destroyable"
 bastions-ami                   = "ami-04dd4500af104442f"
 vpc_cidr_block                 = "10.0.0.0/16"
 public_subnets_cidr            = ["10.0.0.0/20", "10.0.16.0/20"]  //, "10.0.32.0/20"]
