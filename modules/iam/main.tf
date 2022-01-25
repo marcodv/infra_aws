@@ -36,7 +36,7 @@ resource "aws_iam_role_policy_attachment" "eks_all_access" {
   depends_on = [aws_iam_role.iam_role_eks_cluster]
   policy_arn = aws_iam_policy.eks_all_access_policy.arn
   role       = aws_iam_role.iam_role_eks_cluster.name
-} 
+}
 
 # Create EC2 Full Access Policy for EKS
 resource "aws_iam_policy" "ec2_all_access_policy" {
@@ -97,4 +97,11 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_AmazonEC2ContainerRegistr
   depends_on = [aws_iam_role.iam_role_eks_cluster]
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.iam_role_eks_cluster.name
+}
+
+resource "aws_iam_role_policy_attachment" "policies_list" {
+  count      = length(var.iam_eks_policies)
+  role       = aws_iam_role.iam_role_eks_cluster.name
+  policy_arn = "arn:aws:iam::aws:policy/${element(var.iam_eks_policies, count.index)}"
+
 }

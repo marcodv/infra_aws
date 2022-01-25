@@ -42,6 +42,7 @@ locals {
 
 // Create accounts in aws_auth configMap
 resource "kubernetes_config_map" "aws_auth" {
+  depends_on = [aws_eks_cluster.eks_cluster]
   metadata {
     name      = "aws-auth"
     namespace = "kube-system"

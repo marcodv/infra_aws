@@ -155,3 +155,7 @@ variable "eks_version" {
 variable "type_resource" {
   type = string
 }
+
+variable "iam_eks_policies" {
+  type = list(string)
+}

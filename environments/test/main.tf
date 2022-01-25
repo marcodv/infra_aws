@@ -58,7 +58,9 @@ module "lb" {
 module "iam" {
   source = "../../modules/iam"
 
-  environment = var.environment
+  environment      = var.environment
+  iam_eks_policies = var.iam_eks_policies
+
 }
 
 module "k8s" {
@@ -81,7 +83,7 @@ module "k8s" {
   eks_subnets                 = module.networking.private_subnets_id
 }
 
-module "db" {
+/*module "db" {
   source = "../../modules/database"
 
   environment        = var.environment
@@ -91,4 +93,4 @@ module "db" {
   db_subnets         = module.networking.db_private_subnets_id
   db_sg  = module.networking.db_sg
   vpc_id = module.networking.vpc_id
-}
+} */
