@@ -53,7 +53,7 @@ module "lb" {
   public_subnet_alb = module.networking.public_subnets_id
   sg_alb            = module.networking.alb_sg
   vpc_id            = module.networking.vpc_id
-}
+} 
 
 module "iam" {
   source = "../../modules/iam"
@@ -64,6 +64,7 @@ module "iam" {
 }
 
 module "k8s" {
+  //depends_on = [module.networking, module.iam]
   source = "../../modules/eks"
 
   environment                 = var.environment

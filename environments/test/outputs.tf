@@ -66,10 +66,10 @@ output "target_group" {
   value = module.db.db-endpoint
 } */
 
-/*output "eks_endpoint" {
+output "eks_endpoint" {
   value = module.k8s.eks_endpoint
 }
 
 output "eks_cluster_id" {
   value = module.k8s.eks_cluster_id
-} */
+}

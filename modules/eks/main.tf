@@ -42,7 +42,7 @@ locals {
 
 // Create accounts in aws_auth configMap
 resource "kubernetes_config_map" "aws_auth" {
-  depends_on = [aws_eks_cluster.eks_cluster]
+  //depends_on = [aws_eks_cluster.eks_cluster]
   metadata {
     name      = "aws-auth"
     namespace = "kube-system"
@@ -80,7 +80,7 @@ resource "aws_eks_node_group" "node_group_eks" {
   // Remote access doesn't work with launch template
   remote_access {
     // to rename the ssh keys for workers node
-    ec2_ssh_key               = "bastion-ssh-key-${var.environment}"
+    ec2_ssh_key               = "workers-node-ssh-key-${var.environment}-env"
     source_security_group_ids = [var.eks_sg]
   }
 
@@ -94,10 +94,10 @@ resource "aws_eks_node_group" "node_group_eks" {
     max_unavailable = var.worker_nodes_update_config.max_unavailable
   }
 
-  /*launch_template {
-    name    = aws_launch_template.eks_launch_group_template.name
-    version = aws_launch_template.eks_launch_group_template.latest_version
-  } */
+  //launch_template {
+  //  name    = aws_launch_template.eks_launch_group_template.name
+  //  version = aws_launch_template.eks_launch_group_template.latest_version
+  //} 
 
 }
 

@@ -1,29 +1,56 @@
-variable "environment" {}
-variable "vpc_cidr_block" {}
-variable "public_subnets_cidr" {}
-variable "private_subnets_cidr" {}
-variable "availability_zones" {}
-variable "bastions-ami" {}
-variable "bastion_ingress_rule" {}
+variable "environment" {
+  description = "Environments that we want to deploy"
+  type = string
+}
+variable "vpc_cidr_block" {
+  description = "VPC cidr block"
+  type = string
+}
+variable "public_subnets_cidr" {
+  description = "List of cidr blocks"
+  type = list(string)
+}
+variable "private_subnets_cidr" {
+  description = "List of cidr blocks"
+  type = list(string)
+}
+variable "availability_zones" {
+  description = "List of availability zones"
+  type = list(string)
+}
+variable "bastions-ami" {
+  description = "Ami id used to create bastion"
+  type = string
+}
+variable "bastion_ingress_rule" {
+  description = "List of inbound ports open"
+  type = list(number)
+}
 variable "public_subnet_alb" {
+  description = "List of public subnets for ALB"
   default = ""
 }
 variable "sg_alb" {
+  description = "Security group for ALB"
   default = ""
 }
 variable "vpc_id" {
+  description = "VPC id"
   default = ""
 }
 
 variable "alb_ingress_rule" {
+  description = "List of inbound ports open"
   type = list(number)
 }
 
 variable "private_instances_ingress_rule" {
+  description = "List of inbound ports open"
   type = list(number)
 }
 
 variable "acl_public_subnet_rule" {
+  description = "List of rule_no and inbound ports open"
   type = object({
     ingress_rule = list(object({
       rule_no   = number
@@ -34,6 +61,7 @@ variable "acl_public_subnet_rule" {
 }
 
 variable "acl_private_subnet_rule" {
+  description = "List of rule_no and inbound ports open"
   type = object({
     ingress_rule = list(object({
       rule_no   = number
@@ -44,6 +72,7 @@ variable "acl_private_subnet_rule" {
 }
 
 variable "acl_db_rule" {
+  description = "List of rule_no and inbound ports open"
   type = object({
     ingress_rule = list(object({
       rule_no   = number
@@ -54,19 +83,23 @@ variable "acl_db_rule" {
 }
 
 variable "db_master_password" {
+  description = "Master password for db"
   type = string
 }
 
 variable "db_master_username" {
+  description = "Master username for db"
   type = string
 }
 
 variable "eks_cluster_role" {
+  description = "Role for EKS"
   type    = string
   default = ""
 }
 
 variable "db_private_subnets_cidr" {
+  description = "List of private subnets for DB"
   type    = list(string)
   default = []
 }

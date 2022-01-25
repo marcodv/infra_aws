@@ -102,6 +102,6 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_AmazonEC2ContainerRegistr
 resource "aws_iam_role_policy_attachment" "policies_list" {
   count      = length(var.iam_eks_policies)
   role       = aws_iam_role.iam_role_eks_cluster.name
-  policy_arn = "arn:aws:iam::aws:policy/${element(var.iam_eks_policies, count.index)}"
+  policy_arn = "arn:aws:iam::848481299679:policy/${element(var.iam_eks_policies, count.index)}"
 
 }
