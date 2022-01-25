@@ -151,3 +151,7 @@ variable "worker_node_ami_id" {
 variable "eks_version" {
   type = string
 }
+
+variable "type_resource" {
+  type = string
+}
