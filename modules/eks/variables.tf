@@ -2,9 +2,16 @@ variable "environment" {
   description = "Environments that we want to deploy"
   type        = string
 }
-variable "eks_subnets" {}
 
-variable "eks_sg" {}
+variable "eks_subnets" {
+  description = "Subnets where deploy EKS"
+  type        = list(string)
+}
+
+variable "eks_sg" {
+  description = "Security group associate to EKS nodes"
+  type        = string
+}
 
 variable "vpc_id" {
   description = "VPC id where deploy EKS"

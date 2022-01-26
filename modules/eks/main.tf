@@ -1,9 +1,11 @@
 /* Usage:
  *
- * Example of 'foo_bar' module in `foo_bar.tf`.
- *
- * - list item 1
- * - list item 2
+ * This module is used to deploy EKS with instance managed by a worker node group
+ * 
+ * These are the resources created in this module 
+ * - EKS cluster
+ * - Cluster full admin users mapped in the aws_auth configMap
+ * - Node Group
  *
  * Even inline **formatting** in _here_ is possible.
  * and some [link](https://domain.com/)

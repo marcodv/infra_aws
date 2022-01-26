@@ -208,10 +208,3 @@ worker_node_ami_id = "ami-020452378df41ab4b"
 eks_version = 1.21
 
 iam_eks_policies = ["AWSLoadBalancerControllerIAMPolicy"]
-
-public_subnet_tags_alb_ingress_controller = [
-  { label = "kubernetes.io/role/elb", value = "1" },
-  { label = "kubernetes.io/cluster/", value = "shared" },
-  { label = "ingress.k8s.aws/resource", value = "LoadBalancer" },
-  { label = "elbv2.k8s.aws/cluster", value = "eks-test-env" }
-]

@@ -102,6 +102,7 @@ resource "aws_route_table_association" "private" {
 /*==== Subnets ======*/
 /* Public subnet */
 resource "aws_subnet" "public_subnet" {
+
   vpc_id                  = aws_vpc.vpc.id
   count                   = length(var.public_subnets_cidr)
   cidr_block              = element(var.public_subnets_cidr, count.index)
@@ -109,14 +110,16 @@ resource "aws_subnet" "public_subnet" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "public-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
-    // these tags need to be added in order to make eks reachable from HIS OWN ALB
-    "kubernetes.io/role/elb"             = "1"
-    "kubernetes.io/cluster/eks-test-env" = "shared"
-    "elbv2.k8s.aws/cluster"              = "eks-test-env"
-    "ingress.k8s.aws/resource"           = "LoadBalancer"
+    Name                                               = "public-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
+    
+    // Tag needed for bind EKS to ALB created from terraform
+    "kubernetes.io/role/elb"                           = "1"
+    "kubernetes.io/cluster/eks-${var.environment}-env" = "owned"
+    "ingress.k8s.aws/resource"                         = "LoadBalancer"
+    "elbv2.k8s.aws/cluster"                            = "eks-${var.environment}-env"
   }
 }
+
 
 /* Private subnet */
 resource "aws_subnet" "private_subnet" {

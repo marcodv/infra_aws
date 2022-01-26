@@ -82,10 +82,3 @@ variable "sg_db_rule" {
   type        = list(string)
 }
 
-variable "public_subnet_tags_alb_ingress_controller" {
-  description = "Tags for public subnets for using ALB ingress controller"
-  type = list(object({
-    label = string
-    value = string
-  }))
-}
