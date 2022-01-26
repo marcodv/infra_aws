@@ -1,52 +1,61 @@
 variable "environment" {
   description = "Environments that we want to deploy"
-  type = string
+  type        = string
 }
+
 variable "vpc_cidr_block" {
   description = "VPC cidr block"
-  type = string
+  type        = string
 }
+
 variable "public_subnets_cidr" {
   description = "List of cidr blocks"
-  type = list(string)
+  type        = list(string)
 }
+
 variable "private_subnets_cidr" {
   description = "List of cidr blocks"
-  type = list(string)
+  type        = list(string)
 }
+
 variable "availability_zones" {
   description = "List of availability zones"
-  type = list(string)
+  type        = list(string)
 }
+
 variable "bastions-ami" {
   description = "Ami id used to create bastion"
-  type = string
+  type        = string
 }
+
 variable "bastion_ingress_rule" {
-  description = "List of inbound ports open"
-  type = list(number)
+  description = "List of open ports for inbound connections"
+  type        = list(number)
 }
+
 variable "public_subnet_alb" {
   description = "List of public subnets for ALB"
-  default = ""
+  default     = ""
 }
+
 variable "sg_alb" {
   description = "Security group for ALB"
-  default = ""
+  default     = ""
 }
+
 variable "vpc_id" {
   description = "VPC id"
-  default = ""
+  default     = ""
 }
 
 variable "alb_ingress_rule" {
-  description = "List of inbound ports open"
-  type = list(number)
+  description = "List of open ports for inbound connections"
+  type        = list(number)
 }
 
 variable "private_instances_ingress_rule" {
-  description = "List of inbound ports open"
-  type = list(number)
+  description = "List of open ports for inbound connections"
+  type        = list(number)
 }
 
 variable "acl_public_subnet_rule" {
@@ -84,31 +93,33 @@ variable "acl_db_rule" {
 
 variable "db_master_password" {
   description = "Master password for db"
-  type = string
+  type        = string
 }
 
 variable "db_master_username" {
   description = "Master username for db"
-  type = string
+  type        = string
 }
 
 variable "eks_cluster_role" {
   description = "Role for EKS"
-  type    = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
 variable "db_private_subnets_cidr" {
   description = "List of private subnets for DB"
-  type    = list(string)
-  default = []
+  type        = list(string)
+  default     = []
 }
 
 variable "sg_db_rule" {
-  type = list(string)
+  description = "List of open ports for inbound connections"
+  type        = list(string)
 }
 
 variable "map_cluster_admin_users" {
+  description = "Map of full admin users on EKS"
   type = object({
     admins = list(object({
       groups   = list(string)
@@ -119,6 +130,7 @@ variable "map_cluster_admin_users" {
 }
 
 variable "read_only_eks_users" {
+  description = "Map of read only users on EKS"
   type = object({
     users = list(object({
       groups   = list(string)
@@ -129,6 +141,7 @@ variable "read_only_eks_users" {
 }
 
 variable "namespaces" {
+  description = "List of namespaces created on EKS"
   type = list(object({
     manage = string
     name   = string
@@ -144,6 +157,7 @@ variable "namespaces" {
 }
 
 variable "cluster_admin_permissions" {
+  description = "List of permissions granted to admins users"
   type = list(object({
     api_groups = list(string)
     resources  = list(string)
@@ -152,6 +166,7 @@ variable "cluster_admin_permissions" {
 }
 
 variable "read_only_user_permissions" {
+  description = "List of permissions granted to read only users"
   type = list(object({
     api_groups = list(string)
     resources  = list(string)
@@ -160,10 +175,12 @@ variable "read_only_user_permissions" {
 }
 
 variable "workers_nodes_instance_type" {
-  type = list(string)
+  description = "Instance type for worker node"
+  type        = list(string)
 }
 
 variable "worker_nodes_scaling_config" {
+  description = "Setting for scaling nodes in EKS"
   type = object({
     desired_size = number
     max_size     = number
@@ -172,23 +189,36 @@ variable "worker_nodes_scaling_config" {
 }
 
 variable "worker_nodes_update_config" {
+  description = "Max number of unavailable nodes at the same time"
   type = object({
     max_unavailable = number
   })
 }
 
 variable "worker_node_ami_id" {
-  type = string
+  description = "Worker node ami id"
+  type        = string
 }
 
 variable "eks_version" {
-  type = string
+  description = "EKS version"
+  type        = string
 }
 
 variable "type_resource" {
-  type = string
+  description = "Type of resource created by terraform. Values can be [durable,destroyable]"
+  type        = string
 }
 
 variable "iam_eks_policies" {
-  type = list(string)
+  description = "IAM policy for ALB ingress controller"
+  type        = list(string)
+}
+
+variable "public_subnet_tags_alb_ingress_controller" {
+  description = "Tags for public subnets for using ALB ingress controller"
+  type = list(object({
+    label = string
+    value = string
+  }))
 }

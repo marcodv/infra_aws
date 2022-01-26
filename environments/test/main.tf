@@ -21,19 +21,20 @@ provider "aws" {
 module "networking" {
   source = "../../modules/vpc/"
 
-  environment                    = var.environment
-  vpc_cidr_block                 = var.vpc_cidr_block
-  public_subnets_cidr            = var.public_subnets_cidr
-  private_subnets_cidr           = var.private_subnets_cidr
-  availability_zones             = var.availability_zones
-  alb_ingress_rule               = var.alb_ingress_rule
-  bastion_ingress_rule           = var.bastion_ingress_rule
-  private_instances_ingress_rule = var.private_instances_ingress_rule
-  acl_public_subnet_rule         = var.acl_public_subnet_rule
-  acl_private_subnet_rule        = var.acl_private_subnet_rule
-  sg_db_rule                     = var.sg_db_rule
-  acl_db_rule                    = var.acl_db_rule
-  db_subnets_cidr                = var.db_private_subnets_cidr
+  environment                               = var.environment
+  vpc_cidr_block                            = var.vpc_cidr_block
+  public_subnets_cidr                       = var.public_subnets_cidr
+  private_subnets_cidr                      = var.private_subnets_cidr
+  availability_zones                        = var.availability_zones
+  alb_ingress_rule                          = var.alb_ingress_rule
+  bastion_ingress_rule                      = var.bastion_ingress_rule
+  private_instances_ingress_rule            = var.private_instances_ingress_rule
+  acl_public_subnet_rule                    = var.acl_public_subnet_rule
+  acl_private_subnet_rule                   = var.acl_private_subnet_rule
+  sg_db_rule                                = var.sg_db_rule
+  acl_db_rule                               = var.acl_db_rule
+  db_subnets_cidr                           = var.db_private_subnets_cidr
+  public_subnet_tags_alb_ingress_controller = var.public_subnet_tags_alb_ingress_controller
 }
 
 module "jump_host" {
@@ -53,7 +54,7 @@ module "lb" {
   public_subnet_alb = module.networking.public_subnets_id
   sg_alb            = module.networking.alb_sg
   vpc_id            = module.networking.vpc_id
-} 
+}
 
 module "iam" {
   source = "../../modules/iam"

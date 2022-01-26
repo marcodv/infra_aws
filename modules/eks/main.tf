@@ -1,3 +1,17 @@
+/* Usage:
+ *
+ * Example of 'foo_bar' module in `foo_bar.tf`.
+ *
+ * - list item 1
+ * - list item 2
+ *
+ * Even inline **formatting** in _here_ is possible.
+ * and some [link](https://domain.com/)
+ *
+ * * list item 3
+ * * list item 4
+*/
+
 data "aws_caller_identity" "current" {}
 
 # Create EKS cluster 
@@ -42,7 +56,7 @@ locals {
 
 // Create accounts in aws_auth configMap
 resource "kubernetes_config_map" "aws_auth" {
-  //depends_on = [aws_eks_cluster.eks_cluster]
+  depends_on = [aws_eks_cluster.eks_cluster]
   metadata {
     name      = "aws-auth"
     namespace = "kube-system"
