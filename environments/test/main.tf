@@ -34,7 +34,6 @@ module "networking" {
   sg_db_rule                                = var.sg_db_rule
   acl_db_rule                               = var.acl_db_rule
   db_subnets_cidr                           = var.db_private_subnets_cidr
-  public_subnet_tags_alb_ingress_controller = var.public_subnet_tags_alb_ingress_controller
 }
 
 module "jump_host" {
