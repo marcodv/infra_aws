@@ -11,7 +11,8 @@ provider "aws" {
   region = "eu-west-1"
   default_tags {
     tags = {
-      Environment = var.environment
+      Environment   = var.environment
+      Type_Resource = var.type_resource
     }
   }
 }
@@ -20,22 +21,23 @@ provider "aws" {
 module "networking" {
   source = "../../modules/vpc/"
 
-  environment                    = var.environment
-  vpc_cidr_block                 = var.vpc_cidr_block
-  public_subnets_cidr            = var.public_subnets_cidr
-  private_subnets_cidr           = var.private_subnets_cidr
-  availability_zones             = var.availability_zones
-  alb_ingress_rule               = var.alb_ingress_rule
-  bastion_ingress_rule           = var.bastion_ingress_rule
-  private_instances_ingress_rule = var.private_instances_ingress_rule
-  acl_public_subnet_rule         = var.acl_public_subnet_rule
-  acl_private_subnet_rule        = var.acl_private_subnet_rule
-  sg_db_rule                     = var.sg_db_rule
-  acl_db_rule                    = var.acl_db_rule
-  db_subnets_cidr                = var.db_private_subnets_cidr
+  environment                               = var.environment
+  vpc_cidr_block                            = var.vpc_cidr_block
+  public_subnets_cidr                       = var.public_subnets_cidr
+  private_subnets_cidr                      = var.private_subnets_cidr
+  availability_zones                        = var.availability_zones
+  alb_ingress_rule                          = var.alb_ingress_rule
+  bastion_ingress_rule                      = var.bastion_ingress_rule
+  private_instances_ingress_rule            = var.private_instances_ingress_rule
+  acl_public_subnet_rule                    = var.acl_public_subnet_rule
+  acl_private_subnet_rule                   = var.acl_private_subnet_rule
+  sg_db_rule                                = var.sg_db_rule
+  acl_db_rule                               = var.acl_db_rule
+  db_subnets_cidr                           = var.db_private_subnets_cidr
+  public_subnet_tags_alb_ingress_controller = var.public_subnet_tags_alb_ingress_controller
 }
 
-/*module "jump_host" {
+module "jump_host" {
   source = "../../modules/bastions"
 
   environment        = var.environment
@@ -43,7 +45,7 @@ module "networking" {
   availability_zones = var.availability_zones
   public_subnets_id  = module.networking.public_subnets_id
   bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
-}*/
+}
 
 module "lb" {
   source = "../../modules/alb"
@@ -57,10 +59,13 @@ module "lb" {
 module "iam" {
   source = "../../modules/iam"
 
-  environment = var.environment
+  environment      = var.environment
+  iam_eks_policies = var.iam_eks_policies
+
 }
 
 module "k8s" {
+  //depends_on = [module.networking, module.iam]
   source = "../../modules/eks"
 
   environment                 = var.environment

@@ -1,4 +1,5 @@
 environment                    = "test"
+type_resource                  = "destroyable"
 bastions-ami                   = "ami-04dd4500af104442f"
 vpc_cidr_block                 = "10.0.0.0/16"
 public_subnets_cidr            = ["10.0.0.0/20", "10.0.16.0/20"]  //, "10.0.32.0/20"]
@@ -116,14 +117,14 @@ namespaces = [
   {
     manage             = "Terraform",
     name               = "traefik"
-    custom_annotations = [{ label = "production.io/annotation", value = "traefik" }]
-    custom_labels      = [{ label = "environment", value = "production" }]
+    custom_annotations = [{ label = "service.io/annotation", value = "traefik" }]
+    custom_labels      = [{ label = "service", value = "traefik" }]
   },
   {
     manage             = "Terraform",
     name               = "monitoring"
-    custom_annotations = [{ label = "production.io/annotation", value = "monitoring" }]
-    custom_labels      = [{ label = "environment", value = "production" }]
+    custom_annotations = [{ label = "service.io/annotation", value = "monitoring" }]
+    custom_labels      = [{ label = "service", value = "monitoring" }]
   }
 ]
 
@@ -182,6 +183,11 @@ map_cluster_admin_users = {
       userarn  = "arn:aws:iam::848481299679:user/marco@noah.energy"
       username = "marco@noah.energy"
       groups   = ["system:masters", "cluster-full-admin-group"]
+    },
+    {
+      userarn  = "arn:aws:iam::848481299679:user/Terraform_User_Testing_Env"
+      username = "Terraform_User_Testing_Env@noah.energy"
+      groups   = ["system:masters", "cluster-full-admin-group"]
   }]
 }
 
@@ -200,3 +206,12 @@ worker_nodes_update_config = {
 worker_node_ami_id = "ami-020452378df41ab4b"
 
 eks_version = 1.21
+
+iam_eks_policies = ["AWSLoadBalancerControllerIAMPolicy"]
+
+public_subnet_tags_alb_ingress_controller = [
+  { label = "kubernetes.io/role/elb", value = "1" },
+  { label = "kubernetes.io/cluster/", value = "shared" },
+  { label = "ingress.k8s.aws/resource", value = "LoadBalancer" },
+  { label = "elbv2.k8s.aws/cluster", value = "eks-test-env" }
+]

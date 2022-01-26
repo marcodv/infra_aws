@@ -94,5 +94,8 @@ resource "aws_alb" "alb" {
   idle_timeout       = "300"
 
   drop_invalid_header_fields = true
-
+   tags = {
+         "kubernetes.io/role/elb"             = "1"
+    "kubernetes.io/cluster/eks-test-env" = "owned"
+   }
 }

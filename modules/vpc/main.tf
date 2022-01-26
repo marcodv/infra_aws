@@ -1,3 +1,17 @@
+/* Usage:
+ *
+ * Example of 'foo_bar' module in `foo_bar.tf`.
+ *
+ * - list item 1
+ * - list item 2
+ *
+ * Even inline **formatting** in _here_ is possible.
+ * and some [link](https://domain.com/)
+ *
+ * * list item 3
+ * * list item 4
+*/
+
 resource "aws_vpc" "vpc" {
   cidr_block           = var.vpc_cidr_block
   instance_tenancy     = "default"
@@ -34,7 +48,7 @@ resource "aws_nat_gateway" "nat" {
   count         = length(var.public_subnets_cidr)
   subnet_id     = element(aws_subnet.public_subnet.*.id, count.index)
   allocation_id = element(aws_eip.nat_eip.*.id, count.index)
-  
+
   tags = {
     Name = "nat-${element(var.availability_zones, count.index)}-${var.environment}-environment"
   }
@@ -69,7 +83,7 @@ resource "aws_route" "private_nat_gateway" {
   count                  = length(aws_subnet.private_subnet)
   nat_gateway_id         = element(aws_nat_gateway.nat.*.id, count.index)
   route_table_id         = element(aws_route_table.private.*.id, count.index)
-  destination_cidr_block = "0.0.0.0/0" 
+  destination_cidr_block = "0.0.0.0/0"
 }
 
 /* Route table associations */
@@ -96,6 +110,11 @@ resource "aws_subnet" "public_subnet" {
 
   tags = {
     Name = "public-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
+    // these tags need to be added in order to make eks reachable from HIS OWN ALB
+    "kubernetes.io/role/elb"             = "1"
+    "kubernetes.io/cluster/eks-test-env" = "shared"
+    "elbv2.k8s.aws/cluster"              = "eks-test-env"
+    "ingress.k8s.aws/resource"           = "LoadBalancer"
   }
 }
 

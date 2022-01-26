@@ -16,3 +16,6 @@ override.tf.json
 
 # Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
 *tfplan*
+
+# Ignore README.md since we generated at the end of the pipeline
+README.md

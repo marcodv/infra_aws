@@ -1,3 +1,17 @@
+/* Usage:
+ *
+ * Example of 'foo_bar' module in `foo_bar.tf`.
+ *
+ * - list item 1
+ * - list item 2
+ *
+ * Even inline **formatting** in _here_ is possible.
+ * and some [link](https://domain.com/)
+ *
+ * * list item 3
+ * * list item 4
+*/
+
 data "aws_caller_identity" "current" {}
 
 # Create EKS cluster 
@@ -12,6 +26,9 @@ resource "aws_eks_cluster" "eks_cluster" {
     endpoint_public_access = true
     //endpoint_private_access = true
   }
+
+  enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+
 }
 
 // This create a map object with admin and read only users
@@ -39,6 +56,7 @@ locals {
 
 // Create accounts in aws_auth configMap
 resource "kubernetes_config_map" "aws_auth" {
+  depends_on = [aws_eks_cluster.eks_cluster]
   metadata {
     name      = "aws-auth"
     namespace = "kube-system"
@@ -76,7 +94,7 @@ resource "aws_eks_node_group" "node_group_eks" {
   // Remote access doesn't work with launch template
   remote_access {
     // to rename the ssh keys for workers node
-    ec2_ssh_key               = "bastion-ssh-key-${var.environment}"
+    ec2_ssh_key               = "workers-node-ssh-key-${var.environment}-env"
     source_security_group_ids = [var.eks_sg]
   }
 
@@ -90,10 +108,10 @@ resource "aws_eks_node_group" "node_group_eks" {
     max_unavailable = var.worker_nodes_update_config.max_unavailable
   }
 
-  /*launch_template {
-    name    = aws_launch_template.eks_launch_group_template.name
-    version = aws_launch_template.eks_launch_group_template.latest_version
-  } */
+  //launch_template {
+  //  name    = aws_launch_template.eks_launch_group_template.name
+  //  version = aws_launch_template.eks_launch_group_template.latest_version
+  //} 
 
 }
 

@@ -1,4 +1,5 @@
 output "target_group_http_id_alb" {
+  description = "Return HTTP target group from ALB"
   value = aws_alb_target_group.tg-alb.name
 }
 

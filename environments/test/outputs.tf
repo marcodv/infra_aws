@@ -1,75 +1,94 @@
 output "vpc_id" {
-  value = module.networking.vpc_id
+  description = "Return vpc id"
+  value       = module.networking.vpc_id
 }
 
 output "vpc_cidr_block" {
-  value = module.networking.cidr_block
+  description = "Return vpc cidr block"
+  value       = module.networking.cidr_block
 }
 
 output "public_subnets_cidr" {
-  value = module.networking.public_subnets_cidr
+  description = "Return the public subnets cidr"
+  value       = module.networking.public_subnets_cidr
 }
 
 output "public_subnets_id" {
-  value = module.networking.public_subnets_id
+  description = "Return the public subnets id"
+  value       = module.networking.public_subnets_id
 }
 
 output "private_subnets_cidr" {
-  value = module.networking.private_subnets_cidr
+  description = "Return the private subnets cidr"
+  value       = module.networking.private_subnets_cidr
 }
 
 output "private_subnets_id" {
-  value = module.networking.private_subnets_id
+  description = "Return the private subnets id"
+  value       = module.networking.private_subnets_id
 }
 
 output "db_subnets_id" {
-  value = module.networking.db_private_subnets_id
+  description = "Return db subnets id"
+  value       = module.networking.db_private_subnets_id
 }
 
 output "db_subnets_cidr" {
-  value = module.networking.db_private_subnets_cidr
+  description = "Return db subnets cidr blocks"
+  value       = module.networking.db_private_subnets_cidr
 }
 
 output "azs" {
-  value = module.networking.azs_public_subnet
+  description = "Return the availability zones used"
+  value       = module.networking.azs_public_subnet
 }
 
 output "alb_sg" {
-  value = module.networking.alb_sg
+  description = "Return the alb security group"
+  value       = module.networking.alb_sg
 }
 
 output "db_sg" {
-  value = module.networking.db_sg
+  description = "Return the db security group"
+  value       = module.networking.db_sg
 }
 
 output "eks_subnets" {
-  value = module.networking.private_subnets_id
+  description = "Return the eks subnets"
+  value       = module.networking.private_subnets_id
 }
 
 output "bastions_sg" {
-  value = module.networking.bastions_sg
+  description = "Return the bastions security group"
+  value       = module.networking.bastions_sg
 }
 
 output "eks_sg" {
-  value = module.networking.eks_sg
+  description = "Return eks security group"
+  value       = module.networking.eks_sg
 }
 
 output "eks_role" {
-  value = module.iam.eks_cluster_role
+  description = "Return eks ARN role used to manage the cluster"
+  value       = module.iam.eks_cluster_role
 }
 
 output "target_group" {
-  value = module.lb.target_group_http_id_alb
+  description = "Return target groups from ALB"
+  value       = module.lb.target_group_http_id_alb
 }
 
 /*output "db-endpoint" {
+  description = "Return db endpoint"
   value = module.db.db-endpoint
 } */
 
-/*output "eks_endpoint" {
-  value = module.k8s.eks_endpoint
+output "eks_endpoint" {
+  description = "Return EKS URL API"
+  value       = module.k8s.eks_endpoint
 }
 
 output "eks_cluster_id" {
-  value = module.k8s.eks_cluster_id
-} */
+  description = "Return cluster's name"
+  value       = module.k8s.eks_cluster_id
+}

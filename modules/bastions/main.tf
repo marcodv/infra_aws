@@ -1,6 +1,5 @@
 /*==== Bastions for each AZ ======*/
 resource "aws_instance" "bastions" {
-  //depends_on             = [module.networking.aws_security_group.bastions_sg]
   count                  = length(var.public_subnets_id)
   ami                    = var.bastions-ami
   availability_zone      = element(var.availability_zones, count.index)
