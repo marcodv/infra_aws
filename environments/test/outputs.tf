@@ -73,9 +73,14 @@ output "eks_role" {
   value       = module.iam.eks_cluster_role
 }
 
-output "target_group" {
-  description = "Return target groups from ALB"
-  value       = module.lb.target_group_http_id_alb
+output "http_target_group" {
+  description = "Return HTTP target group from ALB"
+  value       = module.lb.name_http_target_group
+}
+
+output "arn_http_target_group" {
+  description = "Return ARN for HTTP target groups"
+  value       = module.lb.arn_http_target_group
 }
 
 /*output "db-endpoint" {

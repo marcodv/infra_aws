@@ -21,7 +21,7 @@ resource "aws_alb" "alb" {
 /*==== Target Group HTTP ======*/
 resource "aws_alb_target_group" "http_tg_alb" {
   depends_on = [aws_alb.alb]
-  name       = "HTTP-TG-${var.environment}-environment"
+  name       = "HTTP-TG-${var.environment}-env"
   port       = 80
   protocol   = "HTTP"
   vpc_id     = var.vpc_id
@@ -43,7 +43,7 @@ resource "aws_alb_target_group" "http_tg_alb" {
 
 /*==== Listener HTTP ======*/
 resource "aws_alb_listener" "http_listener_alb" {
-  depends_on        = [aws_alb_target_group.http_tg_alb]
+  //depends_on        = [aws_alb_target_group.http_tg_alb]
   load_balancer_arn = aws_alb.alb.arn
   port              = "80"
   protocol          = "HTTP"
@@ -51,6 +51,12 @@ resource "aws_alb_listener" "http_listener_alb" {
   default_action {
     type             = "forward"
     target_group_arn = aws_alb_target_group.http_tg_alb.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/index"]
+    }
   }
 }
 
