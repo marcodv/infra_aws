@@ -21,7 +21,7 @@ resource "aws_alb" "alb" {
 /*==== Target Group HTTP ======*/
 resource "aws_alb_target_group" "http_tg_alb" {
   depends_on = [aws_alb.alb]
-  name       = "TargetGroup-${var.environment}-environment"
+  name       = "HTTP-TG-${var.environment}-environment"
   port       = 80
   protocol   = "HTTP"
   vpc_id     = var.vpc_id
