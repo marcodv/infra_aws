@@ -111,7 +111,6 @@ resource "aws_subnet" "public_subnet" {
 
   tags = {
     Name                                               = "public-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
-    
     // Tag needed for bind EKS to ALB created from terraform
     "kubernetes.io/role/elb"                           = "1"
     "kubernetes.io/cluster/eks-${var.environment}-env" = "owned"
@@ -119,7 +118,6 @@ resource "aws_subnet" "public_subnet" {
     "elbv2.k8s.aws/cluster"                            = "eks-${var.environment}-env"
   }
 }
-
 
 /* Private subnet */
 resource "aws_subnet" "private_subnet" {
