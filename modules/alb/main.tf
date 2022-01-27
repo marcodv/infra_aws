@@ -52,12 +52,23 @@ resource "aws_alb_listener" "http_listener_alb" {
     type             = "forward"
     target_group_arn = aws_alb_target_group.http_tg_alb.arn
   }
+}
+
+resource "aws_lb_listener_rule" "http_rule" {
+  listener_arn = aws_alb_listener.http_listener_alb.arn
+  priority = 100
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_alb_target_group.http_tg_alb.arn
+  }
 
   condition {
     path_pattern {
-      values = ["/index"]
+      values = ["/dashboard/"]
     }
   }
+
 }
 
 /*==== Target Group HTTP 8000 ======*/
