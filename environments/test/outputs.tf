@@ -97,3 +97,8 @@ output "eks_cluster_id" {
   description = "Return cluster's name"
   value       = module.k8s.eks_cluster_id
 }
+
+/*output "oidc_issuer_url" {
+  description = "Return the OIDC url issue"
+  value       = module.k8s.oidc_issuer_url
+}*/

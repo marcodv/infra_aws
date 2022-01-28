@@ -21,19 +21,19 @@ provider "aws" {
 module "networking" {
   source = "../../modules/vpc/"
 
-  environment                               = var.environment
-  vpc_cidr_block                            = var.vpc_cidr_block
-  public_subnets_cidr                       = var.public_subnets_cidr
-  private_subnets_cidr                      = var.private_subnets_cidr
-  availability_zones                        = var.availability_zones
-  alb_ingress_rule                          = var.alb_ingress_rule
-  bastion_ingress_rule                      = var.bastion_ingress_rule
-  private_instances_ingress_rule            = var.private_instances_ingress_rule
-  acl_public_subnet_rule                    = var.acl_public_subnet_rule
-  acl_private_subnet_rule                   = var.acl_private_subnet_rule
-  sg_db_rule                                = var.sg_db_rule
-  acl_db_rule                               = var.acl_db_rule
-  db_subnets_cidr                           = var.db_private_subnets_cidr
+  environment                    = var.environment
+  vpc_cidr_block                 = var.vpc_cidr_block
+  public_subnets_cidr            = var.public_subnets_cidr
+  private_subnets_cidr           = var.private_subnets_cidr
+  availability_zones             = var.availability_zones
+  alb_ingress_rule               = var.alb_ingress_rule
+  bastion_ingress_rule           = var.bastion_ingress_rule
+  private_instances_ingress_rule = var.private_instances_ingress_rule
+  acl_public_subnet_rule         = var.acl_public_subnet_rule
+  acl_private_subnet_rule        = var.acl_private_subnet_rule
+  sg_db_rule                     = var.sg_db_rule
+  acl_db_rule                    = var.acl_db_rule
+  db_subnets_cidr                = var.db_private_subnets_cidr
 }
 
 /*module "jump_host" {
@@ -58,9 +58,9 @@ module "lb" {
 module "iam" {
   source = "../../modules/iam"
 
-  environment      = var.environment
-  iam_eks_policies = var.iam_eks_policies
-
+  environment               = var.environment
+  iam_customer_eks_policies = var.iam_customer_eks_policies
+  iam_aws_eks_policies      = var.iam_aws_eks_policies
 }
 
 module "k8s" {

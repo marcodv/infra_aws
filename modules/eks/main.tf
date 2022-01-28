@@ -115,5 +115,9 @@ resource "aws_eks_node_group" "node_group_eks" {
   //  version = aws_launch_template.eks_launch_group_template.latest_version
   //} 
 
+  // This tag tell to the EC2 worker node to join to the cluster
+  tags = {
+    "kubernetes.io/cluster/eks-${var.environment}" = "owned"
+  }
 }
 

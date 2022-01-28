@@ -175,6 +175,7 @@ resource "aws_security_group" "alb_sg" {
     self        = true
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   tags = {
     Name = "ALB sg ${var.environment} environment"
   }
@@ -210,6 +211,7 @@ resource "aws_security_group" "bastions_sg" {
     self        = true
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   tags = {
     Name = "SG Bastions ${var.environment} environment"
   }
@@ -245,6 +247,7 @@ resource "aws_security_group" "private_instances_sg" {
     self        = true
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   tags = {
     Name = "SG private instances in ${var.environment} environment"
   }
@@ -281,7 +284,6 @@ resource "aws_security_group" "db_sg" {
     self        = true
     // Allow outbound only TO private subnets
     cidr_blocks = var.private_subnets_cidr
-
   }
 
   tags = {
@@ -315,7 +317,7 @@ resource "aws_security_group" "eks_sg" {
 
   }
   tags = {
-    Name = "SG EKS nods for ${var.environment} environment"
+    Name = "SG EKS nodes for ${var.environment} environment"
   }
 }
 
