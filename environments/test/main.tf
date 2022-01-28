@@ -65,7 +65,6 @@ module "iam" {
 }
 
 module "k8s" {
-  //depends_on = [module.networking, module.iam]
   source = "../../modules/eks"
 
   environment                 = var.environment

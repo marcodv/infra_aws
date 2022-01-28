@@ -20,7 +20,7 @@ resource "aws_alb" "alb" {
 resource "aws_alb_target_group" "http_tg_alb" {
   depends_on = [aws_alb.alb]
   name       = "HTTP-TG-${var.environment}-env"
-  port       =  var.eks_ingress_controller_port_path.ingress_port // 30080 rename this value 
+  port       =  var.eks_ingress_controller_port_path.ingress_port
   protocol   = "HTTP"
   vpc_id     = var.vpc_id
   health_check {
