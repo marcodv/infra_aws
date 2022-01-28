@@ -49,10 +49,11 @@ module "networking" {
 module "lb" {
   source = "../../modules/alb"
 
-  environment       = var.environment
-  public_subnet_alb = module.networking.public_subnets_id
-  sg_alb            = module.networking.alb_sg
-  vpc_id            = module.networking.vpc_id
+  environment                      = var.environment
+  eks_ingress_controller_port_path = var.eks_ingress_controller_port_path
+  public_subnet_alb                = module.networking.public_subnets_id
+  sg_alb                           = module.networking.alb_sg
+  vpc_id                           = module.networking.vpc_id
 }
 
 module "iam" {

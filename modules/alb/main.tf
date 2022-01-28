@@ -13,8 +13,6 @@ resource "aws_alb" "alb" {
     "kubernetes.io/cluster/eks-${var.environment}-env" = "owned"
     "ingress.k8s.aws/resource"                         = "LoadBalancer"
     "elbv2.k8s.aws/cluster"                            = "eks-${var.environment}-env"
-    // This tag bind existing ALB to traefik ingress
-    //"ingress.k8s.aws/stack" = "traefik/traefik-ingress"
   }
 }
 
@@ -22,12 +20,12 @@ resource "aws_alb" "alb" {
 resource "aws_alb_target_group" "http_tg_alb" {
   depends_on = [aws_alb.alb]
   name       = "HTTP-TG-${var.environment}-env"
-  port       = 30080
+  port       =  var.eks_ingress_controller_port_path.ingress_port // 30080 rename this value 
   protocol   = "HTTP"
   vpc_id     = var.vpc_id
   health_check {
     interval            = 30
-    path                = "/"
+    path                = var.eks_ingress_controller_port_path.healt_check_path
     port                = 30080
     healthy_threshold   = 2
     unhealthy_threshold = 3

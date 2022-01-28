@@ -219,3 +219,10 @@ variable "iam_aws_eks_policies" {
   description = "AWS IAM managed policies for EKS"
   type        = list(string)
 }
+
+variable "eks_ingress_controller_port_path" {
+  type = object({
+    ingress_port     = number
+    healt_check_path = string
+  })
+}

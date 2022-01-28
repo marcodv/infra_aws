@@ -212,3 +212,9 @@ iam_customer_eks_policies = ["AWSLoadBalancerControllerIAMPolicy", "AWSFullAcces
 
 // AWS policies for EKS resource
 iam_aws_eks_policies = ["AmazonEKSVPCResourceController", "AmazonEKSWorkerNodePolicy", "AmazonEKSClusterPolicy", "AmazonEKS_CNI_Policy", "AmazonEC2ContainerRegistryReadOnly"]
+
+// EKS ALB ingress controller definition
+eks_ingress_controller_port_path = {
+  ingress_port     = 30080
+  healt_check_path = "/"
+}
