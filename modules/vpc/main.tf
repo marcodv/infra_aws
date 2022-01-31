@@ -110,7 +110,7 @@ resource "aws_subnet" "public_subnet" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name                                               = "public-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
+    Name = "public-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
     // Tag needed for bind EKS to ALB created from terraform
     "kubernetes.io/role/elb"                           = "1"
     "kubernetes.io/cluster/eks-${var.environment}-env" = "owned"
@@ -128,7 +128,8 @@ resource "aws_subnet" "private_subnet" {
   map_public_ip_on_launch = false
 
   tags = {
-    Name = "private-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
+    Name                                               = "private-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
+    "kubernetes.io/cluster/eks-${var.environment}-env" = "owned"
   }
 }
 
@@ -351,7 +352,8 @@ resource "aws_network_acl" "acl_public_subnet" {
   }
 
   tags = {
-    Name = "Public subnet ACL in ${element(var.availability_zones, count.index)}"
+    Name                                               = "Public subnet ACL in ${element(var.availability_zones, count.index)}"
+    "kubernetes.io/cluster/eks-${var.environment}-env" = "owned"
   }
 }
 

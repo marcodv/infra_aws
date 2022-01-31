@@ -26,7 +26,7 @@ resource "aws_alb_target_group" "http_tg_alb" {
   health_check {
     interval            = 30
     path                = var.eks_ingress_controller_port_path.healt_check_path
-    port                = 30080
+    port                = var.eks_ingress_controller_port_path.ingress_port
     healthy_threshold   = 2
     unhealthy_threshold = 3
     timeout             = 20

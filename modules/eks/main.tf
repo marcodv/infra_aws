@@ -117,7 +117,7 @@ resource "aws_eks_node_group" "node_group_eks" {
 
   // This tag tell to the EC2 worker node to join to the cluster
   tags = {
-    "kubernetes.io/cluster/eks-${var.environment}" = "owned"
+    "kubernetes.io/cluster/eks-${var.environment}-env" = "owned"
   }
 }
 
