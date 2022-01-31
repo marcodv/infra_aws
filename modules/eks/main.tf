@@ -19,7 +19,7 @@ data "aws_caller_identity" "current" {}
 # Create EKS cluster 
 resource "aws_eks_cluster" "eks_cluster" {
   name     = "eks-${var.environment}-env"
-  role_arn = var.eks_cluster_role
+  role_arn = "arn:aws:iam::848481299679:role/eks-role-${var.environment}-env"
   version  = var.eks_version
 
   vpc_config {
@@ -66,11 +66,12 @@ resource "kubernetes_config_map" "aws_auth" {
 
   data = {
     mapRoles = <<YAML
-- rolearn: ${var.eks_cluster_role}
+- rolearn: "arn:aws:iam::848481299679:role/eks-role-${var.environment}-env"
   username: system:node:{{EC2PrivateDNSName}}
   groups:
     - system:bootstrappers
     - system:nodes
+    - system:master
     - cluster-full-admin-group
     - cluster-read-only-group
 YAML

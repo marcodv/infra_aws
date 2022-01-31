@@ -101,12 +101,6 @@ variable "db_master_username" {
   type        = string
 }
 
-variable "eks_cluster_role" {
-  description = "Role for EKS"
-  type        = string
-  default     = ""
-}
-
 variable "db_private_subnets_cidr" {
   description = "List of private subnets for DB"
   type        = list(string)

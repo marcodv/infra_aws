@@ -62,7 +62,7 @@ module "iam" {
   environment               = var.environment
 }
 
-/*module "k8s" {
+module "k8s" {
   source = "../../modules/eks"
 
   environment                 = var.environment
@@ -77,10 +77,9 @@ module "iam" {
   worker_nodes_update_config  = var.worker_nodes_update_config
   worker_node_ami_id          = var.worker_node_ami_id
   eks_version                 = var.eks_version
-  eks_cluster_role            = module.iam.eks_cluster_role
   eks_sg                      = module.networking.eks_sg
   eks_subnets                 = module.networking.private_subnets_id
-} */
+}
 
 /*module "db" {
   source = "../../modules/database"

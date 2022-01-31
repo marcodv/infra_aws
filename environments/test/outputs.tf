@@ -68,11 +68,6 @@ output "eks_sg" {
   value       = module.networking.eks_sg
 }
 
-/*output "eks_role" {
-  description = "Return eks ARN role used to manage the cluster"
-  value       = module.iam.eks_cluster_role
-} */
-
 output "http_target_group" {
   description = "Return HTTP target group from ALB"
   value       = module.lb.name_http_target_group
@@ -88,7 +83,7 @@ output "arn_http_target_group" {
   value = module.db.db-endpoint
 } */
 
-/*output "eks_endpoint" {
+output "eks_endpoint" {
   description = "Return EKS URL API"
   value       = module.k8s.eks_endpoint
 }
@@ -96,9 +91,9 @@ output "arn_http_target_group" {
 output "eks_cluster_id" {
   description = "Return cluster's name"
   value       = module.k8s.eks_cluster_id
-} */
+}
 
-/*output "oidc_issuer_url" {
+output "oidc_issuer_url" {
   description = "Return the OIDC url issue"
   value       = module.k8s.oidc_issuer_url
-}*/
+}

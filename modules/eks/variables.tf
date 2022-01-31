@@ -18,11 +18,6 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "eks_cluster_role" {
-  description = "Role for EKS"
-  type        = string
-}
-
 variable "map_cluster_admin_users" {
   description = "Map of full admin users on EKS"
   type = object({
