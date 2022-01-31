@@ -60,11 +60,9 @@ module "iam" {
   source = "../../modules/iam"
 
   environment               = var.environment
-  iam_customer_eks_policies = var.iam_customer_eks_policies
-  iam_aws_eks_policies      = var.iam_aws_eks_policies
 }
 
-module "k8s" {
+/*module "k8s" {
   source = "../../modules/eks"
 
   environment                 = var.environment
@@ -82,7 +80,7 @@ module "k8s" {
   eks_cluster_role            = module.iam.eks_cluster_role
   eks_sg                      = module.networking.eks_sg
   eks_subnets                 = module.networking.private_subnets_id
-}
+} */
 
 /*module "db" {
   source = "../../modules/database"
