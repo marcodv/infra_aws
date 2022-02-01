@@ -196,3 +196,5 @@ eks_ingress_controller_port_path = {
   ingress_port     = 30080
   healt_check_path = "/"
 }
+
+worker_node_role = "arn:aws:iam::848481299679:role/eks-role-test-env"

@@ -210,3 +210,8 @@ variable "eks_ingress_controller_port_path" {
     healt_check_path = string
   })
 }
+
+variable "worker_node_role" {
+  description = "ARN IAM worker node"
+  type        = string
+}
