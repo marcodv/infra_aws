@@ -28,6 +28,11 @@ variable "alb_ingress_rule" {
   type        = list(number)
 }
 
+variable "eks_ingress_rule" {
+  description = "List of open ports for inbound connections"
+  type        = list(number)
+}
+
 variable "bastion_ingress_rule" {
   description = "List of open ports for inbound connections"
   type        = list(number)

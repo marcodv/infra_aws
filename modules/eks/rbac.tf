@@ -78,5 +78,4 @@ resource "kubernetes_role_binding" "cluster_read_only_role_binding" {
     name      = "cluster-read-only-group"
     api_group = "rbac.authorization.k8s.io"
   }
-
 }

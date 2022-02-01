@@ -6,9 +6,10 @@ public_subnets_cidr            = ["10.0.0.0/20", "10.0.16.0/20"]  //, "10.0.32.0
 private_subnets_cidr           = ["10.0.48.0/20", "10.0.64.0/20"] //, "10.0.80.0/20"]
 db_private_subnets_cidr        = ["10.0.96.0/20", "10.0.112.0/20"]
 availability_zones             = ["eu-west-1a", "eu-west-1b"] //, "eu-west-1c"]
-alb_ingress_rule               = [80, 443, 8000, 8080]
-bastion_ingress_rule           = [22, 80, 443, 8080]
-private_instances_ingress_rule = [22, 80, 8000, 8080]
+alb_ingress_rule               = [80, 443]
+eks_ingress_rule               = [80, 443]
+bastion_ingress_rule           = [22, 80, 443]
+private_instances_ingress_rule = [22, 80, 443, 30080]
 sg_db_rule                     = [5432]
 acl_public_subnet_rule = {
   ingress_rule = [{
@@ -32,18 +33,8 @@ acl_public_subnet_rule = {
       to_port   = 5432
     },
     {
-      rule_no   = 104
-      from_port = 8000
-      to_port   = 8000
-    },
-    {
-      rule_no   = 105
-      from_port = 8080
-      to_port   = 8080
-    },
-    {
       rule_no   = 200
-      from_port = 1024
+      from_port = 1025
       to_port   = 65535
   }]
 }
@@ -70,18 +61,13 @@ acl_private_subnet_rule = {
       to_port   = 5432
     },
     {
-      rule_no   = 104
-      from_port = 8000
-      to_port   = 8000
-    },
-    {
-      rule_no   = 105
-      from_port = 8080
-      to_port   = 8080
+      rule_no   = 106
+      from_port = 30080
+      to_port   = 30080
     },
     {
       rule_no   = 200
-      from_port = 1024
+      from_port = 1025
       to_port   = 65535
   }]
 }
@@ -203,8 +189,10 @@ worker_nodes_update_config = {
   max_unavailable = 1
 }
 
-worker_node_ami_id = "ami-020452378df41ab4b"
-
 eks_version = 1.21
 
-iam_eks_policies = ["AWSLoadBalancerControllerIAMPolicy"]
+// EKS ALB ingress controller definition
+eks_ingress_controller_port_path = {
+  ingress_port     = 30080
+  healt_check_path = "/"
+}

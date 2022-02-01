@@ -53,6 +53,11 @@ variable "alb_ingress_rule" {
   type        = list(number)
 }
 
+variable "eks_ingress_rule" {
+  description = "List of open ports for inbound connections"
+  type        = list(number)
+}
+
 variable "private_instances_ingress_rule" {
   description = "List of open ports for inbound connections"
   type        = list(number)
@@ -99,12 +104,6 @@ variable "db_master_password" {
 variable "db_master_username" {
   description = "Master username for db"
   type        = string
-}
-
-variable "eks_cluster_role" {
-  description = "Role for EKS"
-  type        = string
-  default     = ""
 }
 
 variable "db_private_subnets_cidr" {
@@ -195,11 +194,6 @@ variable "worker_nodes_update_config" {
   })
 }
 
-variable "worker_node_ami_id" {
-  description = "Worker node ami id"
-  type        = string
-}
-
 variable "eks_version" {
   description = "EKS version"
   type        = string
@@ -210,7 +204,9 @@ variable "type_resource" {
   type        = string
 }
 
-variable "iam_eks_policies" {
-  description = "IAM policy for ALB ingress controller"
-  type        = list(string)
+variable "eks_ingress_controller_port_path" {
+  type = object({
+    ingress_port     = number
+    healt_check_path = string
+  })
 }

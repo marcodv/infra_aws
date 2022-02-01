@@ -1,3 +1,5 @@
-variable "environment" {}
+variable "environment" {
+  description = "Environments that we want to deploy"
+  type        = string
+}
 
-variable "iam_eks_policies" {}

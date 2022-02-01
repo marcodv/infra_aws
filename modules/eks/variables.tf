@@ -18,11 +18,6 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "eks_cluster_role" {
-  description = "Role for EKS"
-  type        = string
-}
-
 variable "map_cluster_admin_users" {
   description = "Map of full admin users on EKS"
   type = object({
@@ -98,11 +93,6 @@ variable "worker_nodes_update_config" {
   type = object({
     max_unavailable = number
   })
-}
-
-variable "worker_node_ami_id" {
-  description = "Worker node ami id"
-  type        = string
 }
 
 variable "eks_version" {
