@@ -56,6 +56,8 @@ locals {
   k8s_map_users = concat(local.k8s_admins, local.eks_read_only_dashboard_users)
 }
 
+// Create a different worker node role with less permissions
+
 // Create accounts in aws_auth configMap
 resource "kubernetes_config_map" "aws_auth" {
   depends_on = [aws_eks_cluster.eks_cluster]
@@ -72,8 +74,6 @@ resource "kubernetes_config_map" "aws_auth" {
     - system:bootstrappers
     - system:nodes
     - system:master
-    - cluster-full-admin-group
-    - cluster-read-only-group
 YAML
 
     mapUsers    = yamlencode(local.k8s_map_users)
@@ -86,8 +86,7 @@ YAML
 
 // Create node group for eks
 resource "aws_eks_node_group" "node_group_eks" {
-  //ami_type = var.worker_node_ami_id
-  depends_on      = [kubernetes_config_map.aws_auth] //, aws_launch_template.eks_launch_group_template]
+  depends_on      = [kubernetes_config_map.aws_auth] 
   cluster_name    = aws_eks_cluster.eks_cluster.name
   node_group_name = "node-group-${var.environment}-env"
   node_role_arn   = aws_eks_cluster.eks_cluster.role_arn
@@ -110,11 +109,6 @@ resource "aws_eks_node_group" "node_group_eks" {
   update_config {
     max_unavailable = var.worker_nodes_update_config.max_unavailable
   }
-
-  //launch_template {
-  //  name    = aws_launch_template.eks_launch_group_template.name
-  //  version = aws_launch_template.eks_launch_group_template.latest_version
-  //} 
 
   // This tag tell to the EC2 worker node to join to the cluster
   tags = {

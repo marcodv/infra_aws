@@ -27,6 +27,7 @@ module "networking" {
   private_subnets_cidr           = var.private_subnets_cidr
   availability_zones             = var.availability_zones
   alb_ingress_rule               = var.alb_ingress_rule
+  eks_ingress_rule               = var.eks_ingress_rule
   bastion_ingress_rule           = var.bastion_ingress_rule
   private_instances_ingress_rule = var.private_instances_ingress_rule
   acl_public_subnet_rule         = var.acl_public_subnet_rule
@@ -36,7 +37,7 @@ module "networking" {
   db_subnets_cidr                = var.db_private_subnets_cidr
 }
 
-/*module "jump_host" {
+module "jump_host" {
   source = "../../modules/bastions"
 
   environment        = var.environment
@@ -44,7 +45,7 @@ module "networking" {
   availability_zones = var.availability_zones
   public_subnets_id  = module.networking.public_subnets_id
   bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
-} */
+}
 
 module "lb" {
   source = "../../modules/alb"
@@ -59,7 +60,7 @@ module "lb" {
 module "iam" {
   source = "../../modules/iam"
 
-  environment               = var.environment
+  environment = var.environment
 }
 
 module "k8s" {
@@ -75,7 +76,6 @@ module "k8s" {
   workers_nodes_instance_type = var.workers_nodes_instance_type
   worker_nodes_scaling_config = var.worker_nodes_scaling_config
   worker_nodes_update_config  = var.worker_nodes_update_config
-  worker_node_ami_id          = var.worker_node_ami_id
   eks_version                 = var.eks_version
   eks_sg                      = module.networking.eks_sg
   eks_subnets                 = module.networking.private_subnets_id

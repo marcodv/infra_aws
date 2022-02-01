@@ -302,10 +302,24 @@ resource "aws_security_group" "eks_sg" {
   # Inbound Rule
   ingress {
     description = "EKS Ingress rule"
-    from_port   = 0
+    from_port   = 1025
     to_port     = 65535
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  // Block to create ingress rules
+  dynamic "ingress" {
+    iterator = port
+    for_each = var.eks_ingress_rule
+
+    content {
+      description = "Port ${port.value} rule"
+      from_port   = port.value
+      to_port     = port.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
   }
 
   // Without this section no incoming connection from VPC

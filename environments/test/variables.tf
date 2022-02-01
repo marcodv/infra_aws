@@ -53,6 +53,11 @@ variable "alb_ingress_rule" {
   type        = list(number)
 }
 
+variable "eks_ingress_rule" {
+  description = "List of open ports for inbound connections"
+  type        = list(number)
+}
+
 variable "private_instances_ingress_rule" {
   description = "List of open ports for inbound connections"
   type        = list(number)
@@ -187,11 +192,6 @@ variable "worker_nodes_update_config" {
   type = object({
     max_unavailable = number
   })
-}
-
-variable "worker_node_ami_id" {
-  description = "Worker node ami id"
-  type        = string
 }
 
 variable "eks_version" {

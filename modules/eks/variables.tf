@@ -95,11 +95,6 @@ variable "worker_nodes_update_config" {
   })
 }
 
-variable "worker_node_ami_id" {
-  description = "Worker node ami id"
-  type        = string
-}
-
 variable "eks_version" {
   description = "EKS version"
   type        = string

@@ -1,6 +1,6 @@
 /*==== ALB ======*/
 resource "aws_alb" "alb" {
-  name               = "ALB-for-${var.environment}-environment"
+  name               = "ALB-${var.environment}-environment"
   subnets            = var.public_subnet_alb
   security_groups    = [var.sg_alb]
   internal           = false
