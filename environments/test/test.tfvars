@@ -169,12 +169,13 @@ map_cluster_admin_users = {
       userarn  = "arn:aws:iam::848481299679:user/marco@noah.energy"
       username = "marco@noah.energy"
       groups   = ["system:masters", "cluster-full-admin-group"]
-    },
+    } /*,
     {
       userarn  = "arn:aws:iam::848481299679:user/Terraform_User_Testing_Env"
       username = "Terraform_User_Testing_Env@noah.energy"
       groups   = ["system:masters", "cluster-full-admin-group"]
-  }]
+  }
+  */]
 }
 
 workers_nodes_instance_type = ["t2.small"]
@@ -197,4 +198,4 @@ eks_ingress_controller_port_path = {
   healt_check_path = "/"
 }
 
-worker_node_role = "arn:aws:iam::848481299679:role/eks-role-test-env"
+worker_node_role = "arn:aws:iam::848481299679:role/worker-node-role-test-env"
