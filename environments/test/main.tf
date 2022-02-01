@@ -21,19 +21,20 @@ provider "aws" {
 module "networking" {
   source = "../../modules/vpc/"
 
-  environment                               = var.environment
-  vpc_cidr_block                            = var.vpc_cidr_block
-  public_subnets_cidr                       = var.public_subnets_cidr
-  private_subnets_cidr                      = var.private_subnets_cidr
-  availability_zones                        = var.availability_zones
-  alb_ingress_rule                          = var.alb_ingress_rule
-  bastion_ingress_rule                      = var.bastion_ingress_rule
-  private_instances_ingress_rule            = var.private_instances_ingress_rule
-  acl_public_subnet_rule                    = var.acl_public_subnet_rule
-  acl_private_subnet_rule                   = var.acl_private_subnet_rule
-  sg_db_rule                                = var.sg_db_rule
-  acl_db_rule                               = var.acl_db_rule
-  db_subnets_cidr                           = var.db_private_subnets_cidr
+  environment                    = var.environment
+  vpc_cidr_block                 = var.vpc_cidr_block
+  public_subnets_cidr            = var.public_subnets_cidr
+  private_subnets_cidr           = var.private_subnets_cidr
+  availability_zones             = var.availability_zones
+  alb_ingress_rule               = var.alb_ingress_rule
+  eks_ingress_rule               = var.eks_ingress_rule
+  bastion_ingress_rule           = var.bastion_ingress_rule
+  private_instances_ingress_rule = var.private_instances_ingress_rule
+  acl_public_subnet_rule         = var.acl_public_subnet_rule
+  acl_private_subnet_rule        = var.acl_private_subnet_rule
+  sg_db_rule                     = var.sg_db_rule
+  acl_db_rule                    = var.acl_db_rule
+  db_subnets_cidr                = var.db_private_subnets_cidr
 }
 
 module "jump_host" {
@@ -49,22 +50,20 @@ module "jump_host" {
 module "lb" {
   source = "../../modules/alb"
 
-  environment       = var.environment
-  public_subnet_alb = module.networking.public_subnets_id
-  sg_alb            = module.networking.alb_sg
-  vpc_id            = module.networking.vpc_id
+  environment                      = var.environment
+  eks_ingress_controller_port_path = var.eks_ingress_controller_port_path
+  public_subnet_alb                = module.networking.public_subnets_id
+  sg_alb                           = module.networking.alb_sg
+  vpc_id                           = module.networking.vpc_id
 }
 
 module "iam" {
   source = "../../modules/iam"
 
-  environment      = var.environment
-  iam_eks_policies = var.iam_eks_policies
-
+  environment = var.environment
 }
 
 module "k8s" {
-  //depends_on = [module.networking, module.iam]
   source = "../../modules/eks"
 
   environment                 = var.environment
@@ -77,9 +76,7 @@ module "k8s" {
   workers_nodes_instance_type = var.workers_nodes_instance_type
   worker_nodes_scaling_config = var.worker_nodes_scaling_config
   worker_nodes_update_config  = var.worker_nodes_update_config
-  worker_node_ami_id          = var.worker_node_ami_id
   eks_version                 = var.eks_version
-  eks_cluster_role            = module.iam.eks_cluster_role
   eks_sg                      = module.networking.eks_sg
   eks_subnets                 = module.networking.private_subnets_id
 }

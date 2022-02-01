@@ -1,0 +1,17 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": {
+          "Federated": "arn:aws:iam::848481299679:oidc-provider/oidc.eks.eu-west-1.amazonaws.com/id/ABDB2DE9345FB6079E3AB79BF4FB5729"
+        },
+        "Action": "sts:AssumeRoleWithWebIdentity",
+        "Condition": {
+          "StringEquals": {
+            "oidc.eks.eu-west-1.amazonaws.com/id/ABDB2DE9345FB6079E3AB79BF4FB5729:sub": "system:serviceaccount:kube-system:ALBIngressServiceAccount"
+          }
+        }
+      }
+    ]
+  }

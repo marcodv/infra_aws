@@ -110,8 +110,7 @@ resource "aws_subnet" "public_subnet" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name                                               = "public-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
-    
+    Name = "public-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
     // Tag needed for bind EKS to ALB created from terraform
     "kubernetes.io/role/elb"                           = "1"
     "kubernetes.io/cluster/eks-${var.environment}-env" = "owned"
@@ -119,7 +118,6 @@ resource "aws_subnet" "public_subnet" {
     "elbv2.k8s.aws/cluster"                            = "eks-${var.environment}-env"
   }
 }
-
 
 /* Private subnet */
 resource "aws_subnet" "private_subnet" {
@@ -130,7 +128,8 @@ resource "aws_subnet" "private_subnet" {
   map_public_ip_on_launch = false
 
   tags = {
-    Name = "private-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
+    Name                                               = "private-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
+    "kubernetes.io/cluster/eks-${var.environment}-env" = "owned"
   }
 }
 
@@ -177,6 +176,7 @@ resource "aws_security_group" "alb_sg" {
     self        = true
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   tags = {
     Name = "ALB sg ${var.environment} environment"
   }
@@ -212,6 +212,7 @@ resource "aws_security_group" "bastions_sg" {
     self        = true
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   tags = {
     Name = "SG Bastions ${var.environment} environment"
   }
@@ -247,6 +248,7 @@ resource "aws_security_group" "private_instances_sg" {
     self        = true
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   tags = {
     Name = "SG private instances in ${var.environment} environment"
   }
@@ -283,7 +285,6 @@ resource "aws_security_group" "db_sg" {
     self        = true
     // Allow outbound only TO private subnets
     cidr_blocks = var.private_subnets_cidr
-
   }
 
   tags = {
@@ -301,10 +302,24 @@ resource "aws_security_group" "eks_sg" {
   # Inbound Rule
   ingress {
     description = "EKS Ingress rule"
-    from_port   = 0
+    from_port   = 1025
     to_port     = 65535
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  // Block to create ingress rules
+  dynamic "ingress" {
+    iterator = port
+    for_each = var.eks_ingress_rule
+
+    content {
+      description = "Port ${port.value} rule"
+      from_port   = port.value
+      to_port     = port.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
   }
 
   // Without this section no incoming connection from VPC
@@ -317,7 +332,8 @@ resource "aws_security_group" "eks_sg" {
 
   }
   tags = {
-    Name = "SG EKS nods for ${var.environment} environment"
+    Name                                               = "SG EKS nodes for ${var.environment} environment"
+    "kubernetes.io/cluster/eks-${var.environment}-env" = "owned"
   }
 }
 
@@ -351,7 +367,8 @@ resource "aws_network_acl" "acl_public_subnet" {
   }
 
   tags = {
-    Name = "Public subnet ACL in ${element(var.availability_zones, count.index)}"
+    Name                                               = "Public subnet ACL in ${element(var.availability_zones, count.index)}"
+    "kubernetes.io/cluster/eks-${var.environment}-env" = "owned"
   }
 }
 
