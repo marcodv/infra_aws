@@ -99,3 +99,8 @@ variable "eks_version" {
   description = "EKS version"
   type        = string
 }
+
+variable "worker_node_role" {
+  description = "ARN IAM worker node"
+  type        = string
+}

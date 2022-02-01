@@ -65,10 +65,10 @@ resource "kubernetes_config_map" "aws_auth" {
     name      = "aws-auth"
     namespace = "kube-system"
   }
-
+// - rolearn: "${var.worker_node_role}"
   data = {
     mapRoles = <<YAML
-- rolearn: "arn:aws:iam::848481299679:role/eks-role-${var.environment}-env"
+- rolearn: "${var.worker_node_role}"
   username: system:node:{{EC2PrivateDNSName}}
   groups:
     - system:bootstrappers
@@ -89,7 +89,7 @@ resource "aws_eks_node_group" "node_group_eks" {
   depends_on      = [kubernetes_config_map.aws_auth] 
   cluster_name    = aws_eks_cluster.eks_cluster.name
   node_group_name = "node-group-${var.environment}-env"
-  node_role_arn   = aws_eks_cluster.eks_cluster.role_arn
+  node_role_arn   = var.worker_node_role
   subnet_ids      = var.eks_subnets
   instance_types  = var.workers_nodes_instance_type
 
