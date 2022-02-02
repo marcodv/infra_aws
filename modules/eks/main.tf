@@ -1,18 +1,15 @@
-/* Usage:
- *
+/* 
  * This module is used to deploy EKS with instance managed by a worker node group
  * 
  * These are the resources created in this module 
+ *
  * - EKS cluster
- * - Cluster full admin users mapped in the aws_auth configMap
+ * - Cluster full admin/read only users mapped in the aws_auth configMap
  * - Node Group
  *
- * Even inline **formatting** in _here_ is possible.
- * and some [link](https://domain.com/)
  *
- * * list item 3
- * * list item 4
 */
+
 
 data "aws_caller_identity" "current" {}
 
@@ -56,8 +53,6 @@ locals {
   k8s_map_users = concat(local.k8s_admins, local.eks_read_only_dashboard_users)
 }
 
-// Create a different worker node role with less permissions
-
 // Create accounts in aws_auth configMap
 resource "kubernetes_config_map" "aws_auth" {
   depends_on = [aws_eks_cluster.eks_cluster]
@@ -73,7 +68,6 @@ resource "kubernetes_config_map" "aws_auth" {
   groups:
     - system:bootstrappers
     - system:nodes
-    - system:master
 YAML
 
     mapUsers    = yamlencode(local.k8s_map_users)
@@ -93,13 +87,12 @@ resource "aws_eks_node_group" "node_group_eks" {
   subnet_ids      = var.eks_subnets
   instance_types  = var.workers_nodes_instance_type
 
-  // Remote access doesn't work with launch template
   remote_access {
-    // to rename the ssh keys for workers node
     ec2_ssh_key               = "workers-node-ssh-key-${var.environment}-env"
     source_security_group_ids = [var.eks_sg]
   }
 
+  // Scaling configuration
   scaling_config {
     desired_size = var.worker_nodes_scaling_config.desired_size
     max_size     = var.worker_nodes_scaling_config.max_size
