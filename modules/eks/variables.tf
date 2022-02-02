@@ -104,3 +104,13 @@ variable "worker_node_role" {
   description = "ARN IAM worker node"
   type        = string
 }
+
+/*variable "node_launch_configuration" {
+  description = "Launch configuration node group"
+  type = list(object({
+    instance_type               = string
+    associate_public_ip_address = string
+    iam_instance_profile = string
+  }))
+
+} */

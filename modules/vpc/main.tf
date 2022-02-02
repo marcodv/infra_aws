@@ -308,6 +308,14 @@ resource "aws_security_group" "eks_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description = "Traefik Ingress rule"
+    from_port   = 30080
+    to_port     = 30080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   // Block to create ingress rules
   dynamic "ingress" {
     iterator = port

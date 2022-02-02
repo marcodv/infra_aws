@@ -7,7 +7,7 @@ private_subnets_cidr           = ["10.0.48.0/20", "10.0.64.0/20"] //, "10.0.80.0
 db_private_subnets_cidr        = ["10.0.96.0/20", "10.0.112.0/20"]
 availability_zones             = ["eu-west-1a", "eu-west-1b"] //, "eu-west-1c"]
 alb_ingress_rule               = [80, 443]
-eks_ingress_rule               = [80, 443]
+eks_ingress_rule               = [53, 80, 443]
 bastion_ingress_rule           = [22, 80, 443]
 private_instances_ingress_rule = [22, 80, 443, 30080]
 sg_db_rule                     = [5432]
@@ -102,12 +102,6 @@ namespaces = [
   },
   {
     manage             = "Terraform",
-    name               = "traefik"
-    custom_annotations = [{ label = "service.io/annotation", value = "traefik" }]
-    custom_labels      = [{ label = "service", value = "traefik" }]
-  },
-  {
-    manage             = "Terraform",
     name               = "monitoring"
     custom_annotations = [{ label = "service.io/annotation", value = "monitoring" }]
     custom_labels      = [{ label = "service", value = "monitoring" }]
@@ -169,20 +163,20 @@ map_cluster_admin_users = {
       userarn  = "arn:aws:iam::848481299679:user/marco@noah.energy"
       username = "marco@noah.energy"
       groups   = ["system:masters", "cluster-full-admin-group"]
-    } /*,
+    },
     {
       userarn  = "arn:aws:iam::848481299679:user/Terraform_User_Testing_Env"
       username = "Terraform_User_Testing_Env@noah.energy"
       groups   = ["system:masters", "cluster-full-admin-group"]
   }
-  */]
+  ]
 }
 
-workers_nodes_instance_type = ["t2.small"]
+workers_nodes_instance_type = ["t2.medium"]
 
 worker_nodes_scaling_config = {
-  desired_size = 1
-  max_size     = 2
+  desired_size = 3
+  max_size     = 4
   min_size     = 1
 }
 

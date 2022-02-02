@@ -204,6 +204,7 @@ variable "type_resource" {
   type        = string
 }
 
+// change this variable name
 variable "eks_ingress_controller_port_path" {
   type = object({
     ingress_port     = number
