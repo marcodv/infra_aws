@@ -1,10 +1,10 @@
-environment                    = "test"
+environment                    = "prod"
 type_resource                  = "destroyable"
 bastions-ami                   = "ami-04dd4500af104442f"
-vpc_cidr_block                 = "10.0.0.0/16"
-public_subnets_cidr            = ["10.0.0.0/20", "10.0.16.0/20"]  //, "10.0.32.0/20"]
-private_subnets_cidr           = ["10.0.48.0/20", "10.0.64.0/20"] //, "10.0.80.0/20"]
-db_private_subnets_cidr        = ["10.0.96.0/20", "10.0.112.0/20"]
+vpc_cidr_block                 = "20.0.0.0/16"
+public_subnets_cidr            = ["20.0.0.0/20", "20.0.16.0/20"]  //, "10.0.32.0/20"]
+private_subnets_cidr           = ["20.0.48.0/20", "20.0.64.0/20"] //, "10.0.80.0/20"]
+db_private_subnets_cidr        = ["20.0.96.0/20", "20.0.112.0/20"]
 availability_zones             = ["eu-west-1a", "eu-west-1b"] //, "eu-west-1c"]
 alb_ingress_rule               = [80, 443]
 eks_ingress_rule               = [53, 80, 443]
@@ -102,6 +102,12 @@ namespaces = [
   },
   {
     manage             = "Terraform",
+    name               = "traefik"
+    custom_annotations = [{ label = "service.io/annotation", value = "traefik" }]
+    custom_labels      = [{ label = "service", value = "traefik" }]
+  },
+  {
+    manage             = "Terraform",
     name               = "monitoring"
     custom_annotations = [{ label = "service.io/annotation", value = "monitoring" }]
     custom_labels      = [{ label = "service", value = "monitoring" }]
@@ -146,8 +152,8 @@ read_only_user_permissions = [
 
 read_only_eks_users = {
   users = [/*{
-    userarn  = "arn:aws:iam::848481299679:user/bastiaan@noah.energy"
-    username = "bastiaan@noah.energy"
+    userarn  = "arn:aws:iam::848481299679:user/username@noah.energy"
+    username = "username@noah.energy"
     groups   = ["cluster-read-only-group"]
   }*/]
 }
@@ -165,8 +171,8 @@ map_cluster_admin_users = {
       groups   = ["system:masters", "cluster-full-admin-group"]
     },
     {
-      userarn  = "arn:aws:iam::848481299679:user/Terraform_User_Testing_Env"
-      username = "Terraform_User_Testing_Env@noah.energy"
+      userarn  = "arn:aws:iam::848481299679:user/Terraform_User_Production_Env"
+      username = "Terraform_User_Production_Env@noah.energy"
       groups   = ["system:masters", "cluster-full-admin-group"]
   }
   ]
@@ -175,8 +181,8 @@ map_cluster_admin_users = {
 workers_nodes_instance_type = ["t2.medium"]
 
 worker_nodes_scaling_config = {
-  desired_size = 3
-  max_size     = 4
+  desired_size = 1
+  max_size     = 2
   min_size     = 1
 }
 
@@ -192,4 +198,4 @@ eks_ingress_controller_port_path = {
   healt_check_path = "/"
 }
 
-worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoletestEnv"
+worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoleprodEnv"
