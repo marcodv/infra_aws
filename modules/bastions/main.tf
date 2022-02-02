@@ -10,6 +10,6 @@ resource "aws_instance" "bastions" {
   user_data              = file("${path.module}/kubectl_repo.sh")
 
   tags = {
-    Name = "Bastion-${element(var.availability_zones, count.index)}"
+    Name = "Bastion-${element(var.availability_zones, count.index)}-${var.environment}-env"
   }
 }
