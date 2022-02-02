@@ -1,9 +1,9 @@
 terraform {
   backend "s3" {
-    bucket         = "terraform-state-prod-env"
-    key            = "terraform-state-prod-env/terraform.tfstate"
+    bucket         = "terraform-state-devs-env"
+    key            = "terraform-state-devs-env/terraform.tfstate"
     region         = "eu-west-1"
-    dynamodb_table = "tfStateLockingProdEnv"
+    dynamodb_table = "tfStateLockingDevsEnv"
   }
 }
 
