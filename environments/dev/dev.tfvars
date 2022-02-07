@@ -99,18 +99,6 @@ namespaces = [
     name               = "production"
     custom_annotations = [{ label = "production.io/annotation", value = "production" }]
     custom_labels      = [{ label = "environment", value = "production" }]
-  },
-  {
-    manage             = "Terraform",
-    name               = "traefik"
-    custom_annotations = [{ label = "service.io/annotation", value = "traefik" }]
-    custom_labels      = [{ label = "service", value = "traefik" }]
-  },
-  {
-    manage             = "Terraform",
-    name               = "monitoring"
-    custom_annotations = [{ label = "service.io/annotation", value = "monitoring" }]
-    custom_labels      = [{ label = "service", value = "monitoring" }]
   }
 ]
 
