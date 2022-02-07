@@ -46,6 +46,9 @@ module "jump_host" {
   bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
 }
 
+/*
+// This module is not needed anymore since we delegate the 
+// ALB creation and management to ALB ingress controller from EKS
 module "lb" {
   source = "../../modules/alb"
 
@@ -54,7 +57,7 @@ module "lb" {
   public_subnet_alb                = module.networking.public_subnets_id
   sg_alb                           = module.networking.alb_sg
   vpc_id                           = module.networking.vpc_id
-}
+} */
 
 /*
 module "iam" {

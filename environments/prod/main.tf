@@ -17,9 +17,6 @@ provider "aws" {
   }
 }
 
-// Decomment these lines if you want to spin up a new fresh infra
-
-
 module "networking" {
   source = "../../modules/vpc/"
 
@@ -49,6 +46,7 @@ module "jump_host" {
   bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
 }
 
+/*
 module "lb" {
   source = "../../modules/alb"
 
@@ -63,7 +61,7 @@ module "iam" {
   source = "../../modules/iam"
 
   environment = var.environment
-}
+} */
 
 module "k8s" {
   source = "../../modules/eks"

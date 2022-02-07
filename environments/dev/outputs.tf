@@ -68,6 +68,7 @@ output "eks_sg" {
   value       = module.networking.eks_sg
 }
 
+/*
 output "http_target_group" {
   description = "Return HTTP target group from ALB"
   value       = module.lb.name_http_target_group
@@ -76,7 +77,7 @@ output "http_target_group" {
 output "arn_http_target_group" {
   description = "Return ARN for HTTP target groups"
   value       = module.lb.arn_http_target_group
-}
+} */
 
 /*output "db-endpoint" {
   description = "Return db endpoint"
