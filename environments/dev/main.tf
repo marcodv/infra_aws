@@ -17,9 +17,6 @@ provider "aws" {
   }
 }
 
-// Decomment these lines if you want to spin up a new fresh infra
-
-
 module "networking" {
   source = "../../modules/vpc/"
 
@@ -59,11 +56,12 @@ module "lb" {
   vpc_id                           = module.networking.vpc_id
 }
 
+/*
 module "iam" {
   source = "../../modules/iam"
 
   environment = var.environment
-}
+} */
 
 module "k8s" {
   source = "../../modules/eks"
@@ -84,6 +82,7 @@ module "k8s" {
   eks_subnets                 = module.networking.private_subnets_id
 }
 
+/*
 module "db" {
   source = "../../modules/database"
 
@@ -94,4 +93,4 @@ module "db" {
   db_subnets         = module.networking.db_private_subnets_id
   db_sg  = module.networking.db_sg
   vpc_id = module.networking.vpc_id
-} 
+} */
