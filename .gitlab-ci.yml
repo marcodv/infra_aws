@@ -66,8 +66,6 @@ infrastructure-prod:
     - terraform plan -var-file=prod.tfvars -var="db_master_username=$POSTGRES_USER_PROD_ENV" -var="db_master_password=$POSTGRES_PASSWORD_PROD_ENV"
     - terraform apply -var-file=prod.tfvars -auto-approve -var="db_master_username=$POSTGRES_USER_PROD_ENV" -var="db_master_password=$POSTGRES_PASSWORD_PROD_ENV"
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
 
 # Deploy the Terraform Documentation to GitLab pages
