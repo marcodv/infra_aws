@@ -1,12 +1,22 @@
 /* 
- * This module is used to deploy EKS with instance managed by a worker node group
+ * This module is used to deploy EKS version 1.21 with instances managed by a worker node group
+ *
+ * The worker nodes are deployed in private subnet and for now we only have 1 node
+ *
+ * Also it cames with IAM users mapped to the cluster in order to manage it.
+ *  
  * 
  * These are the resources created in this module 
  *
  * - EKS cluster
  * - Cluster full admin/read only users mapped in the aws_auth configMap
  * - Node Group
- *
+ * - Logs enabled and differentiates by environment: dev/prod
+ * - Tags
+ * - Metrics server for horizontal pods scaling
+ * - K8s API PUBLIC ENDPOINT (means that is reachable from anywhere)
+ * - Cluster Role in order to access/manage AWS resources
+ * - Worker Role for in order to access/manage AWS resources
  *
 */
 

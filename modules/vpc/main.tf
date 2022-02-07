@@ -1,15 +1,22 @@
-/* Usage:
+/* 
+ * This module is used to deploy a VPC that span across 2 AZ
  *
- * Example of 'foo_bar' module in `foo_bar.tf`.
+ * In public subnets, are placed bastions for access to instance in private subnets.
  *
- * - list item 1
- * - list item 2
+ * In private subnets, are placed DB and EKS worker nodes.
  *
- * Even inline **formatting** in _here_ is possible.
- * and some [link](https://domain.com/)
+ * Each resource created here, is tagged by AZ and as public/private
+ * 
+ * 
+ * These are the resources created in this module 
  *
- * * list item 3
- * * list item 4
+ * - 2 Public subnets
+ * - 4 Private subnet (2 for worker node, 2 for db)
+ * - 2 NAT gateway (1 for each AZ)
+ * - Tags needed by EKS in order to use or place resources inside the existing VPC without creating a new one
+ * - Security groups used by public/private subnets, DB, bastions 
+ * - NACL used by public/private subnet, DB, bastions
+ *
 */
 
 resource "aws_vpc" "vpc" {

@@ -1,0 +1,17 @@
+site_name: AWS Infra Terraform Documentation
+site_url: "https://noah-energy.gitlab.io/infra_aws"
+site_dir: public
+theme:
+  name: material
+  features:
+      - navigation.expand
+nav:
+    - index.md
+    - 'Environments':
+        - dev: 'dev.md'
+        - prod: 'prod.md'
+    - 'modules':
+        - bastions: 'bastions.md'
+        - database: 'database.md'
+        - eks: 'eks.md'
+        - vpc: 'vpc.md'
