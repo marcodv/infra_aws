@@ -1,4 +1,14 @@
 <!-- BEGIN_TF_DOCS -->
+The file in the Prod folder of this project, allow you to create infra for Prod env
+
+Dev and Prod env are equals in terms of resources created.
+
+The only differences are for the VPC IP range and tags applied to all the resources
+
+If you want to change any of the values for the resources created here,  
+
+you need to edit prod.tfvars
+
 ## Requirements
 
 No requirements.
@@ -12,10 +22,8 @@ No providers.
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_db"></a> [db](#module\_db) | ../../modules/database | n/a |
-| <a name="module_iam"></a> [iam](#module\_iam) | ../../modules/iam | n/a |
 | <a name="module_jump_host"></a> [jump\_host](#module\_jump\_host) | ../../modules/bastions | n/a |
 | <a name="module_k8s"></a> [k8s](#module\_k8s) | ../../modules/eks | n/a |
-| <a name="module_lb"></a> [lb](#module\_lb) | ../../modules/alb | n/a |
 | <a name="module_networking"></a> [networking](#module\_networking) | ../../modules/vpc/ | n/a |
 
 ## Resources
@@ -64,9 +72,9 @@ No resources.
 | Name | Description |
 |------|-------------|
 | <a name="output_alb_sg"></a> [alb\_sg](#output\_alb\_sg) | Return the alb security group |
-| <a name="output_arn_http_target_group"></a> [arn\_http\_target\_group](#output\_arn\_http\_target\_group) | Return ARN for HTTP target groups |
 | <a name="output_azs"></a> [azs](#output\_azs) | Return the availability zones used |
 | <a name="output_bastions_sg"></a> [bastions\_sg](#output\_bastions\_sg) | Return the bastions security group |
+| <a name="output_db-endpoint"></a> [db-endpoint](#output\_db-endpoint) | Return db endpoint |
 | <a name="output_db_sg"></a> [db\_sg](#output\_db\_sg) | Return the db security group |
 | <a name="output_db_subnets_cidr"></a> [db\_subnets\_cidr](#output\_db\_subnets\_cidr) | Return db subnets cidr blocks |
 | <a name="output_db_subnets_id"></a> [db\_subnets\_id](#output\_db\_subnets\_id) | Return db subnets id |
@@ -74,7 +82,6 @@ No resources.
 | <a name="output_eks_endpoint"></a> [eks\_endpoint](#output\_eks\_endpoint) | Return EKS URL API |
 | <a name="output_eks_sg"></a> [eks\_sg](#output\_eks\_sg) | Return eks security group |
 | <a name="output_eks_subnets"></a> [eks\_subnets](#output\_eks\_subnets) | Return the eks subnets |
-| <a name="output_http_target_group"></a> [http\_target\_group](#output\_http\_target\_group) | Return HTTP target group from ALB |
 | <a name="output_private_subnets_cidr"></a> [private\_subnets\_cidr](#output\_private\_subnets\_cidr) | Return the private subnets cidr |
 | <a name="output_private_subnets_id"></a> [private\_subnets\_id](#output\_private\_subnets\_id) | Return the private subnets id |
 | <a name="output_public_subnets_cidr"></a> [public\_subnets\_cidr](#output\_public\_subnets\_cidr) | Return the public subnets cidr |
