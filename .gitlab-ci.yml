@@ -75,7 +75,7 @@ pages:
   stage: documentation-deploy
   extends: .deploy_pages
   needs:
-  - infrastructure_prod
+  - infrastructure-prod
   script:
     - echo "Publishing Terraform documentations"
   rules:
