@@ -72,7 +72,7 @@ infrastructure-prod:
 
 # Deploy the Terraform Documentation to GitLab pages
 pages:
-  stage: deploy_documentation
+  stage: documentation-deploy
   extends: .deploy_pages
   needs:
   - infrastructure_prod
