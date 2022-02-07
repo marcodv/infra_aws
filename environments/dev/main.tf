@@ -1,3 +1,17 @@
+/* 
+ * The file in the Dev folder of this project, allow you to create infra for Dev env
+ *
+ * Dev and Prod env are equals in terms of resources created.
+ *
+ * The only differences are for the VPC IP range and tags applied to all the resources
+ *
+ * If you want to change any of the values for the resources created here,  
+ *
+ * you need to edit dev.tfvars
+ *
+ *
+*/
+
 terraform {
   backend "s3" {
     bucket         = "terraform-state-devs-env"
