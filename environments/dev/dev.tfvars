@@ -169,12 +169,12 @@ map_cluster_admin_users = {
       userarn  = "arn:aws:iam::848481299679:user/marco@noah.energy"
       username = "marco@noah.energy"
       groups   = ["system:masters", "cluster-full-admin-group"]
-    }/*,
+    },
     {
-      userarn  = "arn:aws:iam::848481299679:user/Terraform_User_Production_Env"
-      username = "Terraform_User_Production_Env@noah.energy"
+      userarn  = "arn:aws:iam::848481299679:user/Terraform_User_Dev_Env"
+      username = "Terraform_User_Dev_Env@noah.energy"
       groups   = ["system:masters", "cluster-full-admin-group"]
-  } */
+    }
   ]
 }
 
