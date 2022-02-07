@@ -8,81 +8,126 @@ include:
 
 # Stage availables for this pipeline
 stages:
-  - run-security-scan 
-  - infrastructure
-  - kube-config
-  - k8s-env
+  - run-security-scan
+  - infrastructure-dev
+  - documentation-test
+  - infrastructure-prod
+  - documentation-deploy
+  #- kube-config
+  #- k8s-env
 
 # Runs tfsec module scan from noah-pipelines-templates project
 run-security-scan:
   stage: run-security-scan
   extends: .module_security_scan
   variables:
-    PATH_TO_SCAN: "environments/test/"
+    PATH_TO_SCAN: "modules/"
   script: 
     - echo "Starting Terraform module security scan"
 
 # Run terraform template job from noah-pipelines-templates project
-infrastructure:
-  stage: infrastructure
+# Crate infra for DEV env
+infrastructure-dev:
+  stage: infrastructure-dev
   extends: .terraform
   variables:
-    AWS_PROFILE_ENV: $TF_USER_TEST_ENV
+    AWS_PROFILE_ENV: $TF_USER_DEV_ENV
   script:
-    - echo "Creating AWS Infra"
-    - cd environments/test/
+    - cd environments/dev/
     - pwd
     - terraform init
-    - terraform plan -var-file=test.tfvars -var="db_master_username=$POSTGRES_USER_TEST_ENV" -var="db_master_password=$POSTGRES_PASSWORD_TEST_ENV"
-    - terraform apply -var-file=test.tfvars -var="db_master_username=$POSTGRES_USER_TEST_ENV" -var="db_master_password=$POSTGRES_PASSWORD_TEST_ENV" -auto-approve 
+    - terraform plan -var-file=dev.tfvars -var="db_master_username=$POSTGRES_USER_DEV_ENV" -var="db_master_password=$POSTGRES_PASSWORD_DEV_ENV"
+    - terraform apply -var-file=dev.tfvars -var="db_master_username=$POSTGRES_USER_DEV_ENV" -var="db_master_password=$POSTGRES_PASSWORD_DEV_ENV" -auto-approve
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
-.kube-config-file:
-  stage: kube-config
-  image:    
-    name: amazon/aws-cli
-    entrypoint: [""]
-  variables:
-    AWS_PROFILE: $TF_USER_TEST_ENV
+# Test the build for the Terraform documentation
+documentation-test:
+  stage: documentation-test
+  extends: .test_mkdocs_build
   script:
-    - aws sts get-caller-identity
-    - aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
+    - echo "Testing Terraform documentations build artifact"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
-    - cp /root/.kube/config kube_config
-    - chmod 777 kube_config
-  artifacts:
-    expose_as: 'kube_config'
-    paths:
-      - kube_config
-  when: manual
-
-kube-config-file-test-cluster:
-  extends: .kube-config-file
+# Run build infra for PROD environment
+infrastructure-prod:
+  stage: infrastructure-prod
+  extends: .terraform
   variables:
-    AWS_REGION: eu-west-1
-    CLUSTER_NAME: eks-test-env
-
-.set-registry-keys:
-  stage: k8s-env
-  image: 
-    name: amazon/aws-cli
-    entrypoint: [""]
-  variables:
-    KUBE_CONFIG_FILE: "./kube_config"
-  before_script:
-    - curl -LO https://dl.k8s.io/release/v1.23.0/bin/linux/amd64/kubectl
-    - chmod +x kubectl
-    - mv ./kubectl /usr/bin/kubectl
+    AWS_PROFILE_ENV: $TF_USER_PROD_ENV
   script:
+    - cd environments/prod/
+    - terraform init
+    - terraform plan -var-file=prod.tfvars -var="db_master_username=$POSTGRES_USER_PROD_ENV" -var="db_master_password=$POSTGRES_PASSWORD_PROD_ENV"
+    - terraform apply -var-file=prod.tfvars -auto-approve -var="db_master_username=$POSTGRES_USER_PROD_ENV" -var="db_master_password=$POSTGRES_PASSWORD_PROD_ENV"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+
+# Deploy the Terraform Documentation to GitLab pages
+pages:
+  stage: deploy_documentation
+  extends: .deploy_pages
+  needs:
+  - infrastructure_prod
+  script:
+    - echo "Publishing Terraform documentations"
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+
+#.kube-config-file:
+#  stage: kube-config
+#  image:    
+#    name: amazon/aws-cli
+#    entrypoint: [""]
+#  variables:
+#    AWS_PROFILE: $TF_USER_DEV_ENV
+#  script:
+#    - aws sts get-caller-identity
+#    - aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
+
+#    - cp /root/.kube/config kube_config
+#    - chmod 777 kube_config
+#  artifacts:
+#    expose_as: 'kube_config'
+#    paths:
+#      - kube_config
+#  when: manual
+
+#kube-config-file-test-cluster:
+#  extends: .kube-config-file
+#  variables:
+#    AWS_REGION: eu-west-1
+#    CLUSTER_NAME: eks-test-env
+
+#.set-registry-keys:
+#  stage: k8s-env
+#  image: 
+#    name: amazon/aws-cli
+#    entrypoint: [""]
+#  variables:
+#    KUBE_CONFIG_FILE: "./kube_config"
+#  before_script:
+#    - curl -LO https://dl.k8s.io/release/v1.23.0/bin/linux/amd64/kubectl
+#    - chmod +x kubectl
+#    - mv ./kubectl /usr/bin/kubectl
+#  script:
     # create namespace if it does not exits
-    - kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f - --kubeconfig=$KUBE_CONFIG_FILE
+#    - kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f - --kubeconfig=$KUBE_CONFIG_FILE
     # set docker registry-credentials for set namespace 
-    - kubectl create secret docker-registry registry-credentials --docker-server=https://registry.gitlab.com --docker-username=$KUBE_PULL_USER --docker-password=$KUBE_PULL_SECRET --docker-email=$KUBE_PULL_EMAIL -n $NAMESPACE  --dry-run=client -o yaml | kubectl apply -f - --kubeconfig=$KUBE_CONFIG_FILE
+#    - kubectl create secret docker-registry registry-credentials --docker-server=https://registry.gitlab.com --docker-username=$KUBE_PULL_USER --docker-password=$KUBE_PULL_SECRET --docker-email=$KUBE_PULL_EMAIL -n $NAMESPACE  --dry-run=client -o yaml | kubectl apply -f - --kubeconfig=$KUBE_CONFIG_FILE
 
-  when: manual
+#  when: manual
 
-set-registry-keys-namespace-test:
-  extends: .set-registry-keys
-  dependencies: 
-    - kube-config-file-test-cluster
-  variables:
-    NAMESPACE: test
+#set-registry-keys-namespace-test:
+#  extends: .set-registry-keys
+#  dependencies: 
+#    - kube-config-file-test-cluster
+#  variables:
+#    NAMESPACE: test
