@@ -1,3 +1,15 @@
+/* 
+ * This module is used to deploy bastions for access to EKS worker nodes
+ * 
+ * The bastions will be deployed in public subnets
+ * Each of them have these configurations
+ *
+ * - Kubectl already installed 
+ * - Tagged by AZ and environment
+ * - Port open: 22, 80, 443
+ *
+*/
+
 /*==== Bastions for each AZ ======*/
 resource "aws_instance" "bastions" {
   count                  = length(var.public_subnets_id)
