@@ -3,7 +3,7 @@
 This docs describe the architecture of our dynamic infra deploy by Terraform via GitLab
 
 ## Structure 
-The infra spin up via pipeline or command line will have the seutp like the picture below 
+The infra spin up via pipeline or command line will have the setup like the picture below 
 ![noah infra](noah_infra.jpeg "Infra AWS")
 
 ## Pre Requisites

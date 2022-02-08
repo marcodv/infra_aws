@@ -60,26 +60,6 @@ module "jump_host" {
   bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
 }
 
-/*
-// This module is not needed anymore since we delegate the 
-// ALB creation and management to ALB ingress controller from EKS
-module "lb" {
-  source = "../../modules/alb"
-
-  environment                      = var.environment
-  eks_ingress_controller_port_path = var.eks_ingress_controller_port_path
-  public_subnet_alb                = module.networking.public_subnets_id
-  sg_alb                           = module.networking.alb_sg
-  vpc_id                           = module.networking.vpc_id
-} */
-
-/*
-module "iam" {
-  source = "../../modules/iam"
-
-  environment = var.environment
-} */
-
 module "k8s" {
   source = "../../modules/eks"
 
@@ -97,6 +77,12 @@ module "k8s" {
   worker_node_role            = var.worker_node_role
   eks_sg                      = module.networking.eks_sg
   eks_subnets                 = module.networking.private_subnets_id
+}
+
+module "observability" {
+  source     = "../../modules/monitoring"
+  
+  cluster_name = module.k8s.eks_cluster_id
 }
 
 /*

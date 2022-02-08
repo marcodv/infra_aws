@@ -18,3 +18,4 @@ nav:
         - database: 'database.md'
         - eks: 'eks.md'
         - vpc: 'vpc.md'
+        - monitoring: 'monitoring.md'

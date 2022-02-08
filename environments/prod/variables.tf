@@ -216,3 +216,8 @@ variable "worker_node_role" {
   description = "ARN IAM worker node"
   type        = string
 }
+
+variable "cluster_name" {
+  description = "Cluster name"
+  type        = string
+}
