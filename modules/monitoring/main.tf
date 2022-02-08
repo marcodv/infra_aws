@@ -48,24 +48,25 @@ resource "helm_release" "prometheus" {
 
 
 data "template_file" "grafana_values" {
-	template = file("${path.module}/templates/grafana-values.yaml")
+  template = file("${path.module}/templates/grafana-values.yaml")
 
-  	vars = {
-	  GRAFANA_SERVICE_ACCOUNT = "grafana"
-	  GRAFANA_ADMIN_USER = "admin"
-	  GRAFANA_ADMIN_PASSWORD = "TestingPassword123456"
-	  PROMETHEUS_SVC = "${helm_release.prometheus.name}-server"
-	  NAMESPACE = "monitoring"
-	}
+  vars = {
+    GRAFANA_SERVICE_ACCOUNT = "grafana"
+    GRAFANA_ADMIN_USER      = "admin"
+    GRAFANA_ADMIN_PASSWORD  = "TestingPassword123456"
+    PROMETHEUS_SVC          = "${helm_release.prometheus.name}-server"
+    NAMESPACE               = "monitoring"
+    GRAFANA_VERSION         = "${var.grafana_setting.grafana_version}"
+  }
 }
 
 resource "helm_release" "grafana" {
-  chart = "grafana"
-  name = "grafana"
+  chart      = "grafana"
+  name       = "grafana"
   repository = "https://grafana.github.io/helm-charts"
-  namespace = "monitoring"
+  namespace  = "monitoring"
 
   values = [
-  	data.template_file.grafana_values.rendered
+    data.template_file.grafana_values.rendered
   ]
 }

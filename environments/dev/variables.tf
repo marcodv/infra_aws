@@ -222,3 +222,11 @@ variable "cluster_name" {
   type        = string
   default = ""
 }
+
+variable "grafana_setting" {
+  description = "List of Grafana setting to apply to template"
+  type = object({
+   grafana_version = string
+  })
+}
+

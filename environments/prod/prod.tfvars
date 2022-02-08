@@ -193,3 +193,7 @@ eks_ingress_controller_port_path = {
 }
 
 worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoleprodEnv"
+
+grafana_setting = {
+  grafana_version = "8.3.5"
+}
