@@ -19,3 +19,4 @@ override.tf.json
 
 # Ignore README.md since we generated at the end of the pipeline
 README.md
+modules/monitoring/provider.txt

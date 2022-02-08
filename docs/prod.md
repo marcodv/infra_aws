@@ -25,6 +25,7 @@ No providers.
 | <a name="module_jump_host"></a> [jump\_host](#module\_jump\_host) | ../../modules/bastions | n/a |
 | <a name="module_k8s"></a> [k8s](#module\_k8s) | ../../modules/eks | n/a |
 | <a name="module_networking"></a> [networking](#module\_networking) | ../../modules/vpc/ | n/a |
+| <a name="module_observability"></a> [observability](#module\_observability) | ../../modules/monitoring | n/a |
 
 ## Resources
 
@@ -42,6 +43,7 @@ No resources.
 | <a name="input_bastion_ingress_rule"></a> [bastion\_ingress\_rule](#input\_bastion\_ingress\_rule) | List of open ports for inbound connections | `list(number)` | n/a | yes |
 | <a name="input_bastions-ami"></a> [bastions-ami](#input\_bastions-ami) | Ami id used to create bastion | `string` | n/a | yes |
 | <a name="input_cluster_admin_permissions"></a> [cluster\_admin\_permissions](#input\_cluster\_admin\_permissions) | List of permissions granted to admins users | <pre>list(object({<br>    api_groups = list(string)<br>    resources  = list(string)<br>    verbs      = list(string)<br>  }))</pre> | n/a | yes |
+| <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | Cluster name | `string` | n/a | yes |
 | <a name="input_db_master_password"></a> [db\_master\_password](#input\_db\_master\_password) | Master password for db | `string` | n/a | yes |
 | <a name="input_db_master_username"></a> [db\_master\_username](#input\_db\_master\_username) | Master username for db | `string` | n/a | yes |
 | <a name="input_db_private_subnets_cidr"></a> [db\_private\_subnets\_cidr](#input\_db\_private\_subnets\_cidr) | List of private subnets for DB | `list(string)` | `[]` | no |

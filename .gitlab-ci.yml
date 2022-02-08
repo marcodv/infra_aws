@@ -34,7 +34,6 @@ infrastructure-dev:
     AWS_PROFILE_ENV: $TF_USER_DEV_ENV
   script:
     - cd environments/dev/
-    - pwd
     - terraform init
     - terraform plan -var-file=dev.tfvars -var="db_master_username=$POSTGRES_USER_DEV_ENV" -var="db_master_password=$POSTGRES_PASSWORD_DEV_ENV"
     - terraform apply -var-file=dev.tfvars -var="db_master_username=$POSTGRES_USER_DEV_ENV" -var="db_master_password=$POSTGRES_PASSWORD_DEV_ENV" -auto-approve
