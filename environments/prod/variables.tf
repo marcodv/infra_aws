@@ -220,4 +220,5 @@ variable "worker_node_role" {
 variable "cluster_name" {
   description = "Cluster name"
   type        = string
+  default     = ""
 }
