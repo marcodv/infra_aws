@@ -99,18 +99,6 @@ namespaces = [
     name               = "production"
     custom_annotations = [{ label = "production.io/annotation", value = "production" }]
     custom_labels      = [{ label = "environment", value = "production" }]
-  },
-  {
-    manage             = "Terraform",
-    name               = "traefik"
-    custom_annotations = [{ label = "service.io/annotation", value = "traefik" }]
-    custom_labels      = [{ label = "service", value = "traefik" }]
-  },
-  {
-    manage             = "Terraform",
-    name               = "monitoring"
-    custom_annotations = [{ label = "service.io/annotation", value = "monitoring" }]
-    custom_labels      = [{ label = "service", value = "monitoring" }]
   }
 ]
 
@@ -169,12 +157,12 @@ map_cluster_admin_users = {
       userarn  = "arn:aws:iam::848481299679:user/marco@noah.energy"
       username = "marco@noah.energy"
       groups   = ["system:masters", "cluster-full-admin-group"]
-    }/*,
+    },
     {
-      userarn  = "arn:aws:iam::848481299679:user/Terraform_User_Production_Env"
-      username = "Terraform_User_Production_Env@noah.energy"
+      userarn  = "arn:aws:iam::848481299679:user/Terraform_User_Dev_Env"
+      username = "Terraform_User_Dev_Env@noah.energy"
       groups   = ["system:masters", "cluster-full-admin-group"]
-  } */
+    }
   ]
 }
 

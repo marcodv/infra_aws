@@ -171,8 +171,8 @@ map_cluster_admin_users = {
       groups   = ["system:masters", "cluster-full-admin-group"]
     },
     {
-      userarn  = "arn:aws:iam::848481299679:user/Terraform_User_Production_Env"
-      username = "Terraform_User_Production_Env@noah.energy"
+      userarn  = "arn:aws:iam::848481299679:user/Terraform_User_Prod_Env"
+      username = "Terraform_User_Prod_Env@noah.energy"
       groups   = ["system:masters", "cluster-full-admin-group"]
   }
   ]
