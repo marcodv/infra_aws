@@ -59,7 +59,7 @@ data "template_file" "grafana_values" {
     NAMESPACE               = "monitoring"
     GRAFANA_VERSION         = "${var.grafana_setting.grafana_version}"
     EKS_ENVIRONMENT         = "${var.environment}"
-    DASHBOARD_PATH          = "${path.module}/grafana-dashboard/"
+    DASHBOARD_PATH          = "${path.module}/grafana-dashboard"
     #DASHBOARD_NAME          = file("${path.module}/grafana-dashboard/${element(var.grafana_dashboard_list, count.index)}.json")
     DASHBOARD_NAME          = "cluster-pod-dashboard.json"
   }
