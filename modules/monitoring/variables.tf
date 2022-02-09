@@ -1,3 +1,8 @@
+variable "environment" {
+  description = "Environments that we want to deploy"
+  type        = string
+}
+
 variable "cluster_name" {
   description = "Cluster name"
   type        = string
@@ -9,3 +14,8 @@ variable "grafana_setting" {
     grafana_version = string
   })
 }
+
+/*variable "grafana_dashboard_list" {
+  description =  "Grafana dashboard list to import on EKS"
+  type = list(string)
+} */

@@ -197,3 +197,9 @@ worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoledevEnv"
 grafana_setting = {
   grafana_version = "8.3.5"
 }
+
+
+/*grafana_dashboard_list = [{
+  dashboard-number = "1",
+  dashboard-name   = "cluster-pod-dashboard"
+}] */

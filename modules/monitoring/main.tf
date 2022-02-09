@@ -49,6 +49,7 @@ resource "helm_release" "prometheus" {
 
 data "template_file" "grafana_values" {
   template = file("${path.module}/templates/grafana-values.yaml")
+  #count    = length(var.grafana_dashboard_list)
 
   vars = {
     GRAFANA_SERVICE_ACCOUNT = "grafana"
@@ -57,6 +58,10 @@ data "template_file" "grafana_values" {
     PROMETHEUS_SVC          = "${helm_release.prometheus.name}-server"
     NAMESPACE               = "monitoring"
     GRAFANA_VERSION         = "${var.grafana_setting.grafana_version}"
+    EKS_ENVIRONMENT         = "${var.environment}"
+    DASHBOARD_PATH          = "${path.module}/grafana-dashboard/"
+    #DASHBOARD_NAME          = file("${path.module}/grafana-dashboard/${element(var.grafana_dashboard_list, count.index)}.json")
+    DASHBOARD_NAME          = "cluster-pod-dashboard.json"
   }
 }
 
@@ -66,6 +71,8 @@ resource "helm_release" "grafana" {
   repository = "https://grafana.github.io/helm-charts"
   namespace  = "monitoring"
 
+
+  // iterate over the list of dashboards to import
   values = [
     data.template_file.grafana_values.rendered
   ]

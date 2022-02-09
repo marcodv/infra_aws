@@ -230,3 +230,7 @@ variable "grafana_setting" {
   })
 }
 
+/*variable "grafana_dashboard_list" {
+  description =  "Grafana dashboard list to import on EKS"
+  type = list(string)
+} */
