@@ -50,6 +50,7 @@ module "networking" {
   db_subnets_cidr                = var.db_private_subnets_cidr
 }
 
+/*
 module "jump_host" {
   source = "../../modules/bastions"
 
@@ -58,7 +59,7 @@ module "jump_host" {
   availability_zones = var.availability_zones
   public_subnets_id  = module.networking.public_subnets_id
   bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
-}
+} */
 
 module "k8s" {
   source = "../../modules/eks"
@@ -80,13 +81,17 @@ module "k8s" {
 }
 
 module "observability" {
-  source     = "../../modules/monitoring"
-  
-  cluster_name = module.k8s.eks_cluster_id
-  grafana_setting = var.grafana_setting
+  source = "../../modules/monitoring/"
+
+  cluster_name               = module.k8s.eks_cluster_id
+  grafana_setting            = var.grafana_setting
+  environment                = var.environment
+  grafana_dashboard_list     = var.grafana_dashboard_list
+  grafana_access_credentials = var.grafana_access_credentials
+  prometheus_setting         = var.prometheus_setting
 }
 
-/*
+
 module "db" {
   source = "../../modules/database"
 
@@ -95,6 +100,6 @@ module "db" {
   db_master_password = var.db_master_password
   db_master_username = var.db_master_username
   db_subnets         = module.networking.db_private_subnets_id
-  db_sg  = module.networking.db_sg
-  vpc_id = module.networking.vpc_id
-} */
+  db_sg              = module.networking.db_sg
+  vpc_id             = module.networking.vpc_id
+}
