@@ -197,3 +197,15 @@ worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoleprodEnv"
 grafana_setting = {
   grafana_version = "8.3.5"
 }
+
+// List of dashboard to import
+grafana_dashboard_list = ["cluster-pod-dashboard.json", "aws-billing.json"]
+
+grafana_access_credentials = {
+  username = "admin"
+  password = "TestingPassword123456"
+}
+
+prometheus_setting = {
+  prometheus_version = "15.2.0"
+}

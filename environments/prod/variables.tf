@@ -242,3 +242,10 @@ variable "grafana_access_credentials" {
     password = string
   })
 }
+
+variable "prometheus_setting" {
+  description = "Setting for Prometheus"
+  type = object({
+    prometheus_version = string
+  })
+}
