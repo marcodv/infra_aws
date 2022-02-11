@@ -91,7 +91,7 @@ module "observability" {
 
 }
 
-/*
+
 module "db" {
   source = "../../modules/database"
 
@@ -102,4 +102,4 @@ module "db" {
   db_subnets         = module.networking.db_private_subnets_id
   db_sg  = module.networking.db_sg
   vpc_id = module.networking.vpc_id
-} */
+}
