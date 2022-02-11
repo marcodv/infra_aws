@@ -175,8 +175,8 @@ map_cluster_admin_users = {
 workers_nodes_instance_type = ["t2.medium"]
 
 worker_nodes_scaling_config = {
-  desired_size = 1
-  max_size     = 2
+  desired_size = 2
+  max_size     = 4
   min_size     = 1
 }
 
@@ -196,4 +196,16 @@ worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoledevEnv"
 
 grafana_setting = {
   grafana_version = "8.3.5"
+}
+
+// List of dashboard to import
+grafana_dashboard_list = ["cluster-pod-dashboard.json", "aws-billing.json"]
+
+grafana_access_credentials = {
+  username = "admin"
+  password = "TestingPassword123456"
+}
+
+prometheus_setting = {
+  prometheus_version = "15.2.0"
 }

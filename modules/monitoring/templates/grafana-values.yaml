@@ -33,7 +33,7 @@ livenessProbe:
 
 image:
   repository: grafana/grafana
-  tag: ${GRAFANA_VERSION}
+  tag: 7.1.1
   sha: ""
   pullPolicy: IfNotPresent
 
@@ -49,13 +49,12 @@ securityContext:
   runAsGroup: 472
   fsGroup: 472
 
-
 extraConfigmapMounts: []
 
-extraEmptyDirMounts: []
+extraEmptyDirMounts:
+  []
   # - name: provisioning-notifiers
 #   mountPath: /etc/grafana/provisioning/notifiers
-
 
 ## Assign a PriorityClassName to pods if set
 # priorityClassName:
@@ -94,14 +93,16 @@ service:
     app: grafana
   portName: service
 
-extraExposePorts: []
+extraExposePorts:
+  []
   # - name: keycloak
   #   port: 8080
   #   targetPort: 8080
 #   type: ClusterIP
 
 # overrides pod.spec.hostAliases in the grafana deployment's pods
-hostAliases: []
+hostAliases:
+  []
   # - ip: "1.2.3.4"
   #   hostnames:
 #     - "my.host.com"
@@ -109,7 +110,8 @@ hostAliases: []
 ingress:
   enabled: false
   # Values can be templated
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
   # kubernetes.io/tls-acme: "true"
   labels: {}
@@ -218,7 +220,6 @@ initChownData:
   #    cpu: 100m
   #    memory: 128Mi
 
-
 # Administrator credentials when not using an existing secret (see below)
 adminUser: ${GRAFANA_ADMIN_USER}
 adminPassword: ${GRAFANA_ADMIN_PASSWORD}
@@ -258,7 +259,8 @@ envRenderSecret: {}
 
 ## Additional grafana server secret mounts
 # Defines additional mounts with secrets. Secrets must be manually created in the namespace.
-extraSecretMounts: []
+extraSecretMounts:
+  []
   # - name: secret-files
   #   mountPath: /etc/secrets
   #   secretName: grafana-secret-files
@@ -267,7 +269,8 @@ extraSecretMounts: []
 
 ## Additional grafana server volume mounts
 # Defines additional volume mounts.
-extraVolumeMounts: []
+extraVolumeMounts:
+  []
   # - name: extra-volume
   #   mountPath: /mnt/volume
   #   readOnly: true
@@ -275,7 +278,8 @@ extraVolumeMounts: []
 
 ## Pass the plugins you want installed as a list.
 ##
-plugins: []
+plugins:
+  []
   # - digrich-bubblechart-panel
 # - grafana-clock-panel
 
@@ -286,11 +290,11 @@ datasources:
   datasources.yaml:
     apiVersion: 1
     datasources:
-    - name: Prometheus
-      type: prometheus
-      url: http://${PROMETHEUS_SVC}.${NAMESPACE}.svc.cluster.local
-      access: proxy
-      isDefault: true
+      - name: Prometheus
+        type: prometheus
+        url: http://${PROMETHEUS_SVC}.${NAMESPACE}.svc.cluster.local
+        access: proxy
+        isDefault: true
 
 ## Configure notifiers
 ## ref: http://docs.grafana.org/administration/provisioning/#alert-notification-channels
@@ -319,14 +323,22 @@ dashboardProviders:
   dashboardproviders.yaml:
     apiVersion: 1
     providers:
-    - name: 'default'
-      orgId: 1
-      folder: ''
-      type: file
-      disableDeletion: false
-      editable: true
-      options:
-        path: /var/lib/grafana/dashboards/default
+      - name: "default"
+        orgId: 1
+        folder: ""
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+      - name: "Cluster dashboards"
+        orgId: 2
+        folder: ""
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default/
 
 ## Configure grafana dashboard to import
 ## NOTE: To use dashboards you must also enable/configure dashboardProviders
@@ -356,8 +368,6 @@ dashboards:
       revision: 1
       datasource: Prometheus
 
-
-
 ## Reference to external ConfigMap per provider. Use provider name as key and ConfiMap name as value.
 ## A provider dashboards must be defined either by external ConfigMaps or in values.yaml, not in both.
 ## ConfigMap data example:
@@ -384,7 +394,8 @@ grafana.ini:
   log:
     mode: console
   grafana_net:
-    url: https://grafana.net
+    url:
+      https://grafana.net
       ## grafana Authentication can be enabled with the following values on grafana.ini
       # server:
     # The full public facing url you use in browser, used for redirects and emails
@@ -479,7 +490,7 @@ sidecar:
       # orgid as configured in grafana
       orgid: 1
       # folder in which the dashboards should be imported in grafana
-      folder: ''
+      folder: ""
       # type of the provider
       type: file
       # disableDelete to activate a import-only behaviour
