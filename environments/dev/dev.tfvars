@@ -202,6 +202,10 @@ grafana_setting = {
 grafana_dashboard_list = ["cluster-pod-dashboard.json", "aws-billing.json"]
 
 grafana_access_credentials = {
-    username = "admin"
-    password = "TestingPassword123456"
+  username = "admin"
+  password = "TestingPassword123456"
+}
+
+prometheus_setting = {
+  prometheus_version = "15.2.0"
 }
