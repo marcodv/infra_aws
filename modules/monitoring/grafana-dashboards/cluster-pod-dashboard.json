@@ -2389,7 +2389,8 @@
   "style": "dark",
   "tags": [
     "kubernetes",
-    "kubernetes-app"
+    "kubernetes-app",
+    "eks-${EKS_ENVIRONMENT}-env"
   ],
   "templating": {
     "list": [

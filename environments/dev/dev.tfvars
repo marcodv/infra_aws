@@ -175,8 +175,8 @@ map_cluster_admin_users = {
 workers_nodes_instance_type = ["t2.medium"]
 
 worker_nodes_scaling_config = {
-  desired_size = 1
-  max_size     = 2
+  desired_size = 2
+  max_size     = 4
   min_size     = 1
 }
 
@@ -198,8 +198,10 @@ grafana_setting = {
   grafana_version = "8.3.5"
 }
 
+// List of dashboard to import
+grafana_dashboard_list = ["cluster-pod-dashboard.json", "aws-billing.json"]
 
-/*grafana_dashboard_list = [{
-  dashboard-number = "1",
-  dashboard-name   = "cluster-pod-dashboard"
-}] */
+grafana_access_credentials = {
+    username = "admin"
+    password = "TestingPassword123456"
+}

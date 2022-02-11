@@ -13,3 +13,17 @@ provider "helm" {
     token                  = data.aws_eks_cluster_auth.cluster.token
   }
 }
+
+terraform {
+  required_providers {
+    grafana = {
+      source  = "grafana/grafana"
+      version = ">= 1.10.0"
+    }
+  }
+}
+
+/*provider "grafana" {
+  auth = "${var.grafana_access_credentials.username}:${var.grafana_access_credentials.password}"
+  url = "http://localhost:3000"
+} */

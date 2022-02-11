@@ -230,7 +230,15 @@ variable "grafana_setting" {
   })
 }
 
-/*variable "grafana_dashboard_list" {
+variable "grafana_dashboard_list" {
   description =  "Grafana dashboard list to import on EKS"
   type = list(string)
-} */
+}
+
+variable "grafana_access_credentials" {
+  description = "These are the creds set for access to Grafana dashboard"
+  type = object({
+    username = string
+    password = string
+  })
+}
