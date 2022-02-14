@@ -81,6 +81,7 @@ module "k8s" {
 }
 
 module "observability" {
+  //depends_on = [module.k8s.eks_cluster_id]
   source = "../../modules/monitoring/"
 
   cluster_name               = module.k8s.eks_cluster_id

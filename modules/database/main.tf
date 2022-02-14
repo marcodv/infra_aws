@@ -20,7 +20,7 @@
 
 /* DB parameter group*/
 resource "aws_db_parameter_group" "pg_db" {
-  name   = "parameters-group-postgres"
+  name   = "parameters-group-postgres-${var.environment}-env"
   family = "postgres13"
 
   //This is a workaround to TF issue https://github.com/hashicorp/terraform-provider-aws/issues/6448

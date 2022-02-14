@@ -196,6 +196,9 @@ worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoledevEnv"
 
 grafana_setting = {
   grafana_version = "8.3.5"
+  persistence_enabled = "true"
+  storage_class = "default"
+  storage_size = "4Gi"
 }
 
 // List of dashboard to import
