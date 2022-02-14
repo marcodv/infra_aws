@@ -228,6 +228,6 @@ elasticache_cluster = {
   engine               = "redis"
   node_type            = "cache.t3.micro"
   num_cache_nodes      = 1
-  engine_version       = "6.2"
+  engine_version       = "6.0.16"
   port                 = 6379
 }

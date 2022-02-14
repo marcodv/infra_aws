@@ -257,20 +257,29 @@ variable "prometheus_setting" {
 variable "elasticache_setting" {
   description = "List for the Elastic Cache Redis based engine instance setting"
   type = object({
-    engine             = string
-    node_type          = string
-    num_cache_nodes    = number
-    port               = number
-    engine_version     = string
+    engine          = string
+    node_type       = string
+    num_cache_nodes = number
+    port            = number
+    engine_version  = string
   })
+  default = {
+    engine          = "redis"
+    node_type       = "cache.t3.micro"
+    num_cache_nodes = 1
+    engine_version  = "5.0.6"
+    port            = 6379
+  }
 }
 
 variable "subnet_group_name" {
   description = "Subnets for Elasticache"
-  type = string
+  type        = string
+  default     = ""
 }
 
 variable "security_group_ids" {
   description = "Security groups ids for Elasticache"
-  type = list(string)
+  type        = list(string)
+  default     = [""]
 }
