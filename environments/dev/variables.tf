@@ -220,23 +220,23 @@ variable "worker_node_role" {
 variable "cluster_name" {
   description = "Cluster name"
   type        = string
-  default = ""
+  default     = ""
 }
 
 variable "grafana_setting" {
   description = "List of Grafana setting to apply to deployment"
   type = object({
-    grafana_version = string
+    grafana_version     = string
     persistence_enabled = string
-    storage_class = string
-    storage_size = string
+    storage_class       = string
+    storage_size        = string
   })
 }
 
 
 variable "grafana_dashboard_list" {
-  description =  "Grafana dashboard list to import on EKS"
-  type = list(string)
+  description = "Grafana dashboard list to import on EKS"
+  type        = list(string)
 }
 
 variable "grafana_access_credentials" {
@@ -252,4 +252,25 @@ variable "prometheus_setting" {
   type = object({
     prometheus_version = string
   })
+}
+
+variable "elasticache_setting" {
+  description = "List for the Elastic Cache Redis based engine instance setting"
+  type = object({
+    engine             = string
+    node_type          = string
+    num_cache_nodes    = number
+    port               = number
+    engine_version     = string
+  })
+}
+
+variable "subnet_group_name" {
+  description = "Subnets for Elasticache"
+  type = string
+}
+
+variable "security_group_ids" {
+  description = "Security groups ids for Elasticache"
+  type = list(string)
 }

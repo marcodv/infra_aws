@@ -81,7 +81,6 @@ module "k8s" {
 }
 
 module "observability" {
-  //depends_on = [module.k8s.eks_cluster_id]
   source = "../../modules/monitoring/"
 
   cluster_name               = module.k8s.eks_cluster_id
@@ -103,4 +102,14 @@ module "db" {
   db_subnets         = module.networking.db_private_subnets_id
   db_sg              = module.networking.db_sg
   vpc_id             = module.networking.vpc_id
+}
+
+module "elastic_cache" {
+  source     = "../../modules/elasticache"
+  depends_on = [module.networking.vpc_id]
+
+  environment         = var.environment
+  elasticache_setting = var.elasticache_setting
+  subnet_group_name   = module.networking.db_private_subnets_id
+  security_group_ids  = [module.networking.db_sg]
 }

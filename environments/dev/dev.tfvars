@@ -10,7 +10,7 @@ alb_ingress_rule               = [80, 443]
 eks_ingress_rule               = [53, 80, 443]
 bastion_ingress_rule           = [22, 80, 443]
 private_instances_ingress_rule = [22, 80, 443, 30080]
-sg_db_rule                     = [5432]
+sg_db_rule                     = [5432, 6379]
 acl_public_subnet_rule = {
   ingress_rule = [{
     rule_no   = 100
@@ -61,6 +61,11 @@ acl_private_subnet_rule = {
       to_port   = 5432
     },
     {
+      rule_no   = 104
+      from_port = 6379
+      to_port   = 6379
+    },
+    {
       rule_no   = 106
       from_port = 30080
       to_port   = 30080
@@ -73,10 +78,16 @@ acl_private_subnet_rule = {
 }
 
 acl_db_rule = {
-  ingress_rule = [{
-    rule_no   = 100
-    from_port = 5432
-    to_port   = 5432
+  ingress_rule = [
+    {
+      rule_no   = 100
+      from_port = 5432
+      to_port   = 5432
+    },
+    {
+      rule_no   = 101
+      from_port = 6379
+      to_port   = 6379
   }]
 }
 
@@ -175,8 +186,8 @@ map_cluster_admin_users = {
 workers_nodes_instance_type = ["t2.medium"]
 
 worker_nodes_scaling_config = {
-  desired_size = 2
-  max_size     = 4
+  desired_size = 1
+  max_size     = 3
   min_size     = 1
 }
 
@@ -195,10 +206,10 @@ eks_ingress_controller_port_path = {
 worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoledevEnv"
 
 grafana_setting = {
-  grafana_version = "8.3.5"
+  grafana_version     = "8.3.5"
   persistence_enabled = "true"
-  storage_class = "default"
-  storage_size = "4Gi"
+  storage_class       = "default"
+  storage_size        = "4Gi"
 }
 
 // List of dashboard to import
@@ -211,4 +222,12 @@ grafana_access_credentials = {
 
 prometheus_setting = {
   prometheus_version = "15.2.0"
+}
+
+elasticache_cluster = {
+  engine               = "redis"
+  node_type            = "cache.t3.micro"
+  num_cache_nodes      = 1
+  engine_version       = "6.2"
+  port                 = 6379
 }

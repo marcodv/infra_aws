@@ -56,7 +56,7 @@ resource "aws_db_instance" "db" {
   engine                 = "postgres"
   engine_version         = "13.3"
   instance_class         = "db.t4g.micro"
-  name                   = "backend${var.environment}env"
+  db_name                = "backend${var.environment}env"
   username               = var.db_master_username
   password               = var.db_master_password
   parameter_group_name   = aws_db_parameter_group.pg_db.name
