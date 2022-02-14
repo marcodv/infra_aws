@@ -82,8 +82,8 @@ module "k8s" {
 module "observability" {
   source = "../../modules/monitoring"
 
-  cluster_name    = module.k8s.eks_cluster_id
-  grafana_setting = var.grafana_setting
+  cluster_name               = module.k8s.eks_cluster_id
+  grafana_setting            = var.grafana_setting
   environment                = var.environment
   grafana_dashboard_list     = var.grafana_dashboard_list
   grafana_access_credentials = var.grafana_access_credentials

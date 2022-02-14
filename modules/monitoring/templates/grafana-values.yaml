@@ -33,7 +33,7 @@ livenessProbe:
 
 image:
   repository: grafana/grafana
-  tag: 7.1.1
+  tag: ${GRAFANA_VERSION}
   sha: ""
   pullPolicy: IfNotPresent
 
@@ -184,7 +184,7 @@ extraContainerVolumes: []
 ##
 persistence:
   type: pvc
-  enabled: false
+  enabled: true
   # storageClassName: default
   accessModes:
     - ReadWriteOnce
@@ -279,9 +279,8 @@ extraVolumeMounts:
 ## Pass the plugins you want installed as a list.
 ##
 plugins:
-  []
-  # - digrich-bubblechart-panel
-# - grafana-clock-panel
+    - digrich-bubblechart-panel
+    - grafana-clock-panel
 
 ## Configure grafana datasources
 ## ref: http://docs.grafana.org/administration/provisioning/#datasources
@@ -331,14 +330,6 @@ dashboardProviders:
         editable: true
         options:
           path: /var/lib/grafana/dashboards/default
-      - name: "Cluster dashboards"
-        orgId: 2
-        folder: ""
-        type: file
-        disableDeletion: false
-        editable: true
-        options:
-          path: /var/lib/grafana/dashboards/default/
 
 ## Configure grafana dashboard to import
 ## NOTE: To use dashboards you must also enable/configure dashboardProviders
@@ -367,6 +358,28 @@ dashboards:
       gnetId: 10000
       revision: 1
       datasource: Prometheus
+    cluster-metrics:
+      gnetId: 6417
+      revision: 1
+      datasource: Prometheus
+    persistent-volumes:
+      gnetId: 6739
+      revision: 1
+      datasource: Prometheus
+    traefik:
+      gnetId: 4475
+      revision: 5
+      datasource: Prometheus
+  #persistence:
+  #  enabled: true
+  #  storageClassName: default
+  #  size: 4Gi
+  #  accessModes:
+  #    - ReadWriteOnce
+  #
+  #plugins:
+  #  - digrich-bubblechart-panel
+  #  - grafana-clock-panel
 
 ## Reference to external ConfigMap per provider. Use provider name as key and ConfiMap name as value.
 ## A provider dashboards must be defined either by external ConfigMaps or in values.yaml, not in both.

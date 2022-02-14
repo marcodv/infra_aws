@@ -3,7 +3,7 @@
  *
  * Prometheus is used to gather metrics and then these will be displayed from Grafana
  *
- *  
+ * Grafana will be provisioned with dashboards 
  * 
  * At this stage, will be setup 2 dashboard which will show
  *
@@ -18,7 +18,7 @@ resource "helm_release" "prometheus" {
   name       = "prometheus"
   namespace  = "monitoring"
   repository = "https://prometheus-community.github.io/helm-charts"
-  version = "${var.prometheus_setting.prometheus_version}"
+  version    = var.prometheus_setting.prometheus_version
 
   # When you want to directly specify the value of an element in a map you need \\ to escape the point.
   set {
@@ -50,7 +50,6 @@ resource "helm_release" "prometheus" {
 // Setup Grafana config values
 data "template_file" "grafana_values" {
   template = file("${path.module}/templates/grafana-values.yaml")
-  #count    = length(var.grafana_dashboard_list)
 
   vars = {
     GRAFANA_SERVICE_ACCOUNT = "grafana"
@@ -60,10 +59,7 @@ data "template_file" "grafana_values" {
     NAMESPACE               = "monitoring"
     GRAFANA_VERSION         = "${var.grafana_setting.grafana_version}"
     EKS_ENVIRONMENT         = "${var.environment}"
-    DASHBOARD_PATH          = "/grafana-dashboard"
-    
-    #DASHBOARD_NAME          = file("${path.module}/grafana-dashboard/${element(var.grafana_dashboard_list, count.index)}.json")
-    #DASHBOARD_NAME          = "dashboard-with-pod.json"
+    DASHBOARD_PATH          = "/grafana-dashboards"
   }
 }
 
@@ -78,9 +74,3 @@ resource "helm_release" "grafana" {
     data.template_file.grafana_values.rendered
   ]
 }
-
-/*
-resource "grafana_dashboard" "dashboards" {
-  count      = length(var.grafana_dashboard_list)
-  config_json = file("${path.module}/grafana-dashboards/${element(var.grafana_dashboard_list, count.index)}")
-}*/

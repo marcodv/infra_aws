@@ -224,9 +224,12 @@ variable "cluster_name" {
 }
 
 variable "grafana_setting" {
-  description = "List of Grafana setting to apply to template"
+  description = "List of Grafana setting to apply to deployment"
   type = object({
-   grafana_version = string
+    grafana_version = string
+    persistence_enabled = string
+    storage_class = string
+    storage_size = string
   })
 }
 
