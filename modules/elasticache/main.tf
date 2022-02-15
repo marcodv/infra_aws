@@ -1,3 +1,16 @@
+/* 
+ * This module is used to deploy ElastiCache instance based on Redis engine with a single instance
+ *
+ * ElastiCache is used by the Django apps to 
+ *
+ * A part that Redis based instance, this module also create
+ *
+ * - cluster parameter group
+ * - subnet group needed
+ * - cluster user  
+ * 
+*/
+
 // Create Parameters group for Elasticache cluster
 resource "aws_elasticache_parameter_group" "default" {
   name   = "cache-params-${var.environment}-env"
@@ -32,6 +45,7 @@ resource "aws_elasticache_user" "redis_user" {
   engine        = "REDIS"
   passwords     = ["${var.redis_credentials.password}"]
 }
+<<<<<<< HEAD
 
 // Create Redis user group and associate the previous user to this group
 /*resource "aws_elasticache_user_group" "redis_group" {
@@ -39,3 +53,5 @@ resource "aws_elasticache_user" "redis_user" {
   user_group_id = "redis-group-${var.environment}-env"
   user_ids      = [aws_elasticache_user.redis_user.user_id]
 } */
+=======
+>>>>>>> develop
