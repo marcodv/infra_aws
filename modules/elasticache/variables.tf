@@ -6,11 +6,12 @@ variable "environment" {
 variable "elasticache_setting" {
   description = "List for the Elastic Cache Redis based engine instance setting"
   type = object({
-    engine               = string
-    node_type            = string
-    num_cache_nodes      = number
-    port                 = number
-    engine_version       = string
+    engine          = string
+    node_type       = string
+    num_cache_nodes = number
+    port            = number
+    engine_version  = string
+    family          = string
   })
 }
 

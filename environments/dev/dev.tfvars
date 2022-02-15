@@ -228,6 +228,7 @@ elasticache_setting = {
   engine               = "redis"
   node_type            = "cache.t3.micro"
   num_cache_nodes      = 1
-  engine_version       = "redis6.2"
+  engine_version       = "6.x"
+  family               = "redis6.2"
   port                 = 6379
 }

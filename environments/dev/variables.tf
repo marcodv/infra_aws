@@ -262,6 +262,7 @@ variable "elasticache_setting" {
     num_cache_nodes = number
     port            = number
     engine_version  = string
+    family          = string
   })
 }
 
