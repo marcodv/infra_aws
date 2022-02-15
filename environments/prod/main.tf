@@ -101,3 +101,14 @@ module "db" {
   db_sg              = module.networking.db_sg
   vpc_id             = module.networking.vpc_id
 }
+
+module "elastic_cache" {
+  source     = "../../modules/elasticache"
+  depends_on = [module.networking.vpc_id]
+
+  environment         = var.environment
+  elasticache_setting = var.elasticache_setting
+  subnet_group_name   = element(module.networking.db_private_subnets_id, 0)
+  security_group_ids  = [module.networking.db_sg]
+  redis_credentials   = var.redis_credentials
+}

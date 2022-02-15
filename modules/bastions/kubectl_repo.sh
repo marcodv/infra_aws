@@ -8,4 +8,7 @@ gpgcheck=1
 repo_gpgcheck=1
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 YUM_REPO
-sudo yum install -y kubectl
+sudo yum install -y kubectl gcc
+wget http://download.redis.io/redis-stable.tar.gz && tar xvzf redis-stable.tar.gz && cd redis-stable && make
+sudo cp src/redis-cli /usr/bin/
+sudo amazon-linux-extras install postgresql10 -y

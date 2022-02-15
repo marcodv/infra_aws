@@ -370,6 +370,10 @@ dashboards:
       gnetId: 4475
       revision: 5
       datasource: Prometheus
+    k8s-ingress-controller:
+      gneId: 12575
+      revision: 1
+      datasource: Prometheus
   #persistence:
   #  enabled: true
   #  storageClassName: default
