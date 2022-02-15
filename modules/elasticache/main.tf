@@ -1,7 +1,7 @@
 // Create Parameters group for Elasticache cluster
 resource "aws_elasticache_parameter_group" "default" {
   name   = "cache-params-${var.environment}-env"
-  family = var.elasticache_setting.family
+  //family = var.elasticache_setting.family
 }
 
 // Set the subnet for Redis
