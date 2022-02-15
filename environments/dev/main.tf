@@ -112,4 +112,5 @@ module "elastic_cache" {
   elasticache_setting = var.elasticache_setting
   subnet_group_name   = element(module.networking.db_private_subnets_id, 0)
   security_group_ids  = [module.networking.db_sg]
+  redis_credentials   = var.redis_credentials
 }
