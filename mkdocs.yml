@@ -1,5 +1,5 @@
 site_name: AWS Infra Terraform Documentation
-site_url: "https://noah-energy.gitlab.io/infra_aws"
+site_url: "https://gitlab.com/noah-energy/infranoah/infra_aws"
 repo_url: https://gitlab.com/noah-energy/infranoah/infra_aws
 site_dir: public
 theme:

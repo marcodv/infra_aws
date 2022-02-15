@@ -50,7 +50,6 @@ module "networking" {
   db_subnets_cidr                = var.db_private_subnets_cidr
 }
 
-/*
 module "jump_host" {
   source = "../../modules/bastions"
 
@@ -59,7 +58,7 @@ module "jump_host" {
   availability_zones = var.availability_zones
   public_subnets_id  = module.networking.public_subnets_id
   bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
-} */
+}
 
 module "k8s" {
   source = "../../modules/eks"
@@ -81,7 +80,6 @@ module "k8s" {
 }
 
 module "observability" {
-  //depends_on = [module.k8s.eks_cluster_id]
   source = "../../modules/monitoring/"
 
   cluster_name               = module.k8s.eks_cluster_id
@@ -103,4 +101,15 @@ module "db" {
   db_subnets         = module.networking.db_private_subnets_id
   db_sg              = module.networking.db_sg
   vpc_id             = module.networking.vpc_id
+}
+
+module "elastic_cache" {
+  source     = "../../modules/elasticache"
+  depends_on = [module.networking.vpc_id]
+
+  environment         = var.environment
+  elasticache_setting = var.elasticache_setting
+  subnet_group_name   = element(module.networking.db_private_subnets_id, 0)
+  security_group_ids  = [module.networking.db_sg]
+  redis_credentials   = var.redis_credentials
 }

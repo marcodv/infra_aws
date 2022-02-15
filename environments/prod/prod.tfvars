@@ -176,7 +176,7 @@ workers_nodes_instance_type = ["t2.medium"]
 
 worker_nodes_scaling_config = {
   desired_size = 1
-  max_size     = 2
+  max_size     = 3
   min_size     = 1
 }
 
@@ -211,4 +211,12 @@ grafana_access_credentials = {
 
 prometheus_setting = {
   prometheus_version = "15.2.0"
+}
+
+elasticache_setting = {
+  engine               = "redis"
+  node_type            = "cache.t3.micro"
+  num_cache_nodes      = 1
+  engine_version       = "6.x"
+  port                 = 6379
 }
