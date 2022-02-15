@@ -45,13 +45,3 @@ resource "aws_elasticache_user" "redis_user" {
   engine        = "REDIS"
   passwords     = ["${var.redis_credentials.password}"]
 }
-<<<<<<< HEAD
-
-// Create Redis user group and associate the previous user to this group
-/*resource "aws_elasticache_user_group" "redis_group" {
-  engine        = "REDIS"
-  user_group_id = "redis-group-${var.environment}-env"
-  user_ids      = [aws_elasticache_user.redis_user.user_id]
-} */
-=======
->>>>>>> develop
