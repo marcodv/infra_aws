@@ -19,7 +19,7 @@ resource "aws_elasticache_parameter_group" "default" {
 
 // Set the subnet for Redis
 resource "aws_elasticache_subnet_group" "redis_subnet" {
-  name       = "redis-cache-subnet"
+  name       = "redis-cache-subnet-${var.environment}-env"
   subnet_ids = [var.subnet_group_name]
 }
 
