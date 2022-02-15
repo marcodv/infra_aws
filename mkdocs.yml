@@ -19,3 +19,4 @@ nav:
         - eks: 'eks.md'
         - vpc: 'vpc.md'
         - monitoring: 'monitoring.md'
+        - elasticache: 'elasticache.md'

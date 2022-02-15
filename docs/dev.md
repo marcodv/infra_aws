@@ -21,10 +21,12 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_db"></a> [db](#module\_db) | ../../modules/database | n/a |
+| <a name="module_elastic_cache"></a> [elastic\_cache](#module\_elastic\_cache) | ../../modules/elasticache | n/a |
 | <a name="module_jump_host"></a> [jump\_host](#module\_jump\_host) | ../../modules/bastions | n/a |
 | <a name="module_k8s"></a> [k8s](#module\_k8s) | ../../modules/eks | n/a |
 | <a name="module_networking"></a> [networking](#module\_networking) | ../../modules/vpc/ | n/a |
-| <a name="module_observability"></a> [observability](#module\_observability) | ../../modules/monitoring | n/a |
+| <a name="module_observability"></a> [observability](#module\_observability) | ../../modules/monitoring/ | n/a |
 
 ## Resources
 
@@ -49,17 +51,25 @@ No resources.
 | <a name="input_eks_ingress_controller_port_path"></a> [eks\_ingress\_controller\_port\_path](#input\_eks\_ingress\_controller\_port\_path) | change this variable name | <pre>object({<br>    ingress_port     = number<br>    healt_check_path = string<br>  })</pre> | n/a | yes |
 | <a name="input_eks_ingress_rule"></a> [eks\_ingress\_rule](#input\_eks\_ingress\_rule) | List of open ports for inbound connections | `list(number)` | n/a | yes |
 | <a name="input_eks_version"></a> [eks\_version](#input\_eks\_version) | EKS version | `string` | n/a | yes |
+| <a name="input_elasticache_setting"></a> [elasticache\_setting](#input\_elasticache\_setting) | List for the Elastic Cache Redis based engine instance setting | <pre>object({<br>    engine          = string<br>    node_type       = string<br>    num_cache_nodes = number<br>    port            = number<br>    engine_version  = string<br>    family          = string<br>  })</pre> | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environments that we want to deploy | `string` | n/a | yes |
+| <a name="input_grafana_access_credentials"></a> [grafana\_access\_credentials](#input\_grafana\_access\_credentials) | These are the creds set for access to Grafana dashboard | <pre>object({<br>    username = string<br>    password = string<br>  })</pre> | n/a | yes |
+| <a name="input_grafana_dashboard_list"></a> [grafana\_dashboard\_list](#input\_grafana\_dashboard\_list) | Grafana dashboard list to import on EKS | `list(string)` | n/a | yes |
+| <a name="input_grafana_setting"></a> [grafana\_setting](#input\_grafana\_setting) | List of Grafana setting to apply to deployment | <pre>object({<br>    grafana_version     = string<br>    persistence_enabled = string<br>    storage_class       = string<br>    storage_size        = string<br>  })</pre> | n/a | yes |
 | <a name="input_map_cluster_admin_users"></a> [map\_cluster\_admin\_users](#input\_map\_cluster\_admin\_users) | Map of full admin users on EKS | <pre>object({<br>    admins = list(object({<br>      groups   = list(string)<br>      userarn  = string<br>      username = string<br>    }))<br>  })</pre> | n/a | yes |
 | <a name="input_namespaces"></a> [namespaces](#input\_namespaces) | List of namespaces created on EKS | <pre>list(object({<br>    manage = string<br>    name   = string<br>    custom_annotations = list(object({<br>      label = string<br>      value = string<br>    }))<br>    custom_labels = list(object({<br>      label = string<br>      value = string<br>    }))<br>  }))</pre> | n/a | yes |
 | <a name="input_private_instances_ingress_rule"></a> [private\_instances\_ingress\_rule](#input\_private\_instances\_ingress\_rule) | List of open ports for inbound connections | `list(number)` | n/a | yes |
 | <a name="input_private_subnets_cidr"></a> [private\_subnets\_cidr](#input\_private\_subnets\_cidr) | List of cidr blocks | `list(string)` | n/a | yes |
+| <a name="input_prometheus_setting"></a> [prometheus\_setting](#input\_prometheus\_setting) | Setting for Prometheus | <pre>object({<br>    prometheus_version = string<br>  })</pre> | n/a | yes |
 | <a name="input_public_subnet_alb"></a> [public\_subnet\_alb](#input\_public\_subnet\_alb) | List of public subnets for ALB | `string` | `""` | no |
 | <a name="input_public_subnets_cidr"></a> [public\_subnets\_cidr](#input\_public\_subnets\_cidr) | List of cidr blocks | `list(string)` | n/a | yes |
 | <a name="input_read_only_eks_users"></a> [read\_only\_eks\_users](#input\_read\_only\_eks\_users) | Map of read only users on EKS | <pre>object({<br>    users = list(object({<br>      groups   = list(string)<br>      userarn  = string<br>      username = string<br>    }))<br>  })</pre> | n/a | yes |
 | <a name="input_read_only_user_permissions"></a> [read\_only\_user\_permissions](#input\_read\_only\_user\_permissions) | List of permissions granted to read only users | <pre>list(object({<br>    api_groups = list(string)<br>    resources  = list(string)<br>    verbs      = list(string)<br>  }))</pre> | n/a | yes |
+| <a name="input_redis_credentials"></a> [redis\_credentials](#input\_redis\_credentials) | Username and password for Redis user | <pre>object({<br>    username = string<br>    password = string<br>  })</pre> | n/a | yes |
+| <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | Security groups ids for Elasticache | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | <a name="input_sg_alb"></a> [sg\_alb](#input\_sg\_alb) | Security group for ALB | `string` | `""` | no |
 | <a name="input_sg_db_rule"></a> [sg\_db\_rule](#input\_sg\_db\_rule) | List of open ports for inbound connections | `list(string)` | n/a | yes |
+| <a name="input_subnet_group_name"></a> [subnet\_group\_name](#input\_subnet\_group\_name) | Subnets for Elasticache | `string` | `""` | no |
 | <a name="input_type_resource"></a> [type\_resource](#input\_type\_resource) | Type of resource created by terraform. Values can be [durable,destroyable] | `string` | n/a | yes |
 | <a name="input_vpc_cidr_block"></a> [vpc\_cidr\_block](#input\_vpc\_cidr\_block) | VPC cidr block | `string` | n/a | yes |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | VPC id | `string` | `""` | no |
@@ -82,6 +92,7 @@ No resources.
 | <a name="output_eks_endpoint"></a> [eks\_endpoint](#output\_eks\_endpoint) | Return EKS URL API |
 | <a name="output_eks_sg"></a> [eks\_sg](#output\_eks\_sg) | Return eks security group |
 | <a name="output_eks_subnets"></a> [eks\_subnets](#output\_eks\_subnets) | Return the eks subnets |
+| <a name="output_elasticache_endpoint"></a> [elasticache\_endpoint](#output\_elasticache\_endpoint) | ElastiCache endpoint |
 | <a name="output_private_subnets_cidr"></a> [private\_subnets\_cidr](#output\_private\_subnets\_cidr) | Return the private subnets cidr |
 | <a name="output_private_subnets_id"></a> [private\_subnets\_id](#output\_private\_subnets\_id) | Return the private subnets id |
 | <a name="output_public_subnets_cidr"></a> [public\_subnets\_cidr](#output\_public\_subnets\_cidr) | Return the public subnets cidr |

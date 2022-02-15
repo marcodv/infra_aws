@@ -168,7 +168,7 @@ map_cluster_admin_users = {
       userarn  = "arn:aws:iam::848481299679:user/Terraform_User_Prod_Env"
       username = "Terraform_User_Prod_Env@noah.energy"
       groups   = ["system:masters", "cluster-full-admin-group"]
-  }
+    }
   ]
 }
 
@@ -195,10 +195,10 @@ eks_ingress_controller_port_path = {
 worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoleprodEnv"
 
 grafana_setting = {
-  grafana_version = "8.3.5"
+  grafana_version     = "8.3.5"
   persistence_enabled = "true"
-  storage_class = "default"
-  storage_size = "4Gi"
+  storage_class       = "default"
+  storage_size        = "4Gi"
 }
 
 // List of dashboard to import
@@ -214,9 +214,15 @@ prometheus_setting = {
 }
 
 elasticache_setting = {
-  engine               = "redis"
-  node_type            = "cache.t3.micro"
-  num_cache_nodes      = 1
-  engine_version       = "6.x"
-  port                 = 6379
+  engine          = "redis"
+  node_type       = "cache.t3.micro"
+  num_cache_nodes = 1
+  engine_version  = "6.x"
+  family          = "redis6.x"
+  port            = 6379
+}
+
+redis_credentials = {
+  username = "redis-user"
+  password = "TestingPassword123456"
 }
