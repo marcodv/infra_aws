@@ -1,7 +1,7 @@
 // Create Parameters group for Elasticache cluster
 resource "aws_elasticache_parameter_group" "default" {
   name   = "cache-params-${var.environment}-env"
-  family = var.elasticache_setting.engine_version
+  family = var.elasticache_setting.family
 }
 
 // Create ElastiCache cluster based on Redis and on 1 node atm
