@@ -1,4 +1,4 @@
-/*output "elasticache_endpoint" {
+output "elasticache_endpoint" {
   description = "ElastiCache endpoint"
-  value       = aws_elasticache_cluster.redis.address
-} */
+  value       = aws_elasticache_cluster.elasticache_cluster.cache_nodes.0.address
+}

@@ -50,7 +50,6 @@ module "networking" {
   db_subnets_cidr                = var.db_private_subnets_cidr
 }
 
-/*
 module "jump_host" {
   source = "../../modules/bastions"
 
@@ -59,7 +58,7 @@ module "jump_host" {
   availability_zones = var.availability_zones
   public_subnets_id  = module.networking.public_subnets_id
   bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
-} */
+}
 
 module "k8s" {
   source = "../../modules/eks"
