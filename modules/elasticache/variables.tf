@@ -24,3 +24,11 @@ variable "security_group_ids" {
   description = "Security groups ids for Elasticache"
   type = list(string)
 }
+
+variable "redis_credentials" {
+  description = "Username and password for Redis user"
+  type = object({
+    username = string
+    password = string
+  })
+}

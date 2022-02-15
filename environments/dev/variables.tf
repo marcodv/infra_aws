@@ -277,3 +277,11 @@ variable "security_group_ids" {
   type        = list(string)
   default     = [""]
 }
+
+variable "redis_credentials" {
+  description = "Username and password for Redis user"
+  type = object({
+    username = string
+    password = string
+  })
+}
