@@ -262,13 +262,6 @@ variable "elasticache_setting" {
     port            = number
     engine_version  = string
   })
-  default = {
-    engine          = "redis"
-    node_type       = "cache.t3.micro"
-    num_cache_nodes = 1
-    engine_version  = "5.0.6"
-    port            = 6379
-  }
 }
 
 variable "subnet_group_name" {

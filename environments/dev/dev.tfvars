@@ -224,10 +224,10 @@ prometheus_setting = {
   prometheus_version = "15.2.0"
 }
 
-elasticache_cluster = {
+elasticache_setting = {
   engine               = "redis"
   node_type            = "cache.t3.micro"
   num_cache_nodes      = 1
-  engine_version       = "6.0.16"
+  engine_version       = "6.x"
   port                 = 6379
 }
