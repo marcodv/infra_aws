@@ -84,7 +84,7 @@ acl_private_subnet_rule = {
       rule_no   = 106
       from_port = 30080
       to_port   = 30080
-    }
+    },
     {
       rule_no   = 200
       from_port = 1025
