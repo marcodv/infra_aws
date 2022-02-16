@@ -285,3 +285,11 @@ variable "redis_credentials" {
     password = string
   })
 }
+
+variable "rabbitmq_settings" {
+  description = "List of settings for RabbitMQ instance"
+  type = object({
+    engine_version     = string
+    host_instance_type = string
+  })
+}
