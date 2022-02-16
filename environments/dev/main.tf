@@ -80,7 +80,8 @@ module "k8s" {
 }
 
 module "observability" {
-  source = "../../modules/monitoring/"
+  source     = "../../modules/monitoring/"
+  depends_on = [module.k8s.eks_cluster_id]
 
   cluster_name               = module.k8s.eks_cluster_id
   grafana_setting            = var.grafana_setting
@@ -112,4 +113,14 @@ module "elastic_cache" {
   subnet_group_name   = element(module.networking.db_private_subnets_id, 0)
   security_group_ids  = [module.networking.db_sg]
   redis_credentials   = var.redis_credentials
+}
+
+module "message_broker" {
+  source     = "../../modules/rabbitmq"
+  depends_on = [module.networking.vpc_id]
+
+  environment        = var.environment
+  subnet_group_name  = element(module.networking.db_private_subnets_id, 0)
+  security_group_ids = [module.networking.db_sg]
+
 }

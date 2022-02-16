@@ -10,7 +10,7 @@ alb_ingress_rule               = [80, 443]
 eks_ingress_rule               = [53, 80, 443]
 bastion_ingress_rule           = [22, 80, 443]
 private_instances_ingress_rule = [22, 80, 443, 30080]
-sg_db_rule                     = [5432, 6379]
+sg_db_rule                     = [5432, 5672, 6379]
 acl_public_subnet_rule = {
   ingress_rule = [{
     rule_no   = 100
@@ -71,6 +71,11 @@ acl_private_subnet_rule = {
       to_port   = 6379
     },
     {
+      rule_no   = 105
+      from_port = 5672
+      to_port   = 5672
+    },
+    {
       rule_no   = 106
       from_port = 30080
       to_port   = 30080
@@ -91,6 +96,11 @@ acl_db_rule = {
     },
     {
       rule_no   = 101
+      from_port = 5672
+      to_port   = 5672
+    },
+    {
+      rule_no   = 102
       from_port = 6379
       to_port   = 6379
   }]
@@ -191,8 +201,8 @@ map_cluster_admin_users = {
 workers_nodes_instance_type = ["t2.medium"]
 
 worker_nodes_scaling_config = {
-  desired_size = 2
-  max_size     = 3
+  desired_size = 3
+  max_size     = 4
   min_size     = 1
 }
 
