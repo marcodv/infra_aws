@@ -292,3 +292,13 @@ variable "rabbitmq_settings" {
     host_instance_type = string
   })
 }
+
+variable "subnet_group_name_rabbitmq" {
+  description = "Subnets for RabbitMQ instance"
+  type        = string
+}
+
+variable "security_group_id_rabbitmq" {
+  description = "Security groups ids for RabbitMQ"
+  type        = list(string)
+}

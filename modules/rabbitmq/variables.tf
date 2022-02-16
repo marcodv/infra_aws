@@ -8,7 +8,15 @@ variable "rabbitmq_settings" {
   type = object({
     engine_version     = string
     host_instance_type = string
-    security_groups    = list(string)
-    subnets_ids        = list(string)
   })
+}
+
+variable "subnet_group_name_rabbitmq" {
+  description = "Subnets for RabbitMQ instance"
+  type        = string
+}
+
+variable "security_group_id_rabbitmq" {
+  description = "Security groups ids for RabbitMQ"
+  type        = list(string)
 }
