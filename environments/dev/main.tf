@@ -81,7 +81,7 @@ module "k8s" {
 
 module "observability" {
   source     = "../../modules/monitoring/"
-  depends_on = [module.k8s.eks_cluster_id]
+  //depends_on = [module.k8s.eks_cluster_id]
 
   cluster_name               = module.k8s.eks_cluster_id
   grafana_setting            = var.grafana_setting
@@ -106,7 +106,7 @@ module "db" {
 
 module "elastic_cache" {
   source     = "../../modules/elasticache"
-  //depends_on = [module.networking.vpc_id]
+  depends_on = [module.networking.vpc_id]
 
   environment         = var.environment
   elasticache_setting = var.elasticache_setting
