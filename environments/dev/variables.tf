@@ -297,9 +297,11 @@ variable "rabbitmq_settings" {
 variable "subnet_group_name_rabbitmq" {
   description = "Subnets for RabbitMQ instance"
   type        = string
+  default     = ""
 }
 
 variable "security_group_id_rabbitmq" {
   description = "Security groups ids for RabbitMQ"
   type        = list(string)
+  default     = [""]
 }
