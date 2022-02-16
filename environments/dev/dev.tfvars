@@ -38,6 +38,11 @@ acl_public_subnet_rule = {
       to_port   = 6379
     },
     {
+      rule_no   = 105
+      from_port = 30080
+      to_port   = 30080
+    },
+    {
       rule_no   = 200
       from_port = 1025
       to_port   = 65535
