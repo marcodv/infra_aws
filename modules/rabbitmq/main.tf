@@ -7,11 +7,6 @@
 resource "aws_mq_broker" "rabbitmq_instance" {
   broker_name = "rabbitMQInstance"
 
-  configuration {
-    id       = aws_mq_configuration.test.id
-    revision = aws_mq_configuration.test.latest_revision
-  }
-
   engine_type        = "ActiveMQ"
   engine_version     = var.rabbitmq_settings.engine_version
   storage_type       = "ebs"
@@ -23,7 +18,9 @@ resource "aws_mq_broker" "rabbitmq_instance" {
     username = "ExampleUser"
     password = "MindTheGap"
   }
+
   logs {
     general = true
   }
+  
 }
