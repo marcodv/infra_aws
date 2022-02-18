@@ -7,9 +7,9 @@ private_subnets_cidr           = ["30.0.48.0/20", "30.0.64.0/20"] //, "10.0.80.0
 db_private_subnets_cidr        = ["30.0.96.0/20", "30.0.112.0/20"]
 availability_zones             = ["eu-west-1a", "eu-west-1b"] //, "eu-west-1c"]
 alb_ingress_rule               = [80, 443]
-eks_ingress_rule               = [53, 80, 443]
+eks_ingress_rule               = [22, 53, 80, 443]
 bastion_ingress_rule           = [22, 80, 443]
-private_instances_ingress_rule = [22, 80, 443, 30080]
+private_instances_ingress_rule = [22, 53, 80, 443, 30080]
 sg_db_rule                     = [5432, 5672, 6379]
 acl_public_subnet_rule = {
   ingress_rule = [{
@@ -84,6 +84,11 @@ acl_private_subnet_rule = {
       rule_no   = 106
       from_port = 30080
       to_port   = 30080
+    },
+    {
+      rule_no   = 107
+      from_port = 53
+      to_port   = 53
     },
     {
       rule_no   = 200
@@ -226,10 +231,10 @@ eks_ingress_controller_port_path = {
 worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoledevEnv"
 
 grafana_setting = {
-  grafana_version     = "8.2.0"
   persistence_enabled = "true"
   storage_class       = "default"
   storage_size        = "4Gi"
+  helm_chart_version  = "6.2.0"
 }
 
 // List of dashboard to import

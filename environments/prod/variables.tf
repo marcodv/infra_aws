@@ -226,16 +226,16 @@ variable "cluster_name" {
 variable "grafana_setting" {
   description = "List of Grafana setting to apply to deployment"
   type = object({
-    grafana_version = string
     persistence_enabled = string
-    storage_class = string
-    storage_size = string
+    storage_class       = string
+    storage_size        = string
+    helm_chart_version  = string
   })
 }
 
 variable "grafana_dashboard_list" {
-  description =  "Grafana dashboard list to import on EKS"
-  type = list(string)
+  description = "Grafana dashboard list to import on EKS"
+  type        = list(string)
 }
 
 variable "grafana_access_credentials" {
