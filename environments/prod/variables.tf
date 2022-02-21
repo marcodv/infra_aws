@@ -226,16 +226,16 @@ variable "cluster_name" {
 variable "grafana_setting" {
   description = "List of Grafana setting to apply to deployment"
   type = object({
-    grafana_version = string
     persistence_enabled = string
-    storage_class = string
-    storage_size = string
+    storage_class       = string
+    storage_size        = string
+    helm_chart_version  = string
   })
 }
 
 variable "grafana_dashboard_list" {
-  description =  "Grafana dashboard list to import on EKS"
-  type = list(string)
+  description = "Grafana dashboard list to import on EKS"
+  type        = list(string)
 }
 
 variable "grafana_access_credentials" {
@@ -283,4 +283,24 @@ variable "redis_credentials" {
     username = string
     password = string
   })
+}
+
+variable "rabbitmq_settings" {
+  description = "List of settings for RabbitMQ instance"
+  type = object({
+    engine_version     = string
+    host_instance_type = string
+  })
+}
+
+variable "subnet_group_name_rabbitmq" {
+  description = "Subnets for RabbitMQ instance"
+  type        = string
+  default     = ""
+}
+
+variable "security_group_id_rabbitmq" {
+  description = "Security groups ids for RabbitMQ"
+  type        = list(string)
+  default     = [""]
 }

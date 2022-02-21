@@ -50,6 +50,7 @@ module "networking" {
   db_subnets_cidr                = var.db_private_subnets_cidr
 }
 
+
 module "jump_host" {
   source = "../../modules/bastions"
 
@@ -58,7 +59,8 @@ module "jump_host" {
   availability_zones = var.availability_zones
   public_subnets_id  = module.networking.public_subnets_id
   bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
-}
+} 
+
 
 module "k8s" {
   source = "../../modules/eks"
@@ -112,4 +114,15 @@ module "elastic_cache" {
   subnet_group_name   = element(module.networking.db_private_subnets_id, 0)
   security_group_ids  = [module.networking.db_sg]
   redis_credentials   = var.redis_credentials
+}
+
+module "message_broker" {
+  source     = "../../modules/rabbitmq"
+  depends_on = [module.networking.vpc_id]
+
+  environment                = var.environment
+  subnet_group_name_rabbitmq = element(module.networking.db_private_subnets_id, 0)
+  security_group_id_rabbitmq = [module.networking.db_sg]
+  rabbitmq_settings          = var.rabbitmq_settings
+
 }

@@ -246,6 +246,14 @@ resource "aws_security_group" "private_instances_sg" {
     }
   }
 
+  ingress {
+    description = "Port 53 UDP rule"
+    from_port   = 53
+    to_port     = 53
+    protocol    = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   // Without this section no incoming connection from VPC
   egress {
     description = "Allow ALL Protocols outboud"
@@ -320,6 +328,14 @@ resource "aws_security_group" "eks_sg" {
     from_port   = 30080
     to_port     = 30080
     protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "DNS UDP Rule"
+    from_port   = 53
+    to_port     = 53
+    protocol    = "udp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -404,6 +420,26 @@ resource "aws_network_acl" "acl_private_subnet" {
       from_port  = ingress.value.from_port
       to_port    = ingress.value.to_port
     }
+  }
+
+  // THESE 2 RULES PERMIT DNS RESOLUTION
+  // TO POD WHICH ARE NOT IN THE SAME NODE WHERE COREDNS IS
+  ingress {
+    protocol   = "udp"
+    rule_no    = 201
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 53
+    to_port    = 53
+  }
+
+  ingress {
+    protocol   = "udp"
+    rule_no    = 202
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 1025
+    to_port    = 65535
   }
 
   egress {

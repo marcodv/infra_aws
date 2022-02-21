@@ -7,10 +7,10 @@ private_subnets_cidr           = ["30.0.48.0/20", "30.0.64.0/20"] //, "10.0.80.0
 db_private_subnets_cidr        = ["30.0.96.0/20", "30.0.112.0/20"]
 availability_zones             = ["eu-west-1a", "eu-west-1b"] //, "eu-west-1c"]
 alb_ingress_rule               = [80, 443]
-eks_ingress_rule               = [53, 80, 443]
+eks_ingress_rule               = [22, 53, 80, 443]
 bastion_ingress_rule           = [22, 80, 443]
-private_instances_ingress_rule = [22, 80, 443, 30080]
-sg_db_rule                     = [5432, 6379]
+private_instances_ingress_rule = [22, 53, 80, 443, 30080]
+sg_db_rule                     = [5432, 5672, 6379]
 acl_public_subnet_rule = {
   ingress_rule = [{
     rule_no   = 100
@@ -36,6 +36,11 @@ acl_public_subnet_rule = {
       rule_no   = 104
       from_port = 6379
       to_port   = 6379
+    },
+    {
+      rule_no   = 105
+      from_port = 30080
+      to_port   = 30080
     },
     {
       rule_no   = 200
@@ -71,9 +76,19 @@ acl_private_subnet_rule = {
       to_port   = 6379
     },
     {
+      rule_no   = 105
+      from_port = 5672
+      to_port   = 5672
+    },
+    {
       rule_no   = 106
       from_port = 30080
       to_port   = 30080
+    },
+    {
+      rule_no   = 107
+      from_port = 53
+      to_port   = 53
     },
     {
       rule_no   = 200
@@ -91,6 +106,11 @@ acl_db_rule = {
     },
     {
       rule_no   = 101
+      from_port = 5672
+      to_port   = 5672
+    },
+    {
+      rule_no   = 102
       from_port = 6379
       to_port   = 6379
   }]
@@ -192,7 +212,7 @@ workers_nodes_instance_type = ["t2.medium"]
 
 worker_nodes_scaling_config = {
   desired_size = 2
-  max_size     = 3
+  max_size     = 4
   min_size     = 1
 }
 
@@ -211,10 +231,10 @@ eks_ingress_controller_port_path = {
 worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoledevEnv"
 
 grafana_setting = {
-  grafana_version     = "8.3.5"
   persistence_enabled = "true"
   storage_class       = "default"
   storage_size        = "4Gi"
+  helm_chart_version  = "6.2.0"
 }
 
 // List of dashboard to import
@@ -241,4 +261,9 @@ elasticache_setting = {
 redis_credentials = {
   username = "redis-user"
   password = "TestingPassword123456"
+}
+
+rabbitmq_settings = {
+  engine_version     = "5.15.9"
+  host_instance_type = "mq.t3.micro"
 }
