@@ -57,9 +57,6 @@ data "template_file" "grafana_values" {
     GRAFANA_ADMIN_PASSWORD  = "${var.grafana_access_credentials.password}"
     PROMETHEUS_SVC          = "${helm_release.prometheus.name}-server"
     NAMESPACE               = "monitoring"
-    GRAFANA_VERSION         = "${var.grafana_setting.grafana_version}"
-    EKS_ENVIRONMENT         = "${var.environment}"
-    DASHBOARD_PATH          = "/grafana-dashboards"
   }
 }
 
@@ -69,6 +66,8 @@ resource "helm_release" "grafana" {
   name       = "grafana"
   repository = "https://grafana.github.io/helm-charts"
   namespace  = "monitoring"
+  lint       = true
+  version    = var.grafana_setting.helm_chart_version
 
   values = [
     data.template_file.grafana_values.rendered

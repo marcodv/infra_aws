@@ -5,7 +5,7 @@ data "kubectl_file_documents" "metrics_server" {
 
 // Apply the manifest using the kubectl_manifest
 resource "kubectl_manifest" "setup_metrics_server" {
-  depends_on = [aws_eks_cluster.eks_cluster]
+  depends_on = [aws_eks_node_group.node_group_eks]
   for_each   = data.kubectl_file_documents.metrics_server.manifests
   yaml_body  = each.value
 }
