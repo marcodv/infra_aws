@@ -94,7 +94,8 @@ output "eks_cluster_id" {
   value       = module.k8s.eks_cluster_id
 }
 
+/*
 output "elasticache_endpoint" {
   description = "ElastiCache endpoint"
   value       = module.elastic_cache.elasticache_endpoint
-}
+}*/

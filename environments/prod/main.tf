@@ -113,6 +113,7 @@ module "elastic_cache" {
   redis_credentials   = var.redis_credentials
 }
 
+/*
 module "message_broker" {
   source     = "../../modules/rabbitmq"
   depends_on = [module.networking.vpc_id]
@@ -123,3 +124,4 @@ module "message_broker" {
   rabbitmq_settings          = var.rabbitmq_settings
 
 }
+*/
