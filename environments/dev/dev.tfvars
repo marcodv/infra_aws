@@ -77,8 +77,8 @@ acl_private_subnet_rule = {
     },
     {
       rule_no   = 105
-      from_port = 5672
-      to_port   = 5672
+      from_port = 5671
+      to_port   = 5671
     },
     {
       rule_no   = 106
@@ -106,8 +106,8 @@ acl_db_rule = {
     },
     {
       rule_no   = 101
-      from_port = 5672
-      to_port   = 5672
+      from_port = 5671
+      to_port   = 5671
     },
     {
       rule_no   = 102
