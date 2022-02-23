@@ -10,7 +10,7 @@ alb_ingress_rule               = [80, 443]
 eks_ingress_rule               = [22, 53, 80, 443]
 bastion_ingress_rule           = [22, 80, 443]
 private_instances_ingress_rule = [22, 53, 80, 443, 30080]
-sg_db_rule                     = [5432, 5671, 6379]
+sg_db_rule                     = [465, 5432, 5671, 6379]
 acl_public_subnet_rule = {
   ingress_rule = [{
     rule_no   = 100
@@ -91,6 +91,11 @@ acl_private_subnet_rule = {
       to_port   = 53
     },
     {
+      rule_no   = 108
+      from_port = 465
+      to_port   = 465
+    },
+    {
       rule_no   = 200
       from_port = 1025
       to_port   = 65535
@@ -113,7 +118,13 @@ acl_db_rule = {
       rule_no   = 102
       from_port = 6379
       to_port   = 6379
-  }]
+    },
+    {
+      rule_no   = 103
+      from_port = 465
+      to_port   = 465
+    }
+  ]
 }
 
 // The next vars are related to eks, node-group, launch config 
