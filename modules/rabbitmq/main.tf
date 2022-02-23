@@ -24,3 +24,25 @@ resource "aws_mq_broker" "rabbitmq_instance" {
   }
   
 }
+
+data "aws_iam_policy_document" "mq_logs" {
+  statement {
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+
+    resources = ["arn:aws:logs:*:*:log-group:/aws/amazonmq/*"]
+
+    principals {
+      identifiers = ["mq.amazonaws.com"]
+      type        = "Service"
+    }
+  }
+}
+
+resource "aws_cloudwatch_log_resource_policy" "mq_logs" {
+  policy_document = data.aws_iam_policy_document.mq_logs.json
+  policy_name     = "mq-logs"
+}
+
