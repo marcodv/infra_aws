@@ -10,7 +10,7 @@ alb_ingress_rule               = [80, 443]
 eks_ingress_rule               = [22, 53, 80, 443]
 bastion_ingress_rule           = [22, 80, 443]
 private_instances_ingress_rule = [22, 53, 80, 443, 30080]
-sg_db_rule                     = [465, 5432, 5671, 6379]
+sg_db_rule                     = [443, 5432, 5671, 6379]
 acl_public_subnet_rule = {
   ingress_rule = [{
     rule_no   = 100
@@ -92,8 +92,8 @@ acl_private_subnet_rule = {
     },
     {
       rule_no   = 108
-      from_port = 465
-      to_port   = 465
+      from_port = 443
+      to_port   = 443
     },
     {
       rule_no   = 200
@@ -121,8 +121,8 @@ acl_db_rule = {
     },
     {
       rule_no   = 103
-      from_port = 465
-      to_port   = 465
+      from_port = 443
+      to_port   = 443
     }
   ]
 }
