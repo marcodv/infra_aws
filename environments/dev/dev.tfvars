@@ -275,6 +275,6 @@ redis_credentials = {
 }
 
 rabbitmq_settings = {
-  engine_version     = "5.15.9"
+  engine_version     = "5.16.3"
   host_instance_type = "mq.t3.micro"
 }
