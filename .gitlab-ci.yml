@@ -89,11 +89,12 @@ setup-monitoring-system:
   stage: trigger-monitoring-setup
   needs:
     - infrastructure-dev
+  rules:
+    - if: '$CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH'
   trigger:
     project: noah-energy/orchestration/applications-charts 
     branch: 12-move-prometheus-from-terraform-to-orchestration-project
-  rules:
-    - if: '$CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH'
+
 
 
 #.kube-config-file:
