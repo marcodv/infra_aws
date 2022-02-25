@@ -93,8 +93,7 @@ trigger-monitoring-system:
     project: noah-energy/orchestration/applications-charts 
     branch: 12-move-prometheus-from-terraform-to-orchestration-project
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-
+    - if: '$CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH'
 
 
 #.kube-config-file:
