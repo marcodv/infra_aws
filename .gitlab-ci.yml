@@ -93,7 +93,7 @@ setup-monitoring-system:
     - if: '$CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH'
   trigger:
     project: noah-energy/orchestration/applications-charts 
-    branch: 12-move-prometheus-from-terraform-to-orchestration-project
+    branch: main
 
 
 
