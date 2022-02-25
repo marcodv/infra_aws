@@ -13,7 +13,7 @@ stages:
   - documentation-test
   - infrastructure-prod
   - documentation-deploy
-  #- kube-config
+  - trigger-monitoring-system
   #- k8s-env
 
 # Runs tfsec module scan from noah-pipelines-templates project
@@ -81,6 +81,21 @@ pages:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+
+# Trigger Orchestrator pipeline project
+# to install the monitoring system
+
+trigger-monitoring-system:
+  stage: trigger-monitoring-system
+  needs:
+    - infrastructure-dev
+  trigger:
+    project: noah-energy/orchestration/applications-charts 
+    branch: 12-move-prometheus-from-terraform-to-orchestration-project
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+
 
 #.kube-config-file:
 #  stage: kube-config

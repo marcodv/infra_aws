@@ -273,8 +273,3 @@ redis_credentials = {
   username = "redis-user"
   password = "TestingPassword123456"
 }
-
-rabbitmq_settings = {
-  engine_version     = "5.16.3"
-  host_instance_type = "mq.t3.micro"
-}

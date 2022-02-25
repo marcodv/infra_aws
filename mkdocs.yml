@@ -20,4 +20,3 @@ nav:
         - vpc: 'vpc.md'
         - monitoring: 'monitoring.md'
         - elasticache: 'elasticache.md'
-        - rabbitMQ: 'rabbitmq.md'

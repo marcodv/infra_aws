@@ -117,6 +117,14 @@ datasources:
         url: http://${PROMETHEUS_SVC}.${NAMESPACE}.svc.cluster.local
         access: proxy
         isDefault: true
+      - name: CloudWatch
+        type: cloudwatch
+        jsonData:
+          authType: keys
+          defaultRegion: eu-west-1
+        secureJsonData:
+          accessKey: 'AKIA4LDLNFTPUXJRM2XN'
+          secretKey: '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'
 
 dashboardProviders:
   dashboardproviders.yaml:
@@ -149,12 +157,16 @@ dashboards:
       gnetId: 4475
       revision: 5
       datasource: Prometheus
+    aws-billing:
+      gnetId: 139
+      revision: 16
+      datasource: Prometheus
 
 ## Plugins to install
 plugins:
   - digrich-bubblechart-panel
   - grafana-clock-panel
-  - redis-datasource
+  #- redis-datasource
   - grafana-piechart-panel
 
 persistence:

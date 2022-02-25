@@ -116,13 +116,3 @@ module "elastic_cache" {
   redis_credentials   = var.redis_credentials
 }
 
-module "message_broker" {
-  source     = "../../modules/rabbitmq"
-  depends_on = [module.networking.vpc_id]
-
-  environment                = var.environment
-  subnet_group_name_rabbitmq = element(module.networking.db_private_subnets_id, 0)
-  security_group_id_rabbitmq = [module.networking.db_sg]
-  rabbitmq_settings          = var.rabbitmq_settings
-
-}
