@@ -13,7 +13,7 @@ stages:
   - documentation-test
   - infrastructure-prod
   - documentation-deploy
-  - trigger-monitoring-system
+  - trigger-monitoring-setup
   #- k8s-env
 
 # Runs tfsec module scan from noah-pipelines-templates project
@@ -85,8 +85,8 @@ pages:
 # Trigger Orchestrator pipeline project
 # to install the monitoring system
 
-trigger-monitoring-system:
-  stage: trigger-monitoring-system
+setup-monitoring-system:
+  stage: trigger-monitoring-setup
   needs:
     - infrastructure-dev
   trigger:
