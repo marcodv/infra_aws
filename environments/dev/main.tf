@@ -81,6 +81,7 @@ module "k8s" {
   eks_subnets                 = module.networking.private_subnets_id
 }
 
+/*
 module "observability" {
   source = "../../modules/monitoring/"
 
@@ -90,7 +91,7 @@ module "observability" {
   grafana_dashboard_list     = var.grafana_dashboard_list
   grafana_access_credentials = var.grafana_access_credentials
   prometheus_setting         = var.prometheus_setting
-}
+} */
 
 
 module "db" {
