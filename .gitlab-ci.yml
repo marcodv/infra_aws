@@ -34,8 +34,8 @@ infrastructure-dev:
   script:
     - cd environments/dev/
     - terraform init
-    - terraform plan -var-file=dev.tfvars -var="db_master_username=$POSTGRES_USER_DEV_ENV" -var="db_master_password=$POSTGRES_PASSWORD_DEV_ENV"
-    - terraform apply -var-file=dev.tfvars -var="db_master_username=$POSTGRES_USER_DEV_ENV" -var="db_master_password=$POSTGRES_PASSWORD_DEV_ENV" -auto-approve
+    - terraform plan -var-file=dev.tfvars #-var="db_master_username=$POSTGRES_USER_DEV_ENV" -var="db_master_password=$POSTGRES_PASSWORD_DEV_ENV"
+    - terraform apply -var-file=dev.tfvars #-var="db_master_username=$POSTGRES_USER_DEV_ENV" -var="db_master_password=$POSTGRES_PASSWORD_DEV_ENV" -auto-approve
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
@@ -50,8 +50,8 @@ infrastructure-prod:
   script:
     - cd environments/prod/
     - terraform init
-    - terraform plan -var-file=prod.tfvars -var="db_master_username=$POSTGRES_USER_PROD_ENV" -var="db_master_password=$POSTGRES_PASSWORD_PROD_ENV"
-    - terraform apply -var-file=prod.tfvars -auto-approve -var="db_master_username=$POSTGRES_USER_PROD_ENV" -var="db_master_password=$POSTGRES_PASSWORD_PROD_ENV"
+    - terraform plan -var-file=prod.tfvars #-var="db_master_username=$POSTGRES_USER_PROD_ENV" -var="db_master_password=$POSTGRES_PASSWORD_PROD_ENV"
+    - terraform apply -var-file=prod.tfvars #-auto-approve -var="db_master_username=$POSTGRES_USER_PROD_ENV" -var="db_master_password=$POSTGRES_PASSWORD_PROD_ENV"
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never

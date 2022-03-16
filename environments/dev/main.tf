@@ -86,7 +86,6 @@ module "db" {
 
 module "jump_host" {
   source = "../../modules/bastions"
-  depends_on = [ module.db ]
 
   environment        = var.environment
   bastions-ami       = var.bastions-ami
