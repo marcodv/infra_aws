@@ -158,6 +158,7 @@ resource "aws_subnet" "private_subnet" {
 }
 
 /* DB Subnets */
+/*
 resource "aws_subnet" "db_subnets" {
   vpc_id                  = aws_vpc.vpc.id
   count                   = length(var.db_subnets_cidr)
@@ -168,7 +169,7 @@ resource "aws_subnet" "db_subnets" {
   tags = {
     Name = "db-private-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
   }
-}
+} */
 
 /*==== ALB Security Group ======*/
 resource "aws_security_group" "alb_sg" {
@@ -287,6 +288,7 @@ resource "aws_security_group" "private_instances_sg" {
 }
 
 /*==== RDS Security Group ======*/
+/*
 resource "aws_security_group" "db_sg" {
   name        = "db-sg-${var.environment}-environment"
   description = "DB sg to allow inbound/outbound"
@@ -323,6 +325,7 @@ resource "aws_security_group" "db_sg" {
     Name = "SG DB for ${var.environment} environment"
   }
 }
+*/
 
 /*==== EKS Security Group ======*/
 resource "aws_security_group" "eks_sg" {
@@ -474,6 +477,7 @@ resource "aws_network_acl" "acl_private_subnet" {
 }
 
 /*==== ACL for DB Private subnet ======*/
+/*
 resource "aws_network_acl" "acl_db_private_subnet" {
   vpc_id     = aws_vpc.vpc.id
   depends_on = [aws_vpc.vpc, aws_subnet.db_subnets]
@@ -504,4 +508,4 @@ resource "aws_network_acl" "acl_db_private_subnet" {
   tags = {
     Name = "DB ACL ${element(var.availability_zones, count.index)}"
   }
-}
+}*/

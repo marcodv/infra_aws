@@ -45,9 +45,11 @@ module "networking" {
   private_instances_ingress_rule = var.private_instances_ingress_rule
   acl_public_subnet_rule         = var.acl_public_subnet_rule
   acl_private_subnet_rule        = var.acl_private_subnet_rule
+  /*
   sg_db_rule                     = var.sg_db_rule
   acl_db_rule                    = var.acl_db_rule
   db_subnets_cidr                = var.db_private_subnets_cidr
+  */
 }
 
 module "k8s" {
@@ -69,7 +71,6 @@ module "k8s" {
   eks_subnets                 = module.networking.private_subnets_id
 }
 
-/*
 module "jump_host" {
   source = "../../modules/bastions"
 
@@ -79,4 +80,3 @@ module "jump_host" {
   public_subnets_id  = module.networking.public_subnets_id
   bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
 }
-*/
