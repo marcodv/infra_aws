@@ -1,9 +1,9 @@
 environment                    = "prod"
 type_resource                  = "destroyable"
 bastions-ami                   = "ami-04dd4500af104442f"
-vpc_cidr_block                 = "10.0.0.0/16"
-public_subnets_cidr            = ["10.0.0.0/20", "10.0.16.0/20"]  //, "10.0.32.0/20"]
-private_subnets_cidr           = ["10.0.48.0/20", "10.0.64.0/20"] //, "10.0.80.0/20"]
+vpc_cidr_block                 = "20.0.0.0/16"
+public_subnets_cidr            = ["20.0.0.0/20", "20.0.16.0/20"]  //, "10.0.32.0/20"]
+private_subnets_cidr           = ["20.0.48.0/20", "20.0.64.0/20"] //, "10.0.80.0/20"]
 availability_zones             = ["eu-west-1a", "eu-west-1b"] //, "eu-west-1c"]
 alb_ingress_rule               = [80, 443]
 eks_ingress_rule               = [22, 53, 80, 443]
