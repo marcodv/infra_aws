@@ -214,13 +214,3 @@ variable "cluster_name" {
   type        = string
   default     = ""
 }
-
-variable "postgres_prod_secrets" {
-  description = "Name for the prod secret stored in AWS"
-  type        = string
-}
-
-variable "postgres_dev_secrets" {
-  description = "Name for the dev secret stored in AWS"
-  type        = string
-}

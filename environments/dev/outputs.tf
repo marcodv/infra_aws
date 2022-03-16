@@ -27,32 +27,11 @@ output "private_subnets_id" {
   description = "Return the private subnets id"
   value       = module.networking.private_subnets_id
 }
-/*
-output "db_subnets_id" {
-  description = "Return db subnets id"
-  value       = module.networking.db_private_subnets_id
-}
-
-output "db_subnets_cidr" {
-  description = "Return db subnets cidr blocks"
-  value       = module.networking.db_private_subnets_cidr
-} */
 
 output "azs" {
   description = "Return the availability zones used"
   value       = module.networking.azs_public_subnet
 }
-
-/*
-output "alb_sg" {
-  description = "Return the alb security group"
-  value       = module.networking.alb_sg
-}
-
-output "db_sg" {
-  description = "Return the db security group"
-  value       = module.networking.db_sg
-}*/
 
 output "eks_subnets" {
   description = "Return the eks subnets"
