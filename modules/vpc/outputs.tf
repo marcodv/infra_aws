@@ -33,6 +33,7 @@ output "private_subnets_id" {
   value       = [for ids in aws_subnet.private_subnet : ids.id]
 }
 
+/*
 output "db_private_subnets_id" {
   description = "Return a list of db subnets id"
   value       = [for ids in aws_subnet.db_subnets : ids.id]
@@ -51,7 +52,7 @@ output "alb_sg" {
 output "db_sg" {
   description = "Return the db security group id"
   value       = aws_security_group.db_sg.id
-}
+}*/
 
 output "eks_sg" {
   description = "Return eks security group id"

@@ -10,10 +10,10 @@ include:
 stages:
   - run-security-scan
   - infrastructure-dev
-  - documentation-test
   - infrastructure-prod
   - documentation-deploy
-  #- kube-config
+  - dev-monitoring-setup
+  - prod-monitoring-setup
   #- k8s-env
 
 # Runs tfsec module scan from noah-pipelines-templates project
@@ -35,19 +35,8 @@ infrastructure-dev:
   script:
     - cd environments/dev/
     - terraform init
-    - terraform plan -var-file=dev.tfvars -var="db_master_username=$POSTGRES_USER_DEV_ENV" -var="db_master_password=$POSTGRES_PASSWORD_DEV_ENV"
-    - terraform apply -var-file=dev.tfvars -var="db_master_username=$POSTGRES_USER_DEV_ENV" -var="db_master_password=$POSTGRES_PASSWORD_DEV_ENV" -auto-approve
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
-
-# Test the build for the Terraform documentation
-documentation-test:
-  stage: documentation-test
-  extends: .test_mkdocs_build
-  script:
-    - echo "Testing Terraform documentations build artifact"
+    - terraform plan -var-file=dev.tfvars
+    - terraform apply -var-file=dev.tfvars -auto-approve
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
@@ -62,8 +51,8 @@ infrastructure-prod:
   script:
     - cd environments/prod/
     - terraform init
-    - terraform plan -var-file=prod.tfvars -var="db_master_username=$POSTGRES_USER_PROD_ENV" -var="db_master_password=$POSTGRES_PASSWORD_PROD_ENV"
-    - terraform apply -var-file=prod.tfvars -auto-approve -var="db_master_username=$POSTGRES_USER_PROD_ENV" -var="db_master_password=$POSTGRES_PASSWORD_PROD_ENV"
+    - terraform plan -var-file=prod.tfvars 
+    - terraform apply -var-file=prod.tfvars -auto-approve
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
@@ -81,6 +70,32 @@ pages:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+
+# Trigger Orchestrator pipeline project
+# to install the monitoring system
+dev-monitoring-system:
+  stage: dev-monitoring-setup
+  needs:
+    - infrastructure-dev
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: '$CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH'
+  trigger:
+    project: noah-energy/orchestration/applications-charts 
+    branch: main
+
+prod-monitoring-system:
+  stage: prod-monitoring-setup
+  needs:
+    - infrastructure-prod
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+  trigger:
+    project: noah-energy/orchestration/applications-charts 
+    branch: main
 
 #.kube-config-file:
 #  stage: kube-config

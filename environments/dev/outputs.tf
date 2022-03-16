@@ -28,29 +28,9 @@ output "private_subnets_id" {
   value       = module.networking.private_subnets_id
 }
 
-output "db_subnets_id" {
-  description = "Return db subnets id"
-  value       = module.networking.db_private_subnets_id
-}
-
-output "db_subnets_cidr" {
-  description = "Return db subnets cidr blocks"
-  value       = module.networking.db_private_subnets_cidr
-}
-
 output "azs" {
   description = "Return the availability zones used"
   value       = module.networking.azs_public_subnet
-}
-
-output "alb_sg" {
-  description = "Return the alb security group"
-  value       = module.networking.alb_sg
-}
-
-output "db_sg" {
-  description = "Return the db security group"
-  value       = module.networking.db_sg
 }
 
 output "eks_subnets" {
@@ -68,22 +48,6 @@ output "eks_sg" {
   value       = module.networking.eks_sg
 }
 
-/*
-output "http_target_group" {
-  description = "Return HTTP target group from ALB"
-  value       = module.lb.name_http_target_group
-}
-
-output "arn_http_target_group" {
-  description = "Return ARN for HTTP target groups"
-  value       = module.lb.arn_http_target_group
-} */
-
-/*output "db-endpoint" {
-  description = "Return db endpoint"
-  value = module.db.db-endpoint
-} */
-
 output "eks_endpoint" {
   description = "Return EKS URL API"
   value       = module.k8s.eks_endpoint
@@ -94,8 +58,3 @@ output "eks_cluster_id" {
   value       = module.k8s.eks_cluster_id
 }
 
-/*
-output "elasticache_endpoint" {
-  description = "ElastiCache endpoint"
-  value       = module.elastic_cache.elasticache_endpoint
-}*/

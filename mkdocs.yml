@@ -15,9 +15,5 @@ nav:
         - prod: 'prod.md'
     - 'modules':
         - bastions: 'bastions.md'
-        - database: 'database.md'
         - eks: 'eks.md'
         - vpc: 'vpc.md'
-        - monitoring: 'monitoring.md'
-        - elasticache: 'elasticache.md'
-        - rabbitMQ: 'rabbitmq.md'

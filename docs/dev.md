@@ -96,7 +96,6 @@ No resources.
 | <a name="output_eks_endpoint"></a> [eks\_endpoint](#output\_eks\_endpoint) | Return EKS URL API |
 | <a name="output_eks_sg"></a> [eks\_sg](#output\_eks\_sg) | Return eks security group |
 | <a name="output_eks_subnets"></a> [eks\_subnets](#output\_eks\_subnets) | Return the eks subnets |
-| <a name="output_elasticache_endpoint"></a> [elasticache\_endpoint](#output\_elasticache\_endpoint) | ElastiCache endpoint |
 | <a name="output_private_subnets_cidr"></a> [private\_subnets\_cidr](#output\_private\_subnets\_cidr) | Return the private subnets cidr |
 | <a name="output_private_subnets_id"></a> [private\_subnets\_id](#output\_private\_subnets\_id) | Return the private subnets id |
 | <a name="output_public_subnets_cidr"></a> [public\_subnets\_cidr](#output\_public\_subnets\_cidr) | Return the public subnets cidr |
