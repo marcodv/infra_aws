@@ -4,13 +4,13 @@ bastions-ami                   = "ami-04dd4500af104442f"
 vpc_cidr_block                 = "30.0.0.0/16"
 public_subnets_cidr            = ["30.0.0.0/20", "30.0.16.0/20"]  //, "10.0.32.0/20"]
 private_subnets_cidr           = ["30.0.48.0/20", "30.0.64.0/20"] //, "10.0.80.0/20"]
-db_private_subnets_cidr        = ["30.0.96.0/20", "30.0.112.0/20"]
+//db_private_subnets_cidr        = ["30.0.96.0/20", "30.0.112.0/20"]
 availability_zones             = ["eu-west-1a", "eu-west-1b"] //, "eu-west-1c"]
 alb_ingress_rule               = [80, 443]
 eks_ingress_rule               = [22, 53, 80, 443]
 bastion_ingress_rule           = [22, 80, 443]
 private_instances_ingress_rule = [22, 53, 80, 443, 30080]
-sg_db_rule                     = [443, 5432, 5671, 6379]
+//sg_db_rule                     = [443, 5432, 5671, 6379]
 acl_public_subnet_rule = {
   ingress_rule = [{
     rule_no   = 100
@@ -102,6 +102,7 @@ acl_private_subnet_rule = {
   }]
 }
 
+/*
 acl_db_rule = {
   ingress_rule = [
     {
@@ -125,7 +126,7 @@ acl_db_rule = {
       to_port   = 443
     }
   ]
-}
+} */
 
 // The next vars are related to eks, node-group, launch config 
 namespaces = [

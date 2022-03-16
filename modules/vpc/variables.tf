@@ -65,6 +65,7 @@ variable "acl_private_subnet_rule" {
   })
 }
 
+/*
 variable "acl_db_rule" {
   description = "List of rule_no and inbound ports open"
   type = object({
@@ -86,4 +87,4 @@ variable "sg_db_rule" {
   description = "List of open ports for inbound connections"
   type        = list(string)
 }
-
+*/

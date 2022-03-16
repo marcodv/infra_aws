@@ -8,6 +8,7 @@ gpgcheck=1
 repo_gpgcheck=1
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 YUM_REPO
+
 sudo yum install -y kubectl gcc
 wget http://download.redis.io/redis-stable.tar.gz && tar xvzf redis-stable.tar.gz && cd redis-stable && make
 sudo cp src/redis-cli /usr/bin/
@@ -16,8 +17,8 @@ pip3 install ansible psycopg2-binary
 
 cat > /home/ec2-user/create_postgres_users_db.yaml << __EOF__
 ---
-- hosts: "add_db_endpoint"
-  remote_user: db_creation_user
+- hosts: "db_name_to_connect"
+  remote_user: add_user_here
   become: yes
   gather_facts: false
 
@@ -34,28 +35,26 @@ cat > /home/ec2-user/create_postgres_users_db.yaml << __EOF__
       encoding: 'UTF-8'
       lc_collate: 'en_US.UTF-8'
       lc_ctype: 'en_US.UTF-8'
-      port: 5432
+      port: 
       state: present
-      login_host: add_db_endpoint
-      login_user: "db_creation_user"
-      login_password: "db_creation_user_password"
+      login_host: db_name_to_connect
+      login_user: "add_user_here"
+      login_password: "add_password"
     delegate_to: 127.0.0.1
     with_items:
-    - prod_backend_db
-    - dev_backend_db
-    - staging_backend_db
+    - list_db
 
   - name: Create DB user
     postgresql_user:
-      login_host: add_db_endpoint
-      login_user: "db_creation_user"
-      login_password: "db_creation_user_password"
-      port: 5432
+      login_host: db_name_to_connect
+      login_user: "add_user_here"
+      login_password: "add_password"
+      port: 
       db: "{{ item.db_name }}"
       name: "{{ item.db_username }}"
       password:  "{{ item.db_password }}"
-      role_attr_flags: CREATEDB,LOGIN
       priv: "ALL/ALL"
+      role_attr_flags: "CREATEDB,LOGIN"
     delegate_to: 127.0.0.1
     with_items:
     - {db_name: '', db_username: '', db_password: ''}
@@ -64,10 +63,10 @@ cat > /home/ec2-user/create_postgres_users_db.yaml << __EOF__
 
   - name: Assign db created to users
     postgresql_owner:
-      login_host: add_db_endpoint
-      login_user: "db_creation_user"
-      login_password: "db_creation_user_password"
-      port: 5432
+      login_host: db_name_to_connect
+      login_user: "add_user_here"
+      login_password: "add_password"
+      port: 
       db: "{{ item.db_name }}"
       new_owner: "{{ item.db_username }}"
       obj_type: database
@@ -80,10 +79,10 @@ cat > /home/ec2-user/create_postgres_users_db.yaml << __EOF__
 
   - name: Assign DB permission to users
     postgresql_privs:
-      login_host: add_db_endpoint
-      login_user: "db_creation_user"
-      login_password: "db_creation_user_password"
-      port: 5432
+      login_host: db_name_to_connect
+      login_user: "add_user_here"
+      login_password: "add_password"
+      port:
       database: "{{ item.db_name }}"
       role: "{{ item.db_username }}"
       type: database
@@ -93,5 +92,40 @@ cat > /home/ec2-user/create_postgres_users_db.yaml << __EOF__
     - {db_name: '', db_username: ''}
     - {db_name: '', db_username: ''}
     - {db_name: '', db_username: ''}
+
+  # the list need to be of 6 elements
+  - name: Revoke ALL PRIVILEGES from users in order to not access to db
+    postgresql_privs:
+      login_host: db_name_to_connect
+      login_user: "add_user_here"
+      login_password: "add_password"
+      port:
+      db: "{{ item.db_name }}"
+      role: "{{ item.db_username }}"
+      type: database
+      state: absent
+      grant_option: no
+      priv: ALL
+    delegate_to: 127.0.0.1
+    with_items:
+    - {db_name: '', db_username: ''}
+    - {db_name: '', db_username: ''}
+    - {db_name: '', db_username: ''}
+
+  - name: Revoke PUBLIC for all the DB
+    postgresql_privs:
+      login_host: db_name_to_connect
+      login_user: "add_user_here"
+      login_password: "add_password"
+      port:
+      db: "{{ item }}"
+      type: database
+      state: absent
+      grant_option: no
+      priv: ALL
+      role: public
+    delegate_to: 127.0.0.1
+    with_items:
+    - list_db
 __EOF__
 
