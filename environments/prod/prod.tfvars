@@ -199,16 +199,3 @@ eks_ingress_controller_port_path = {
 
 worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoleprodEnv"
 
-elasticache_setting = {
-  engine          = "redis"
-  node_type       = "cache.t3.micro"
-  num_cache_nodes = 1
-  engine_version  = "6.x"
-  family          = "redis6.x"
-  port            = 6379
-}
-
-redis_credentials = {
-  username = "redis-user"
-  password = "TestingPassword123456"
-}

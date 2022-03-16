@@ -96,16 +96,6 @@ variable "acl_db_rule" {
   })
 }
 
-variable "db_master_password" {
-  description = "Master password for db"
-  type        = string
-}
-
-variable "db_master_username" {
-  description = "Master username for db"
-  type        = string
-}
-
 variable "db_private_subnets_cidr" {
   description = "List of private subnets for DB"
   type        = list(string)
@@ -221,38 +211,6 @@ variable "cluster_name" {
   description = "Cluster name"
   type        = string
   default     = ""
-}
-
-variable "elasticache_setting" {
-  description = "List for the Elastic Cache Redis based engine instance setting"
-  type = object({
-    engine          = string
-    node_type       = string
-    num_cache_nodes = number
-    port            = number
-    engine_version  = string
-    family          = string
-  })
-}
-
-variable "subnet_group_name" {
-  description = "Subnets for Elasticache"
-  type        = string
-  default     = ""
-}
-
-variable "security_group_ids" {
-  description = "Security groups ids for Elasticache"
-  type        = list(string)
-  default     = [""]
-}
-
-variable "redis_credentials" {
-  description = "Username and password for Redis user"
-  type = object({
-    username = string
-    password = string
-  })
 }
 
 variable "postgres_prod_secrets" {

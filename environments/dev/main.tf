@@ -70,20 +70,6 @@ module "k8s" {
 }
 
 /*
-module "db" {
-  source = "../../modules/database"
-
-  environment           = var.environment
-  azs                   = var.availability_zones
-  db_master_password    = var.db_master_password
-  db_master_username    = var.db_master_username
-  postgres_prod_secrets = var.postgres_prod_secrets
-  postgres_dev_secrets  = var.postgres_dev_secrets
-  db_subnets            = module.networking.db_private_subnets_id
-  db_sg                 = module.networking.db_sg
-  vpc_id                = module.networking.vpc_id
-} */
-
 module "jump_host" {
   source = "../../modules/bastions"
 
@@ -92,17 +78,5 @@ module "jump_host" {
   availability_zones = var.availability_zones
   public_subnets_id  = module.networking.public_subnets_id
   bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
-}
-
-/*
-module "elastic_cache" {
-  source     = "../../modules/elasticache"
-  depends_on = [module.networking.vpc_id]
-
-  environment         = var.environment
-  redis_credentials   = var.redis_credentials
-  elasticache_setting = var.elasticache_setting
-  subnet_group_name   = element(module.networking.db_private_subnets_id, 0)
-  security_group_ids  = [module.networking.db_sg]
 }
 */

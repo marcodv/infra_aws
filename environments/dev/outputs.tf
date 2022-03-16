@@ -68,23 +68,6 @@ output "eks_sg" {
   value       = module.networking.eks_sg
 }
 
-/*
-output "http_target_group" {
-  description = "Return HTTP target group from ALB"
-  value       = module.lb.name_http_target_group
-}
-
-output "arn_http_target_group" {
-  description = "Return ARN for HTTP target groups"
-  value       = module.lb.arn_http_target_group
-} */
-
-/*
-output "db-endpoint" {
-  description = "Return db endpoint"
-  value = module.db.db-endpoint
-} */
-
 output "eks_endpoint" {
   description = "Return EKS URL API"
   value       = module.k8s.eks_endpoint
@@ -95,8 +78,3 @@ output "eks_cluster_id" {
   value       = module.k8s.eks_cluster_id
 }
 
-/*
-output "elasticache_endpoint" {
-  description = "ElastiCache endpoint"
-  value       = module.elastic_cache.elasticache_endpoint
-}*/
