@@ -241,25 +241,6 @@ eks_ingress_controller_port_path = {
 
 worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoledevEnv"
 
-grafana_setting = {
-  persistence_enabled = "true"
-  storage_class       = "default"
-  storage_size        = "4Gi"
-  helm_chart_version  = "6.2.0"
-}
-
-// List of dashboard to import
-grafana_dashboard_list = ["cluster-pod-dashboard.json", "aws-billing.json"]
-
-grafana_access_credentials = {
-  username = "admin"
-  password = "TestingPassword123456"
-}
-
-prometheus_setting = {
-  prometheus_version = "15.2.0"
-}
-
 elasticache_setting = {
   engine          = "redis"
   node_type       = "cache.t3.micro"
@@ -273,3 +254,7 @@ redis_credentials = {
   username = "redis-user"
   password = "TestingPassword123456"
 }
+
+postgres_prod_secrets = "credentialsPostgresprodEnv"
+
+postgres_dev_secrets = "credentialsPostgresdevEnv"

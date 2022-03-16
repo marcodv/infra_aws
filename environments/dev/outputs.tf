@@ -79,7 +79,8 @@ output "arn_http_target_group" {
   value       = module.lb.arn_http_target_group
 } */
 
-/*output "db-endpoint" {
+/*
+output "db-endpoint" {
   description = "Return db endpoint"
   value = module.db.db-endpoint
 } */

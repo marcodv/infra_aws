@@ -50,18 +50,6 @@ module "networking" {
   db_subnets_cidr                = var.db_private_subnets_cidr
 }
 
-
-module "jump_host" {
-  source = "../../modules/bastions"
-
-  environment        = var.environment
-  bastions-ami       = var.bastions-ami
-  availability_zones = var.availability_zones
-  public_subnets_id  = module.networking.public_subnets_id
-  bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
-} 
-
-
 module "k8s" {
   source = "../../modules/eks"
 
@@ -82,38 +70,40 @@ module "k8s" {
 }
 
 /*
-module "observability" {
-  source = "../../modules/monitoring/"
-
-  cluster_name               = module.k8s.eks_cluster_id
-  grafana_setting            = var.grafana_setting
-  environment                = var.environment
-  grafana_dashboard_list     = var.grafana_dashboard_list
-  grafana_access_credentials = var.grafana_access_credentials
-  prometheus_setting         = var.prometheus_setting
-} */
-
-
 module "db" {
   source = "../../modules/database"
 
+  environment           = var.environment
+  azs                   = var.availability_zones
+  db_master_password    = var.db_master_password
+  db_master_username    = var.db_master_username
+  postgres_prod_secrets = var.postgres_prod_secrets
+  postgres_dev_secrets  = var.postgres_dev_secrets
+  db_subnets            = module.networking.db_private_subnets_id
+  db_sg                 = module.networking.db_sg
+  vpc_id                = module.networking.vpc_id
+} */
+
+module "jump_host" {
+  source = "../../modules/bastions"
+  depends_on = [ module.db ]
+
   environment        = var.environment
-  azs                = var.availability_zones
-  db_master_password = var.db_master_password
-  db_master_username = var.db_master_username
-  db_subnets         = module.networking.db_private_subnets_id
-  db_sg              = module.networking.db_sg
-  vpc_id             = module.networking.vpc_id
+  bastions-ami       = var.bastions-ami
+  availability_zones = var.availability_zones
+  public_subnets_id  = module.networking.public_subnets_id
+  bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
 }
 
+/*
 module "elastic_cache" {
   source     = "../../modules/elasticache"
   depends_on = [module.networking.vpc_id]
 
   environment         = var.environment
+  redis_credentials   = var.redis_credentials
   elasticache_setting = var.elasticache_setting
   subnet_group_name   = element(module.networking.db_private_subnets_id, 0)
   security_group_ids  = [module.networking.db_sg]
-  redis_credentials   = var.redis_credentials
 }
-
+*/

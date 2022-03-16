@@ -18,6 +18,16 @@
  *
 */
 
+
+terraform {
+  required_providers {
+    postgresql = {
+      source  = "cyrilgdn/postgresql"
+      version = ">=1.15.0"
+    }
+  }
+}
+
 /* DB parameter group*/
 resource "aws_db_parameter_group" "pg_db" {
   name   = "parameters-group-postgres-${var.environment}-env"
@@ -70,3 +80,37 @@ resource "aws_db_instance" "db" {
     Name = "db-${var.environment}-environment"
   }
 }
+
+// Use the postgres provider for later create users
+/*provider "postgresql" {
+  scheme           = "awspostgres"
+  host             = aws_db_instance.db.address
+  username         = var.db_master_username
+  password         = var.db_master_password
+  expected_version = "13.3"
+}
+
+// Read secret for prod secrets
+data "aws_secretsmanager_secret" "prod_secrets" {
+  name = var.postgres_prod_secrets
+}
+
+data "aws_secretsmanager_secret_version" "current" {
+  secret_id = data.aws_secretsmanager_secret.prod_secrets.id
+}
+
+resource "postgresql_role" "prod_role" {
+  name               = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["username"]
+  password           = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["password"]
+  login              = true
+  encrypted_password = true
+}
+
+resource "postgresql_database" "new_db" {
+  name              = "new_db"
+  owner             = postgresql_role.new_db_role.name
+  template          = "template0"
+  lc_collate        = "C"
+  connection_limit  = -1
+  allow_connections = true
+}*/
