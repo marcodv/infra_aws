@@ -12,7 +12,8 @@ stages:
   - infrastructure-dev
   - infrastructure-prod
   - documentation-deploy
-  - trigger-monitoring-setup
+  - dev-monitoring-setup
+  - prod-monitoring-setup
   #- k8s-env
 
 # Runs tfsec module scan from noah-pipelines-templates project
@@ -72,14 +73,26 @@ pages:
 
 # Trigger Orchestrator pipeline project
 # to install the monitoring system
-setup-monitoring-system:
-  stage: trigger-monitoring-setup
+dev-monitoring-system:
+  stage: dev-monitoring-setup
   needs:
-    - infrastructure-dev
+    - infrastructure-prod
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
     - if: '$CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH'
+  trigger:
+    project: noah-energy/orchestration/applications-charts 
+    branch: main
+
+prod-monitoring-system:
+  stage: prod-monitoring-setup
+  needs:
+    - infrastructure-prod
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
   trigger:
     project: noah-energy/orchestration/applications-charts 
     branch: main
