@@ -1,84 +1,207 @@
-# infra_aws
+# AWS INFRA 
 
-Infrastructure AWS project 
+This docs describe the architecture of our dynamic infra deploy by Terraform via GitLab
 
-## Getting started
+## Structure 
+The infra spin up via pipeline or command line will have the setup like the picture below 
+![noah infra](noah_infra.jpeg "Infra AWS")
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Infra Description
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+The infra generated from this repo will do a VPC peering in order to connect to the DB and Elasticache for **prod environment**.
 
-## Add your files
+This repo generate all the components for infra which are in the top part of the below pictures.
 
-- [ ] [Create](https://gitlab.com/-/experiment/new_project_readme_content:368b2e8c408559d13fefa2cdc138bc3d?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://gitlab.com/-/experiment/new_project_readme_content:368b2e8c408559d13fefa2cdc138bc3d?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://gitlab.com/-/experiment/new_project_readme_content:368b2e8c408559d13fefa2cdc138bc3d?https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+So all the resources which are in the **VPC with cidr block 20.0.0.0/16** are generated from this repo 
+
+## Pre Requisites
+
+If you want to spin up the infra via your local laptop, there are few prerequisite that you need to have.
+
+Visit [this page](https://gitlab.com/noah-energy/infranoah/infra_aws/-/wikis/home#prerequisite) in order to setup your Terraform and aws cli
+
+Usually running Terraform locally is enough for local development.
+
+## Command to run to create infra
+
+Once you got your aws configured, you can run terraform.
+
+Initiate your terraform space running `terraform init` like in the example below
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/noah-energy/infra_aws.git
-git branch -M main
-git push -uf origin main
+marcodivincenzo@Marcos-MacBook-Pro:[prod]:(main): terraform init
+Initializing modules...
+- db in ../../modules/database
+- iam in ../../modules/iam
+- jump_host in ../../modules/bastions
+- k8s in ../../modules/eks
+- lb in ../../modules/alb
+- networking in ../../modules/vpc
+
+Initializing the backend...
+
+Successfully configured the backend "s3"! Terraform will automatically
+use this backend unless the backend configuration changes.
+
+Initializing provider plugins...
+- Finding latest version of hashicorp/aws...
+- Finding latest version of hashicorp/kubernetes...
+- Installing hashicorp/aws v3.74.0...
+- Installed hashicorp/aws v3.74.0 (signed by HashiCorp)
+- Installing hashicorp/kubernetes v2.7.1...
+- Installed hashicorp/kubernetes v2.7.1 (signed by HashiCorp)
+
+Terraform has created a lock file .terraform.lock.hcl to record the provider
+selections it made above. Include this file in your version control repository
+so that Terraform can guarantee to make the same selections by default when
+you run "terraform init" in the future.
+
+Terraform has been successfully initialized!
 ```
 
-## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.com/-/experiment/new_project_readme_content:368b2e8c408559d13fefa2cdc138bc3d?https://gitlab.com/noah-energy/infra_aws/-/settings/integrations)
+After that we run `terraform plan` to have a detailed explanation about what is going to be created like in this example
 
-## Collaborate with your team
+```
+terraform plan -var-file=dev.tfvars 
+```
+```
+...
+...
+Plan: 62 to add, 0 to change, 0 to destroy.
 
-- [ ] [Invite team members and collaborators](https://gitlab.com/-/experiment/new_project_readme_content:368b2e8c408559d13fefa2cdc138bc3d?https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://gitlab.com/-/experiment/new_project_readme_content:368b2e8c408559d13fefa2cdc138bc3d?https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://gitlab.com/-/experiment/new_project_readme_content:368b2e8c408559d13fefa2cdc138bc3d?https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://gitlab.com/-/experiment/new_project_readme_content:368b2e8c408559d13fefa2cdc138bc3d?https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://gitlab.com/-/experiment/new_project_readme_content:368b2e8c408559d13fefa2cdc138bc3d?https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+Changes to Outputs:
+  + alb_sg                = (known after apply)
+  + arn_http_target_group = (known after apply)
+  + azs                   = [
+      + "eu-west-1a",
+      + "eu-west-1b",
+    ]
+  + bastions_sg           = (known after apply)
+  + db_sg                 = (known after apply)
+  + db_subnets_cidr       = [
+      + "20.0.96.0/20",
+      + "20.0.112.0/20",
+    ]
+  + db_subnets_id         = [
+      + (known after apply),
+      + (known after apply),
+    ]
+  + eks_cluster_id        = (known after apply)
+  + eks_endpoint          = (known after apply)
+  + eks_sg                = (known after apply)
+  + eks_subnets           = [
+      + (known after apply),
+      + (known after apply),
+    ]
+  + http_target_group     = "HTTP-TG-prod-env"
+  + private_subnets_cidr  = [
+      + "20.0.48.0/20",
+      + "20.0.64.0/20",
+    ]
+  + private_subnets_id    = [
+      + (known after apply),
+      + (known after apply),
+    ]
+  + public_subnets_cidr   = [
+      + "20.0.0.0/20",
+      + "20.0.16.0/20",
+    ]
+  + public_subnets_id     = [
+      + (known after apply),
+      + (known after apply),
+    ]
+  + vpc_cidr_block        = "20.0.0.0/16"
+  + vpc_id                = (known after apply)
+```
 
-## Test and Deploy
+Once you that you validated that everything is fine, you can run `terraform apply` like in this example. 
 
-Use the built-in continuous integration in GitLab.
 
-- [ ] [Get started with GitLab CI/CD](https://gitlab.com/-/experiment/new_project_readme_content:368b2e8c408559d13fefa2cdc138bc3d?https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://gitlab.com/-/experiment/new_project_readme_content:368b2e8c408559d13fefa2cdc138bc3d?https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://gitlab.com/-/experiment/new_project_readme_content:368b2e8c408559d13fefa2cdc138bc3d?https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://gitlab.com/-/experiment/new_project_readme_content:368b2e8c408559d13fefa2cdc138bc3d?https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://gitlab.com/-/experiment/new_project_readme_content:368b2e8c408559d13fefa2cdc138bc3d?https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+````
+terraform apply -var-file=dev.tfvars 
+````
 
-***
+## Destroy Infra
 
-# Editing this README
+For destroy infra run this command 
+````
+terraform destroy -var-file=dev.tfvars 
+````
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://gitlab.com/-/experiment/new_project_readme_content:368b2e8c408559d13fefa2cdc138bc3d?https://www.makeareadme.com/) for this template.
+**And you will prompted to type yes** in case you want destroy it
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+```
+Plan: 0 to add, 0 to change, 64 to destroy.
 
-## Name
-Choose a self-explaining name for your project.
+Changes to Outputs:
+  - alb_sg               = "sg-0bef360d68e6d78e7" -> null
+  - azs                  = [
+      - "eu-west-1a",
+      - "eu-west-1b",
+    ] -> null
+  - bastions_sg          = "sg-0b27d9376513bb72a" -> null
+  - db_sg                = "sg-0bc5ac36bcd7b5323" -> null
+  - db_subnets_cidr      = [
+      - "30.0.96.0/20",
+      - "30.0.112.0/20",
+    ] -> null
+  - db_subnets_id        = [
+      - "subnet-0c14096c8a0ef060a",
+      - "subnet-0c54de546303da31a",
+    ] -> null
+  - eks_cluster_id       = "eks-dev-env" -> null
+  - eks_endpoint         = "https://78CB6F4C6D7B95DF494650280F719A47.gr7.eu-west-1.eks.amazonaws.com" -> null
+  - eks_sg               = "sg-0b9a935d806d35b38" -> null
+  - eks_subnets          = [
+      - "subnet-062a0de2d8bf09922",
+      - "subnet-0754907ae48e70436",
+    ] -> null
+  - private_subnets_cidr = [
+      - "30.0.48.0/20",
+      - "30.0.64.0/20",
+    ] -> null
+  - private_subnets_id   = [
+      - "subnet-062a0de2d8bf09922",
+      - "subnet-0754907ae48e70436",
+    ] -> null
+  - public_subnets_cidr  = [
+      - "30.0.0.0/20",
+      - "30.0.16.0/20",
+    ] -> null
+  - public_subnets_id    = [
+      - "subnet-00eddf9c02de34ae7",
+      - "subnet-0cd99767ce9af4fca",
+    ] -> null
+  - vpc_cidr_block       = "30.0.0.0/16" -> null
+  - vpc_id               = "vpc-0136fa86655536a2e" -> null
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Do you really want to destroy all resources?
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+  Enter a value:
+```
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## Terraform modules description
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Terraform modules descriptions [are explained at this url](https://noah-energy.gitlab.io/infranoah/infra_aws/)
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+## Automatic Terraform modules documentations
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Each time that you add a new tf module, you need to follow these steps in order to create the docs
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+* Add module description inside the main.tf of the module. You can have a look at the existing one
+* Add an entry inside the **mkdocs.yml** under the **modules section**
+  * the entry need to be in the style like this => 'newModule' : 'newModule.md'
+* Now you can run the script **TFDocsGenerator.sh** which will generate the actual module documentation based on the comment presents in the main.tf file
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
+```
+marcodivincenzo@Marcos-MacBook-Pro:[infra_aws]:(develop): ./TFDocsGenerator.sh
+/Users/marcodivincenzo/Desktop/noah_repos/infra_aws/environments/dev/dev.md updated successfully
+/Users/marcodivincenzo/Desktop/noah_repos/infra_aws/environments/prod/prod.md updated successfully
+/Users/marcodivincenzo/Desktop/noah_repos/infra_aws/modules/bastions/bastions.md updated successfully
+/Users/marcodivincenzo/Desktop/noah_repos/infra_aws/modules/eks/eks.md updated successfully
+/Users/marcodivincenzo/Desktop/noah_repos/infra_aws/modules/iam/iam.md updated successfully
+/Users/marcodivincenzo/Desktop/noah_repos/infra_aws/modules/vpc/vpc.md updated successfully
+```

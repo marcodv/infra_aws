@@ -6,6 +6,14 @@ This docs describe the architecture of our dynamic infra deploy by Terraform via
 The infra spin up via pipeline or command line will have the setup like the picture below 
 ![noah infra](noah_infra.jpeg "Infra AWS")
 
+## Infra Description
+
+The infra generated from this repo will do a VPC peering in order to connect to the DB and Elasticache for **prod environment**.
+
+This repo generate all the components for infra which are in the top part of the below pictures.
+
+So all the resources which are in the **VPC with cidr block 20.0.0.0/16** are generated from this repo 
+
 ## Pre Requisites
 
 If you want to spin up the infra via your local laptop, there are few prerequisite that you need to have.
@@ -51,20 +59,11 @@ you run "terraform init" in the future.
 Terraform has been successfully initialized!
 ```
 
-**_THIS IS REALLY IMPORTANT_**
-
-Before to run `terraform plan` you need to know that you also need to pass the variable for 
-
-- db username 
-- db password
-
-I've omitted those one from my example, but the ones that you pass, will be used in order to access to the db
-
 
 After that we run `terraform plan` to have a detailed explanation about what is going to be created like in this example
 
 ```
-terraform plan -var-file=dev.tfvars -var="db_master_username=replace_username_db" -var="db_master_password=replace_passwd_db"
+terraform plan -var-file=dev.tfvars 
 ```
 ```
 ...
@@ -118,17 +117,16 @@ Changes to Outputs:
 
 Once you that you validated that everything is fine, you can run `terraform apply` like in this example. 
 
-**Also here you need to specify the db username and passwd**
 
 ````
-terraform apply -var-file=dev.tfvars -var="db_master_username=replace_username_db" -var="db_master_password=replace_passwd_db"
+terraform apply -var-file=dev.tfvars 
 ````
 
 ## Destroy Infra
 
 For destroy infra run this command 
 ````
-terraform destroy -var-file=dev.tfvars -var="db_master_username=replace_username_db" -var="db_master_password=replace_passwd_db"
+terraform destroy -var-file=dev.tfvars 
 ````
 
 **And you will prompted to type yes** in case you want destroy it
