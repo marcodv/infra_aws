@@ -86,14 +86,6 @@ resource "aws_route" "public_internet_gateway" {
   gateway_id             = aws_internet_gateway.ig.id
 }
 
-// VPC Peering against RDS in prod
-// from public subnet 
-resource "aws_route" "peering_prod_rds_to_public_subnet" {
-  route_table_id            = aws_route_table.public.id
-  destination_cidr_block    = "10.0.0.0/16"
-  vpc_peering_connection_id = "pcx-005b1e19c573bd49d"
-}
-
 resource "aws_route" "private_nat_gateway" {
   count                  = length(aws_subnet.private_subnet)
   nat_gateway_id         = element(aws_nat_gateway.nat.*.id, count.index)
