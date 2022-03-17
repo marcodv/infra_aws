@@ -11,11 +11,11 @@
  * These are the resources created in this module 
  *
  * - 2 Public subnets
- * - 4 Private subnet (2 for worker node, 2 for db)
+ * - 2 Private subnets for worker node
  * - 2 NAT gateway (1 for each AZ)
  * - Tags needed by EKS in order to use or place resources inside the existing VPC without creating a new one
- * - Security groups used by public/private subnets, DB, bastions 
- * - NACL used by public/private subnet, DB, bastions
+ * - Security groups used by public/private subnets, bastions 
+ * - NACL used by public/private subnet, bastions
  *
 */
 
@@ -91,7 +91,7 @@ resource "aws_route" "public_internet_gateway" {
 resource "aws_route" "peering_prod_rds_to_public_subnet" {
   route_table_id            = aws_route_table.public.id
   destination_cidr_block    = "10.0.0.0/16"
-  vpc_peering_connection_id = "pcx-0a03d3eaf0863590a"
+  vpc_peering_connection_id = "pcx-005b1e19c573bd49d"
 }
 
 resource "aws_route" "private_nat_gateway" {
@@ -106,7 +106,7 @@ resource "aws_route" "private_nat_gateway" {
 resource "aws_route" "peering_prod_rds_to_private_subnet" {
   count                     = length(var.private_subnets_cidr)
   route_table_id            = element(aws_route_table.private.*.id, count.index)
-  vpc_peering_connection_id = "pcx-0a03d3eaf0863590a"
+  vpc_peering_connection_id = "pcx-005b1e19c573bd49d"
   destination_cidr_block    = "10.0.0.0/16"
 }
 
@@ -156,20 +156,6 @@ resource "aws_subnet" "private_subnet" {
     "kubernetes.io/cluster/eks-${var.environment}-env" = "owned"
   }
 }
-
-/* DB Subnets */
-/*
-resource "aws_subnet" "db_subnets" {
-  vpc_id                  = aws_vpc.vpc.id
-  count                   = length(var.db_subnets_cidr)
-  cidr_block              = element(var.db_subnets_cidr, count.index)
-  availability_zone       = element(var.availability_zones, count.index)
-  map_public_ip_on_launch = false
-
-  tags = {
-    Name = "db-private-subnet-${element(var.availability_zones, count.index)}-${var.environment}-environment"
-  }
-} */
 
 /*==== ALB Security Group ======*/
 resource "aws_security_group" "alb_sg" {
@@ -286,46 +272,6 @@ resource "aws_security_group" "private_instances_sg" {
     Name = "SG private instances in ${var.environment} environment"
   }
 }
-
-/*==== RDS Security Group ======*/
-/*
-resource "aws_security_group" "db_sg" {
-  name        = "db-sg-${var.environment}-environment"
-  description = "DB sg to allow inbound/outbound"
-  vpc_id      = aws_vpc.vpc.id
-  depends_on  = [aws_vpc.vpc]
-
-  // Block to create ingress rules
-  dynamic "ingress" {
-    iterator = port
-    for_each = var.sg_db_rule
-
-    content {
-      description = "Port ${port.value} rule"
-      from_port   = port.value
-      to_port     = port.value
-      protocol    = "tcp"
-      // Allow connection only FROM private subnets
-      cidr_blocks = concat(var.private_subnets_cidr, var.public_subnets_cidr)
-    }
-  }
-
-  // Without this section no incoming connection from VPC
-  egress {
-    description = "Allow ALL Protocols outboud"
-    from_port   = "0"
-    to_port     = "0"
-    protocol    = "-1"
-    self        = true
-    // Allow outbound only TO private subnets
-    cidr_blocks = var.private_subnets_cidr
-  }
-
-  tags = {
-    Name = "SG DB for ${var.environment} environment"
-  }
-}
-*/
 
 /*==== EKS Security Group ======*/
 resource "aws_security_group" "eks_sg" {
@@ -475,37 +421,3 @@ resource "aws_network_acl" "acl_private_subnet" {
     Name = "Private subnet ACL in ${element(var.availability_zones, count.index)}"
   }
 }
-
-/*==== ACL for DB Private subnet ======*/
-/*
-resource "aws_network_acl" "acl_db_private_subnet" {
-  vpc_id     = aws_vpc.vpc.id
-  depends_on = [aws_vpc.vpc, aws_subnet.db_subnets]
-  count      = length(var.db_subnets_cidr)
-  subnet_ids = ["${element(aws_subnet.db_subnets.*.id, count.index)}"]
-
-  dynamic "ingress" {
-    for_each = var.acl_db_rule.ingress_rule
-    content {
-      protocol   = "tcp"
-      rule_no    = ingress.value.rule_no
-      action     = "allow"
-      cidr_block = "0.0.0.0/0"
-      from_port  = ingress.value.from_port
-      to_port    = ingress.value.to_port
-    }
-  }
-
-  egress {
-    protocol   = "-1"
-    rule_no    = 100
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 0
-    to_port    = 0
-  }
-
-  tags = {
-    Name = "DB ACL ${element(var.availability_zones, count.index)}"
-  }
-}*/

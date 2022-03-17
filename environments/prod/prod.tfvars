@@ -26,11 +26,6 @@ acl_public_subnet_rule = {
       to_port   = 443
     },
     {
-      rule_no   = 103
-      from_port = 5432
-      to_port   = 5432
-    },
-    {
       rule_no   = 200
       from_port = 1025
       to_port   = 65535
@@ -54,17 +49,12 @@ acl_private_subnet_rule = {
       to_port   = 443
     },
     {
-      rule_no   = 103
-      from_port = 5432
-      to_port   = 5432
-    },
-    {
-      rule_no   = 106
+      rule_no   = 104
       from_port = 30080
       to_port   = 30080
     },
     {
-      rule_no   = 107
+      rule_no   = 103
       from_port = 53
       to_port   = 53
     },
@@ -170,9 +160,9 @@ map_cluster_admin_users = {
 workers_nodes_instance_type = ["t2.medium"]
 
 worker_nodes_scaling_config = {
-  desired_size = 1
-  max_size     = 3
-  min_size     = 1
+  desired_size = 2
+  max_size     = 4
+  min_size     = 2
 }
 
 worker_nodes_update_config = {
