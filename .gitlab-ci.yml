@@ -9,9 +9,9 @@ include:
 # Stage availables for this pipeline
 stages:
   - run-security-scan
+  - documentation-deploy
   - infrastructure-dev
   - infrastructure-prod
-  - documentation-deploy
   - dev-monitoring-setup
   - prod-monitoring-setup
   #- k8s-env
