@@ -41,6 +41,9 @@ infrastructure-dev:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+    - changes:
+      - modules/*/*
+      - environments/*/*
 
 # Run build infra for PROD environment
 infrastructure-prod:
