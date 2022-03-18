@@ -51,6 +51,7 @@ No resources.
 | <a name="input_private_subnets_cidr"></a> [private\_subnets\_cidr](#input\_private\_subnets\_cidr) | List of cidr blocks | `list(string)` | n/a | yes |
 | <a name="input_public_subnet_alb"></a> [public\_subnet\_alb](#input\_public\_subnet\_alb) | List of public subnets for ALB | `string` | `""` | no |
 | <a name="input_public_subnets_cidr"></a> [public\_subnets\_cidr](#input\_public\_subnets\_cidr) | List of cidr blocks | `list(string)` | n/a | yes |
+| <a name="input_rabbitmq_settings"></a> [rabbitmq\_settings](#input\_rabbitmq\_settings) | List of settings for RabbitMQ instance | <pre>object({<br>    engine_version     = string<br>    host_instance_type = string<br>  })</pre> | n/a | yes |
 | <a name="input_read_only_eks_users"></a> [read\_only\_eks\_users](#input\_read\_only\_eks\_users) | Map of read only users on EKS | <pre>object({<br>    users = list(object({<br>      groups   = list(string)<br>      userarn  = string<br>      username = string<br>    }))<br>  })</pre> | n/a | yes |
 | <a name="input_read_only_user_permissions"></a> [read\_only\_user\_permissions](#input\_read\_only\_user\_permissions) | List of permissions granted to read only users | <pre>list(object({<br>    api_groups = list(string)<br>    resources  = list(string)<br>    verbs      = list(string)<br>  }))</pre> | n/a | yes |
 | <a name="input_sg_alb"></a> [sg\_alb](#input\_sg\_alb) | Security group for ALB | `string` | `""` | no |
