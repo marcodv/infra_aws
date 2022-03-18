@@ -122,13 +122,14 @@ resource "aws_vpc_peering_connection" "prod_to_prod" {
 
 // VPC Peering against RDS in prod
 // from private subnet 
-/*resource "aws_route" "peering_prod_rds_to_private_subnet" {
+resource "aws_route" "peering_prod_rds_to_private_subnet" {
   count                     = length(var.private_subnets_cidr)
   route_table_id            = element(aws_route_table.private.*.id, count.index)
   vpc_peering_connection_id = aws_vpc_peering_connection.prod_to_prod.id
   destination_cidr_block    = "10.0.0.0/16"
 }
 
+/*
 // VPC Peering against RDS in prod
 // from private subnet 
 resource "aws_route" "peering_prod_rds_to_public_subnet" {
