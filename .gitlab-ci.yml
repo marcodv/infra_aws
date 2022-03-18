@@ -40,6 +40,9 @@ infrastructure-dev:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
+    - changes:
+      - modules/*
+      - environments/* 
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 # Run build infra for PROD environment
