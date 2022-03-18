@@ -38,9 +38,6 @@ infrastructure-dev:
     - terraform plan -var-file=dev.tfvars
     - terraform apply -var-file=dev.tfvars -auto-approve
   rules:
-    - changes:
-      - modules/*/*
-      - environments/*/*
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
