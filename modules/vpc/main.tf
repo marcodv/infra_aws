@@ -93,14 +93,49 @@ resource "aws_route" "private_nat_gateway" {
   destination_cidr_block = "0.0.0.0/0"
 }
 
+// get vpc id for vpc peering
+data "aws_vpc" "vpc_prod_infra" {
+  filter {
+    name   = "tag:Name"
+    values = ["vpc-durable-prod-rds"]
+  }
+}
+
+// Create request vpc peering
+resource "aws_vpc_peering_connection" "prod_to_prod" {
+  peer_vpc_id = aws_vpc.vpc.id
+  vpc_id      = data.aws_vpc.vpc_prod_infra.id
+  auto_accept = true
+
+  accepter {
+    allow_remote_vpc_dns_resolution = true
+  }
+
+  requester {
+    allow_remote_vpc_dns_resolution = true
+  }
+  tags = {
+    Name = "${var.environment}-to-prod-peering"
+    Side = "${var.environment} requester"
+  }
+}
+
 // VPC Peering against RDS in prod
 // from private subnet 
-/*resource "aws_route" "peering_prod_rds_to_private_subnet" {
+resource "aws_route" "peering_prod_rds_to_private_subnet" {
   count                     = length(var.private_subnets_cidr)
   route_table_id            = element(aws_route_table.private.*.id, count.index)
-  vpc_peering_connection_id = "pcx-005b1e19c573bd49d"
+  vpc_peering_connection_id = aws_vpc_peering_connection.prod_to_prod.id
   destination_cidr_block    = "10.0.0.0/16"
-} */
+}
+
+// VPC Peering against RDS in prod
+// from private subnet 
+resource "aws_route" "peering_prod_rds_to_public_subnet" {
+  route_table_id            = aws_route_table.public.id
+  vpc_peering_connection_id = aws_vpc_peering_connection.prod_to_prod.id
+  destination_cidr_block    = "10.0.0.0/16"
+}
 
 /* Route table associations */
 resource "aws_route_table_association" "public" {
