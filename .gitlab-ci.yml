@@ -62,14 +62,13 @@ infrastructure-prod:
 pages:
   stage: documentation-deploy
   extends: .deploy_pages
-  needs:
-  - infrastructure-prod
   script:
     - echo "Publishing Terraform documentations"
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - changes:
+      - docs/* 
 
 # Trigger Orchestrator pipeline project
 # to install the monitoring system
