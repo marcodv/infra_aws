@@ -31,6 +31,7 @@ provider "aws" {
   }
 }
 
+/*
 module "networking" {
   source = "../../modules/vpc/"
 
@@ -75,3 +76,4 @@ module "jump_host" {
   public_subnets_id  = module.networking.public_subnets_id
   bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
 }
+*/
