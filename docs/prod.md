@@ -78,5 +78,4 @@ No resources.
 | <a name="output_public_subnets_id"></a> [public\_subnets\_id](#output\_public\_subnets\_id) | Return the public subnets id |
 | <a name="output_vpc_cidr_block"></a> [vpc\_cidr\_block](#output\_vpc\_cidr\_block) | Return vpc cidr block |
 | <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | Return vpc id |
-
 <!-- END_TF_DOCS -->
