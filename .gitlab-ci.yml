@@ -42,8 +42,8 @@ infrastructure-dev:
       when: never
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
       changes:
-        - modules/*
-        - environments/* 
+        - modules/*/*
+        - environments/*/*
 
 # Run build infra for PROD environment
 infrastructure-prod:
@@ -63,18 +63,6 @@ infrastructure-prod:
       changes:
         - modules/*/*
         - environments/*/*
-
-# Deploy the Terraform Documentation to GitLab pages
-pages:
-  stage: documentation-deploy
-  extends: .deploy_pages
-  script:
-    - echo "Publishing Terraform documentations"
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    - changes:
-      - docs/* 
 
 # Trigger Orchestrator pipeline project
 # to install the monitoring system
@@ -108,6 +96,18 @@ prod-monitoring-system:
     project: noah-energy/orchestration/applications-charts 
     branch: main
 
+# Deploy the Terraform Documentation to GitLab pages
+pages:
+  stage: documentation-deploy
+  extends: .deploy_pages
+  script:
+    - echo "Publishing Terraform documentations"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - changes:
+      - docs/* 
+      
 #.kube-config-file:
 #  stage: kube-config
 #  image:    
