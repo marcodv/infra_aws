@@ -9,9 +9,9 @@ include:
 # Stage availables for this pipeline
 stages:
   - run-security-scan
-  - documentation-deploy
   - infrastructure-dev
   - infrastructure-prod
+  - documentation-deploy
   - dev-monitoring-setup
   - prod-monitoring-setup
   #- k8s-env
@@ -41,9 +41,6 @@ infrastructure-dev:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
-      changes:
-        - modules/*/*
-        - environments/*/*
 
 # Run build infra for PROD environment
 infrastructure-prod:
@@ -60,9 +57,22 @@ infrastructure-prod:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+
+# Deploy the Terraform Documentation to GitLab pages
+pages:
+  stage: documentation-deploy
+  extends: .deploy_pages
+  needs:
+  - infrastructure-prod
+  script:
+    - echo "Publishing Terraform documentations"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
       changes:
-        - modules/*/*
-        - environments/*/*
+        - docs/*/*
+        - mkdocs.yml
 
 # Trigger Orchestrator pipeline project
 # to install the monitoring system
@@ -74,9 +84,6 @@ dev-monitoring-system:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
     - if: '$CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH'
-      changes:
-        - modules/*/*
-        - environments/*/*
   trigger:
     project: noah-energy/orchestration/applications-charts 
     branch: main
@@ -89,25 +96,10 @@ prod-monitoring-system:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-      changes:
-        - modules/*/*
-        - environments/*/*
   trigger:
     project: noah-energy/orchestration/applications-charts 
     branch: main
 
-# Deploy the Terraform Documentation to GitLab pages
-pages:
-  stage: documentation-deploy
-  extends: .deploy_pages
-  script:
-    - echo "Publishing Terraform documentations"
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    - changes:
-      - docs/* 
-      
 #.kube-config-file:
 #  stage: kube-config
 #  image:    
