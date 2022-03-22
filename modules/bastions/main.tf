@@ -11,7 +11,6 @@
 */
 
 /*==== Bastions for each AZ ======*/
-#tfsec:ignore:
 resource "aws_instance" "bastions" {
   count                  = length(var.public_subnets_id)
   ami                    = var.bastions-ami
