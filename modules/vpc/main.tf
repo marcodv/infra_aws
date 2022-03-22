@@ -186,6 +186,7 @@ resource "aws_subnet" "private_subnet" {
 }
 
 /*==== ALB Security Group ======*/
+/*
 resource "aws_security_group" "alb_sg" {
   name        = "alb-sg-${var.environment}-environment"
   description = "ALB sg to allow inbound/outbound"
@@ -219,7 +220,7 @@ resource "aws_security_group" "alb_sg" {
   tags = {
     Name = "ALB sg ${var.environment} environment"
   }
-}
+}*/
 
 /*==== Bastion Security Group ======*/
 resource "aws_security_group" "bastions_sg" {
