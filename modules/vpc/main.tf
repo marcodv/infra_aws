@@ -202,7 +202,7 @@ resource "aws_security_group" "bastions_sg" {
       from_port   = port.value
       to_port     = port.value
       protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
+      cidr_blocks = [aws_vpc.vpc.cidr_block]
     }
   }
 
@@ -213,7 +213,7 @@ resource "aws_security_group" "bastions_sg" {
     to_port     = "0"
     protocol    = "-1"
     self        = true
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [aws_vpc.vpc.cidr_block]
   }
 
   tags = {
@@ -259,7 +259,7 @@ resource "aws_security_group" "private_instances_sg" {
     to_port     = "0"
     protocol    = "-1"
     self        = true
-    #tfsec:ignore:aws-vpc-no-public-egress-sg 
+    // #tfsec:ignore:aws-vpc-no-public-egress-sg 
     cidr_blocks = ["0.0.0.0/0"]
   }
 
