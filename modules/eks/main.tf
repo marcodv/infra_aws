@@ -25,6 +25,7 @@ data "aws_caller_identity" "current" {}
 
 # Create EKS cluster 
 #tfsec:ignore:aws-eks-encrypt-secrets
+#tfsec-ignore:aws-eks-no-public-cluster-access-to-cidr 
 resource "aws_eks_cluster" "eks_cluster" {
   name     = "eks-${var.environment}-env"
   role_arn = "arn:aws:iam::848481299679:role/eks-role-${var.environment}-env"
