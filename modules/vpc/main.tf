@@ -284,6 +284,7 @@ resource "aws_security_group" "private_instances_sg" {
     from_port   = 53
     to_port     = 53
     protocol    = "udp"
+    #tfsec:ignore:aws-vpc-no-public-egress-sg 
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -294,6 +295,7 @@ resource "aws_security_group" "private_instances_sg" {
     to_port     = "0"
     protocol    = "-1"
     self        = true
+    #tfsec:ignore:aws-vpc-no-public-egress-sg 
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -344,6 +346,7 @@ resource "aws_security_group" "eks_sg" {
       from_port   = port.value
       to_port     = port.value
       protocol    = "tcp"
+      #tfsec:ignore:aws-vpc-no-public-ingress-sg 
       cidr_blocks = ["0.0.0.0/0"]
     }
   }
@@ -354,6 +357,7 @@ resource "aws_security_group" "eks_sg" {
     from_port   = 0
     to_port     = 65535
     protocol    = "tcp"
+    #tfsec:ignore:aws-vpc-no-public-egress-sg 
     cidr_blocks = ["0.0.0.0/0"]
 
   }
@@ -387,6 +391,7 @@ resource "aws_network_acl" "acl_public_subnet" {
     protocol   = "-1"
     rule_no    = 100
     action     = "allow"
+    #tfsec:ignore:aws-vpc-no-public-egress-sg
     cidr_block = "0.0.0.0/0"
     from_port  = 0
     to_port    = 0
@@ -441,6 +446,7 @@ resource "aws_network_acl" "acl_private_subnet" {
     protocol   = "-1"
     rule_no    = 100
     action     = "allow"
+    #tfsec:ignore:aws-vpc-no-public-egress-sg 
     cidr_block = "0.0.0.0/0"
     from_port  = 0
     to_port    = 0
