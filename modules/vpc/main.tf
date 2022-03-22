@@ -102,6 +102,7 @@ data "aws_vpc" "vpc_prod_infra" {
 }
 
 // Create request vpc peering
+
 resource "aws_vpc_peering_connection" "prod_to_prod" {
   peer_vpc_id = aws_vpc.vpc.id
   vpc_id      = data.aws_vpc.vpc_prod_infra.id
@@ -313,7 +314,7 @@ resource "aws_security_group" "eks_sg" {
     from_port   = 1025
     to_port     = 65535
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [aws_vpc.vpc.cidr_block]
   }
 
   ingress {
@@ -321,7 +322,7 @@ resource "aws_security_group" "eks_sg" {
     from_port   = 30080
     to_port     = 30080
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [aws_vpc.vpc.cidr_block]
   }
 
   ingress {
@@ -329,7 +330,7 @@ resource "aws_security_group" "eks_sg" {
     from_port   = 53
     to_port     = 53
     protocol    = "udp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [aws_vpc.vpc.cidr_block]
   }
 
   // Block to create ingress rules

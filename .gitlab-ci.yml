@@ -40,7 +40,7 @@ infrastructure-dev:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME == 'develop'
 
 # Run build infra for PROD environment
 infrastructure-prod:
@@ -83,9 +83,9 @@ dev-monitoring-system:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
-    - if: '$CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH'
+    - if: $CI_COMMIT_BRANCH == 'develop'
   trigger:
-    project: noah-energy/orchestration/applications-charts 
+    project: noah-energy/orchestration/cluster-management-charts
     branch: main
 
 prod-monitoring-system:
@@ -97,8 +97,8 @@ prod-monitoring-system:
       when: never
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
   trigger:
-    project: noah-energy/orchestration/applications-charts 
-    branch: main
+    project: noah-energy/orchestration/cluster-management-charts
+    branch: production
 
 #.kube-config-file:
 #  stage: kube-config

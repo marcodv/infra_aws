@@ -11,6 +11,7 @@
 */
 
 /*==== Bastions for each AZ ======*/
+#tfsec:ignore:
 resource "aws_instance" "bastions" {
   count                  = length(var.public_subnets_id)
   ami                    = var.bastions-ami
@@ -20,6 +21,9 @@ resource "aws_instance" "bastions" {
   vpc_security_group_ids = var.bastions_sg
   instance_type          = "t2.micro"
   user_data              = file("${path.module}/kubectl_repo.sh")
+  metadata_options {
+    http_tokens = "required"
+  } 
 
   tags = {
     Name = "Bastion-${element(var.availability_zones, count.index)}-${var.environment}-env"
