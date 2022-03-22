@@ -185,43 +185,6 @@ resource "aws_subnet" "private_subnet" {
   }
 }
 
-/*==== ALB Security Group ======*/
-/*
-resource "aws_security_group" "alb_sg" {
-  name        = "alb-sg-${var.environment}-environment"
-  description = "ALB sg to allow inbound/outbound"
-  vpc_id      = aws_vpc.vpc.id
-  depends_on  = [aws_vpc.vpc]
-
-  // Block to create ingress rules
-  dynamic "ingress" {
-    iterator = port
-    for_each = var.alb_ingress_rule
-
-    content {
-      description = "Port ${port.value} rule"
-      from_port   = port.value
-      to_port     = port.value
-      protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
-  }
-
-  // Without this section no incoming connection from VPC
-  egress {
-    description = "Allow ALL Protocols outboud"
-    from_port   = "0"
-    to_port     = "0"
-    protocol    = "-1"
-    self        = true
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "ALB sg ${var.environment} environment"
-  }
-}*/
-
 /*==== Bastion Security Group ======*/
 resource "aws_security_group" "bastions_sg" {
   name        = "bastions-sg-${var.environment}-environment"
@@ -285,8 +248,8 @@ resource "aws_security_group" "private_instances_sg" {
     from_port   = 53
     to_port     = 53
     protocol    = "udp"
-    #tfsec:ignore:aws-vpc-no-public-egress-sg 
-    cidr_blocks = ["0.0.0.0/0"]
+    //cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [aws_vpc.vpc.cidr_block]
   }
 
   // Without this section no incoming connection from VPC
