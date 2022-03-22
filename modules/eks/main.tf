@@ -25,7 +25,6 @@ data "aws_caller_identity" "current" {}
 
 # Create EKS cluster 
 #tfsec:ignore:aws-eks-encrypt-secrets
-#tfsec-ignore:aws-eks-no-public-cluster-access-to-cidr 
 resource "aws_eks_cluster" "eks_cluster" {
   name     = "eks-${var.environment}-env"
   role_arn = "arn:aws:iam::848481299679:role/eks-role-${var.environment}-env"
@@ -34,7 +33,7 @@ resource "aws_eks_cluster" "eks_cluster" {
   vpc_config {
     security_group_ids     = [var.eks_sg]
     subnet_ids             = var.eks_subnets
-    #tfsec:ignore:aws-eks-no-public-cluster-access 
+    #tfsec-ignore:aws-eks-no-public-cluster-access-to-cidr 
     endpoint_public_access = true
     //endpoint_private_access = true
   }
