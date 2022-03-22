@@ -258,6 +258,7 @@ resource "aws_security_group" "bastions_sg" {
 }
 
 /*==== Private instances Security Group ======*/
+#tfsec:ignore:aws-vpc-no-public-ingress-sgr
 resource "aws_security_group" "private_instances_sg" {
   name        = "private-instances-sg-${var.environment}-environment"
   description = "Private instances sg to allow inbound/outbound"
