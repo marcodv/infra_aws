@@ -102,6 +102,7 @@ data "aws_vpc" "vpc_prod_infra" {
 }
 
 // Create request vpc peering
+
 resource "aws_vpc_peering_connection" "prod_to_prod" {
   peer_vpc_id = aws_vpc.vpc.id
   vpc_id      = data.aws_vpc.vpc_prod_infra.id
@@ -184,42 +185,6 @@ resource "aws_subnet" "private_subnet" {
   }
 }
 
-/*==== ALB Security Group ======*/
-resource "aws_security_group" "alb_sg" {
-  name        = "alb-sg-${var.environment}-environment"
-  description = "ALB sg to allow inbound/outbound"
-  vpc_id      = aws_vpc.vpc.id
-  depends_on  = [aws_vpc.vpc]
-
-  // Block to create ingress rules
-  dynamic "ingress" {
-    iterator = port
-    for_each = var.alb_ingress_rule
-
-    content {
-      description = "Port ${port.value} rule"
-      from_port   = port.value
-      to_port     = port.value
-      protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
-  }
-
-  // Without this section no incoming connection from VPC
-  egress {
-    description = "Allow ALL Protocols outboud"
-    from_port   = "0"
-    to_port     = "0"
-    protocol    = "-1"
-    self        = true
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "ALB sg ${var.environment} environment"
-  }
-}
-
 /*==== Bastion Security Group ======*/
 resource "aws_security_group" "bastions_sg" {
   name        = "bastions-sg-${var.environment}-environment"
@@ -237,7 +202,7 @@ resource "aws_security_group" "bastions_sg" {
       from_port   = port.value
       to_port     = port.value
       protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
+      cidr_blocks = [aws_vpc.vpc.cidr_block]
     }
   }
 
@@ -248,7 +213,7 @@ resource "aws_security_group" "bastions_sg" {
     to_port     = "0"
     protocol    = "-1"
     self        = true
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [aws_vpc.vpc.cidr_block]
   }
 
   tags = {
@@ -257,6 +222,7 @@ resource "aws_security_group" "bastions_sg" {
 }
 
 /*==== Private instances Security Group ======*/
+#tfsec:ignore:aws-vpc-no-public-ingress-sgr
 resource "aws_security_group" "private_instances_sg" {
   name        = "private-instances-sg-${var.environment}-environment"
   description = "Private instances sg to allow inbound/outbound"
@@ -282,7 +248,8 @@ resource "aws_security_group" "private_instances_sg" {
     from_port   = 53
     to_port     = 53
     protocol    = "udp"
-    cidr_blocks = ["0.0.0.0/0"]
+    //cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [aws_vpc.vpc.cidr_block]
   }
 
   // Without this section no incoming connection from VPC
@@ -292,6 +259,7 @@ resource "aws_security_group" "private_instances_sg" {
     to_port     = "0"
     protocol    = "-1"
     self        = true
+    // #tfsec:ignore:aws-vpc-no-public-egress-sg 
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -313,7 +281,7 @@ resource "aws_security_group" "eks_sg" {
     from_port   = 1025
     to_port     = 65535
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [aws_vpc.vpc.cidr_block]
   }
 
   ingress {
@@ -321,7 +289,7 @@ resource "aws_security_group" "eks_sg" {
     from_port   = 30080
     to_port     = 30080
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [aws_vpc.vpc.cidr_block]
   }
 
   ingress {
@@ -329,7 +297,7 @@ resource "aws_security_group" "eks_sg" {
     from_port   = 53
     to_port     = 53
     protocol    = "udp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [aws_vpc.vpc.cidr_block]
   }
 
   // Block to create ingress rules
@@ -342,6 +310,7 @@ resource "aws_security_group" "eks_sg" {
       from_port   = port.value
       to_port     = port.value
       protocol    = "tcp"
+      #tfsec:ignore:aws-vpc-no-public-ingress-sg 
       cidr_blocks = ["0.0.0.0/0"]
     }
   }
@@ -352,6 +321,7 @@ resource "aws_security_group" "eks_sg" {
     from_port   = 0
     to_port     = 65535
     protocol    = "tcp"
+    #tfsec:ignore:aws-vpc-no-public-egress-sg 
     cidr_blocks = ["0.0.0.0/0"]
 
   }
@@ -385,6 +355,7 @@ resource "aws_network_acl" "acl_public_subnet" {
     protocol   = "-1"
     rule_no    = 100
     action     = "allow"
+    #tfsec:ignore:aws-vpc-no-public-egress-sg
     cidr_block = "0.0.0.0/0"
     from_port  = 0
     to_port    = 0
@@ -439,6 +410,7 @@ resource "aws_network_acl" "acl_private_subnet" {
     protocol   = "-1"
     rule_no    = 100
     action     = "allow"
+    #tfsec:ignore:aws-vpc-no-public-egress-sg 
     cidr_block = "0.0.0.0/0"
     from_port  = 0
     to_port    = 0
