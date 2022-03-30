@@ -21,8 +21,9 @@ resource "aws_instance" "bastions" {
   instance_type          = "t2.micro"
   user_data              = file("${path.module}/kubectl_repo.sh")
   metadata_options {
-    http_tokens = "required"
-  } 
+    http_tokens   = "required"
+    http_endpoint = "enabled"
+  }
 
   tags = {
     Name = "Bastion-${element(var.availability_zones, count.index)}-${var.environment}-env"
