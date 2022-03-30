@@ -25,6 +25,7 @@ resource "aws_instance" "bastions" {
     http_endpoint = "enabled"
   }
 
+
   tags = {
     Name = "Bastion-${element(var.availability_zones, count.index)}-${var.environment}-env"
   }
