@@ -2,9 +2,17 @@ terraform {
   required_providers {
     kubectl = {
       source  = "gavinbunney/kubectl"
-      version = ">= 1.10.0"
+      version = "~> 1.13.1"
+    }/*
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.8.0"
+    }    
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.6.0"
     }
-  }
+  }*/
 }
 
 data "aws_eks_cluster" "cluster" {
