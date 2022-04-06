@@ -11,8 +11,8 @@ terraform {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 4.6.0"
-    }
-  }*/
+    }*/
+  }
 }
 
 data "aws_eks_cluster" "cluster" {
