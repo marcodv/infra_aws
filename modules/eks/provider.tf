@@ -10,7 +10,7 @@ terraform {
     }
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.8.0"
+      version = "~> 4.6.0"
     }
   }
 }
@@ -24,13 +24,21 @@ data "aws_eks_cluster_auth" "cluster" {
 }
 
 provider "kubernetes" {
-  token                  = data.aws_eks_cluster_auth.cluster.token
+  exec {
+    api_version = "client.authentication.k8s.io/v1alpha1"
+    command     = "aws"
+    args        = ["eks", "get-token", "--cluster-name", "eks-${var.environment}-env"]
+  }
   host                   = aws_eks_cluster.eks_cluster.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
 }
 
 provider "kubectl" {
-  token                  = data.aws_eks_cluster_auth.cluster.token
+  exec {
+    api_version = "client.authentication.k8s.io/v1alpha1"
+    command     = "aws"
+    args        = ["eks", "get-token", "--cluster-name", "eks-${var.environment}-env"]
+  }
   host                   = aws_eks_cluster.eks_cluster.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
   // the following config fix this issue
