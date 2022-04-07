@@ -39,7 +39,7 @@ resource "aws_eks_cluster" "eks_cluster" {
     //endpoint_private_access = true
   }
 
-  enabled_cluster_log_types = ["api", "audit", "controllerManager", "scheduler"]
+  enabled_cluster_log_types = ["api", "controllerManager", "scheduler"]
 
 }
 
