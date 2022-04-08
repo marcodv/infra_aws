@@ -215,7 +215,8 @@ variable "cluster_name" {
   default     = ""
 }
 
+/*
 variable "enabled_cluster_log_types" {
-  description = "List of logs enabled on the EKS"
+  description = "List of logs type enabled on the EKS"
   type =  list(string)
-}
+} */

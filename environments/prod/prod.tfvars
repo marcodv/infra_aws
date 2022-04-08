@@ -179,4 +179,4 @@ eks_ingress_controller_port_path = {
 
 worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoleprodEnv"
 
-enabled_cluster_log_types = ["api",  "controllerManager", "scheduler", "audit", "authenticator"]
+//enabled_cluster_log_types = ["api",  "controllerManager", "scheduler", "audit", "authenticator"]
