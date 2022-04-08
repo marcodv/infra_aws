@@ -63,6 +63,7 @@ module "k8s" {
   worker_nodes_update_config  = var.worker_nodes_update_config
   eks_version                 = var.eks_version
   worker_node_role            = var.worker_node_role
+  enabled_cluster_log_types   = var.enabled_cluster_log_types
   eks_sg                      = module.networking.eks_sg
   eks_subnets                 = module.networking.private_subnets_id
 }
