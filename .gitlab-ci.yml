@@ -59,10 +59,9 @@ infrastructure-prod:
       when: never
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
 
-# Call durable pipeline so the vpc peering id is update
 trigger-durable:
   stage: trigger-durable
-  needs:
+  needs: 
     - infrastructure-prod
   trigger:
     project: noah-energy/infranoah/durable-resources-aws
