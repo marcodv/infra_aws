@@ -71,18 +71,6 @@ trigger-durable:
     project: noah-energy/infranoah/durable-resources-aws
     branch: main
 
-trigger-durable:
-  stage: trigger-durable
-  needs: 
-    - infrastructure-prod
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  trigger:
-    project: noah-energy/infranoah/durable-resources-aws
-    branch: main
-
 # Deploy the Terraform Documentation to GitLab pages
 pages:
   stage: documentation-deploy
