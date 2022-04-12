@@ -14,6 +14,7 @@ stages:
   - documentation-deploy
   - dev-monitoring-setup
   - prod-monitoring-setup
+  - trigger-durable
   #- k8s-env
 
 # Runs tfsec module scan from noah-pipelines-templates project
@@ -57,6 +58,17 @@ infrastructure-prod:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+
+trigger-durable:
+  stage: trigger-durable
+  needs: 
+    - infrastructure-prod
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+  trigger:
+    project: noah-energy/infranoah/durable-resources-aws
+    branch: main
 
 # Deploy the Terraform Documentation to GitLab pages
 pages:
