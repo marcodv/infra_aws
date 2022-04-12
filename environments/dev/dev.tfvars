@@ -213,3 +213,5 @@ eks_ingress_controller_port_path = {
 }
 
 worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoledevEnv"
+
+eks_logs_type = ["api",  "controllerManager", "scheduler"]

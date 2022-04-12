@@ -104,3 +104,9 @@ variable "worker_node_role" {
   description = "ARN IAM worker node"
   type        = string
 }
+
+
+variable "eks_logs_type" {
+  description = "List of logs types enabled on the EKS"
+  type        = list(string)
+}

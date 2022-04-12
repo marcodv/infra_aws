@@ -63,10 +63,12 @@ module "k8s" {
   worker_nodes_update_config  = var.worker_nodes_update_config
   eks_version                 = var.eks_version
   worker_node_role            = var.worker_node_role
+  eks_logs_type               = var.eks_logs_type
   eks_sg                      = module.networking.eks_sg
   eks_subnets                 = module.networking.private_subnets_id
 }
 
+/*
 module "jump_host" {
   source = "../../modules/bastions"
 
@@ -76,4 +78,4 @@ module "jump_host" {
   public_subnets_id  = module.networking.public_subnets_id
   bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
 }
-
+*/
