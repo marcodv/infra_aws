@@ -35,8 +35,8 @@ resource "aws_eks_cluster" "eks_cluster" {
     security_group_ids     = [var.eks_sg]
     subnet_ids             = var.eks_subnets
     #tfsec:ignore:aws-eks-no-public-cluster-access 
-    endpoint_public_access = true
-    //endpoint_private_access = true
+    //endpoint_public_access = true
+    endpoint_private_access = true
   }
 
   enabled_cluster_log_types = var.eks_logs_type
