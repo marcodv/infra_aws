@@ -32,10 +32,10 @@ resource "aws_eks_cluster" "eks_cluster" {
   version  = var.eks_version
 
   vpc_config {
-    security_group_ids     = [var.eks_sg]
-    subnet_ids             = var.eks_subnets
+    security_group_ids = [var.eks_sg]
+    subnet_ids         = var.eks_subnets
     #tfsec:ignore:aws-eks-no-public-cluster-access 
-    //endpoint_public_access = true
+    endpoint_public_access  = false
     endpoint_private_access = true
   }
 
@@ -93,7 +93,7 @@ YAML
 
 // Create node group for eks
 resource "aws_eks_node_group" "node_group_eks" {
-  depends_on      = [kubernetes_config_map.aws_auth] 
+  depends_on      = [kubernetes_config_map.aws_auth]
   cluster_name    = aws_eks_cluster.eks_cluster.name
   node_group_name = "node-group-${var.environment}-env"
   node_role_arn   = var.worker_node_role
