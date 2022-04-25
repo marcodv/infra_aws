@@ -69,14 +69,13 @@ module "k8s" {
   //eks_subnets                 = module.networking.private_subnets_id
 }
 
-/*
+
 module "jump_host" {
   source = "../../modules/bastions"
 
   environment        = var.environment
   bastions-ami       = var.bastions-ami
   availability_zones = var.availability_zones
-  public_subnets_id  = module.networking.public_subnets_id
-  bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
+  //public_subnets_id  = module.networking.public_subnets_id
+  //bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
 }
-*/

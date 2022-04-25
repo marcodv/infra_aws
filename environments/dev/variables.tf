@@ -2,6 +2,17 @@ variable "environment" {
   description = "Environments that we want to deploy"
   type        = string
 }
+
+variable "availability_zones" {
+  description = "List of availability zones"
+  type        = list(string)
+}
+
+variable "bastions-ami" {
+  description = "Ami id used to create bastion"
+  type        = string
+}
+
 /*
 variable "vpc_cidr_block" {
   description = "VPC cidr block"
@@ -21,11 +32,6 @@ variable "private_subnets_cidr" {
 variable "availability_zones" {
   description = "List of availability zones"
   type        = list(string)
-}
-
-variable "bastions-ami" {
-  description = "Ami id used to create bastion"
-  type        = string
 }
 
 variable "bastion_ingress_rule" {

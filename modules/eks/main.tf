@@ -40,7 +40,7 @@ data "aws_vpc" "vpc" {
 data "aws_subnets" "private_subnet" {
   filter {
     name   = "tag:Name"
-    values = ["private-subnet-*-dev-environment"]
+    values = ["private-subnet-*-${var.environment}-environment"]
   }
 }
 
@@ -122,10 +122,10 @@ resource "aws_eks_node_group" "node_group_eks" {
   subnet_ids      = data.aws_subnets.private_subnet.ids
   instance_types  = var.workers_nodes_instance_type
 
-  /*remote_access {
+  remote_access {
     ec2_ssh_key               = "workers-node-ssh-key-${var.environment}-env"
     source_security_group_ids = [data.aws_security_group.eks_sg.id]
-  } */
+  }
 
   // Scaling configuration
   scaling_config {

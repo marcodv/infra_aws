@@ -1,5 +1,7 @@
 environment                    = "dev"
 type_resource                  = "destroyable"
+availability_zones             = ["eu-west-1a", "eu-west-1b"] //, "eu-west-1c"]
+bastions-ami                   = "ami-04dd4500af104442f"
 
 // The next vars are related to eks, node-group, launch config 
 namespaces = [
