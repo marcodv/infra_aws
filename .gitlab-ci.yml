@@ -25,6 +25,8 @@ run-security-scan:
     PATH_TO_SCAN: "modules/"
   script: 
     - echo "Starting Terraform module security scan"
+  tags:
+    - infra-aws
 
 # Run terraform template job from noah-pipelines-templates project
 # Crate infra for DEV env
