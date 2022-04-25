@@ -39,7 +39,7 @@ resource "aws_instance" "bastions" {
   availability_zone      = element(var.availability_zones, count.index)
   subnet_id              = element(data.aws_subnets.public_subnet.ids, count.index)
   key_name               = "ssh-key-bastion-${var.environment}-env"
-  vpc_security_group_ids = data.aws_security_group.bastions_sg
+  vpc_security_group_ids = [data.aws_security_group.bastions_sg.id]
   instance_type          = "t2.micro"
   user_data              = file("${path.module}/kubectl_repo.sh")
   metadata_options {
