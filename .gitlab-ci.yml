@@ -40,6 +40,8 @@ infrastructure-dev:
     - terraform init
     - terraform plan -var-file=dev.tfvars
     - terraform apply -var-file=dev.tfvars -auto-approve
+  tags:
+    - infra-aws
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never

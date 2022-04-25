@@ -31,7 +31,7 @@ provider "aws" {
   }
 }
 
-
+/*
 module "networking" {
   source = "../../modules/vpc/"
 
@@ -46,13 +46,14 @@ module "networking" {
   private_instances_ingress_rule = var.private_instances_ingress_rule
   acl_public_subnet_rule         = var.acl_public_subnet_rule
   acl_private_subnet_rule        = var.acl_private_subnet_rule
-}
+}*/
+
 
 module "k8s" {
   source = "../../modules/eks"
 
   environment                 = var.environment
-  vpc_id                      = var.vpc_id
+  //vpc_id                      = var.vpc_id
   map_cluster_admin_users     = var.map_cluster_admin_users
   namespaces                  = var.namespaces
   read_only_eks_users         = var.read_only_eks_users
@@ -64,8 +65,8 @@ module "k8s" {
   eks_version                 = var.eks_version
   worker_node_role            = var.worker_node_role
   eks_logs_type               = var.eks_logs_type
-  eks_sg                      = module.networking.eks_sg
-  eks_subnets                 = module.networking.private_subnets_id
+  //eks_sg                      = module.networking.eks_sg
+  //eks_subnets                 = module.networking.private_subnets_id
 }
 
 /*

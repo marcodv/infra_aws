@@ -23,6 +23,28 @@
 
 data "aws_caller_identity" "current" {}
 
+data "aws_security_group" "eks_sg" {
+  filter {
+    name   = "tag:Name"
+    values = ["SG EKS nodes for ${var.environment} environment"]
+  }
+}
+
+data "aws_vpc" "vpc" {
+  filter {
+    name   = "tag:Name"
+    values = ["vpc-${var.environment}-environment"]
+  }
+}
+
+data "aws_subnets" "private_subnet" {
+  filter {
+    name   = "tag:Name"
+    values = ["private-subnet-*-dev-environment"]
+  }
+}
+
+
 # Create EKS cluster 
 #tfsec:ignore:aws-eks-encrypt-secrets
 #tfsec-ignore:aws-eks-no-public-cluster-access-to-cidr 
@@ -32,8 +54,8 @@ resource "aws_eks_cluster" "eks_cluster" {
   version  = var.eks_version
 
   vpc_config {
-    security_group_ids = [var.eks_sg]
-    subnet_ids         = var.eks_subnets
+    security_group_ids = [data.aws_security_group.eks_sg.id]
+    subnet_ids         = data.aws_subnets.private_subnet.ids
     #tfsec:ignore:aws-eks-no-public-cluster-access 
     endpoint_public_access  = false
     endpoint_private_access = true
@@ -97,13 +119,13 @@ resource "aws_eks_node_group" "node_group_eks" {
   cluster_name    = aws_eks_cluster.eks_cluster.name
   node_group_name = "node-group-${var.environment}-env"
   node_role_arn   = var.worker_node_role
-  subnet_ids      = var.eks_subnets
+  subnet_ids      = data.aws_subnets.private_subnet.ids
   instance_types  = var.workers_nodes_instance_type
 
-  remote_access {
+  /*remote_access {
     ec2_ssh_key               = "workers-node-ssh-key-${var.environment}-env"
-    source_security_group_ids = [var.eks_sg]
-  }
+    source_security_group_ids = [data.aws_security_group.eks_sg.id]
+  } */
 
   // Scaling configuration
   scaling_config {
@@ -121,4 +143,3 @@ resource "aws_eks_node_group" "node_group_eks" {
     "kubernetes.io/cluster/eks-${var.environment}-env" = "owned"
   }
 }
-
