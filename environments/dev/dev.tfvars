@@ -1,104 +1,7 @@
 environment                    = "dev"
 type_resource                  = "destroyable"
-bastions-ami                   = "ami-04dd4500af104442f"
-vpc_cidr_block                 = "30.0.0.0/16"
-public_subnets_cidr            = ["30.0.0.0/20", "30.0.16.0/20"]  //, "10.0.32.0/20"]
-private_subnets_cidr           = ["30.0.48.0/20", "30.0.64.0/20"] //, "10.0.80.0/20"]
 availability_zones             = ["eu-west-1a", "eu-west-1b"] //, "eu-west-1c"]
-alb_ingress_rule               = [80, 443]
-eks_ingress_rule               = [22, 53, 80, 443]
-bastion_ingress_rule           = [22, 80, 443]
-private_instances_ingress_rule = [22, 53, 80, 443, 30080]
-acl_public_subnet_rule = {
-  ingress_rule = [{
-    rule_no   = 100
-    from_port = 22
-    to_port   = 22
-    },
-    {
-      rule_no   = 101
-      from_port = 80
-      to_port   = 80
-    },
-    {
-      rule_no   = 102
-      from_port = 443
-      to_port   = 443
-    },
-    {
-      rule_no   = 103
-      from_port = 5432
-      to_port   = 5432
-    },
-    {
-      rule_no   = 104
-      from_port = 6379
-      to_port   = 6379
-    },
-    {
-      rule_no   = 105
-      from_port = 30080
-      to_port   = 30080
-    },
-    {
-      rule_no   = 200
-      from_port = 1025
-      to_port   = 65535
-  }]
-}
-
-acl_private_subnet_rule = {
-  ingress_rule = [{
-    rule_no   = 100
-    from_port = 22
-    to_port   = 22
-    },
-    {
-      rule_no   = 101
-      from_port = 80
-      to_port   = 80
-    },
-    {
-      rule_no   = 102
-      from_port = 443
-      to_port   = 443
-    },
-    {
-      rule_no   = 103
-      from_port = 5432
-      to_port   = 5432
-    },
-    {
-      rule_no   = 104
-      from_port = 6379
-      to_port   = 6379
-    },
-    {
-      rule_no   = 105
-      from_port = 5671
-      to_port   = 5671
-    },
-    {
-      rule_no   = 106
-      from_port = 30080
-      to_port   = 30080
-    },
-    {
-      rule_no   = 107
-      from_port = 53
-      to_port   = 53
-    },
-    {
-      rule_no   = 108
-      from_port = 443
-      to_port   = 443
-    },
-    {
-      rule_no   = 200
-      from_port = 1025
-      to_port   = 65535
-  }]
-}
+bastions-ami                   = "ami-04dd4500af104442f"
 
 // The next vars are related to eks, node-group, launch config 
 namespaces = [
@@ -215,3 +118,4 @@ eks_ingress_controller_port_path = {
 worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoledevEnv"
 
 eks_logs_type = ["api",  "controllerManager", "scheduler"]
+
