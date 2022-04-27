@@ -1,3 +1,4 @@
+/*
 output "vpc_id" {
   description = "Return vpc id"
   value       = module.networking.vpc_id
@@ -57,3 +58,4 @@ output "eks_cluster_id" {
   description = "Return cluster's name"
   value       = module.k8s.eks_cluster_id
 }
+*/
