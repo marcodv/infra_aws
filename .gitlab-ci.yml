@@ -42,7 +42,7 @@ infrastructure-dev:
     - terraform apply -var-file=dev.tfvars -auto-approve
   tags:
     - infra-aws
-    - dev
+    - prod
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
@@ -63,18 +63,21 @@ infrastructure-prod:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  tags:
+    - infra-aws
+    - prod
 
-trigger-durable:
-  stage: trigger-durable
-  needs: 
-    - infrastructure-prod
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  trigger:
-    project: noah-energy/infranoah/durable-resources-aws
-    branch: main
+#trigger-durable:
+#  stage: trigger-durable
+#  needs: 
+#    - infrastructure-prod
+#  rules:
+#    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+#      when: never
+#    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+#  trigger:
+#    project: noah-energy/infranoah/durable-resources-aws
+#    branch: main
 
 # Deploy the Terraform Documentation to GitLab pages
 pages:
@@ -91,6 +94,9 @@ pages:
       changes:
         - docs/*/*
         - mkdocs.yml
+  tags:
+    - infra-aws
+    - prod
 
 # Trigger Orchestrator pipeline project
 # to install the monitoring system
@@ -117,6 +123,9 @@ prod-monitoring-system:
   trigger:
     project: noah-energy/orchestration/cluster-management-charts
     branch: production
+  tags:
+    - infra-aws
+    - prod
 
 #.kube-config-file:
 #  stage: kube-config
