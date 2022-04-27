@@ -48,7 +48,7 @@ module "networking" {
   acl_private_subnet_rule        = var.acl_private_subnet_rule
 }*/
 
-
+/*
 module "k8s" {
   source = "../../modules/eks"
 
@@ -79,3 +79,4 @@ module "jump_host" {
   //public_subnets_id  = module.networking.public_subnets_id
   //bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
 }
+*/
