@@ -26,7 +26,7 @@ data "aws_caller_identity" "current" {}
 data "aws_security_group" "eks_sg" {
   filter {
     name   = "tag:Name"
-    values = ["SG EKS nodes for ${var.environment} environment"]
+    values = ["eks-nodes-sg-${var.environment}-environment"]
   }
 }
 

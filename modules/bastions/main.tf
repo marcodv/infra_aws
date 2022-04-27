@@ -13,7 +13,7 @@
 data "aws_security_group" "bastions_sg" {
   filter {
     name   = "tag:Name"
-    values = ["SG Bastions ${var.environment} environment"]
+    values = ["bastions-sg-${var.environment}-environment"]
   }
 }
 
