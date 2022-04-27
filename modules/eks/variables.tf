@@ -3,6 +3,7 @@ variable "environment" {
   type        = string
 }
 
+/*
 variable "eks_subnets" {
   description = "Subnets where deploy EKS"
   type        = list(string)
@@ -17,6 +18,7 @@ variable "vpc_id" {
   description = "VPC id where deploy EKS"
   type        = string
 }
+*/
 
 variable "map_cluster_admin_users" {
   description = "Map of full admin users on EKS"

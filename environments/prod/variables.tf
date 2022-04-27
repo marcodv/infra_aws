@@ -85,29 +85,7 @@ variable "acl_private_subnet_rule" {
   })
 }
 
-/*
-variable "acl_db_rule" {
-  description = "List of rule_no and inbound ports open"
-  type = object({
-    ingress_rule = list(object({
-      rule_no   = number
-      from_port = number
-      to_port   = number
-    }))
-  })
-}
 
-variable "db_private_subnets_cidr" {
-  description = "List of private subnets for DB"
-  type        = list(string)
-  default     = []
-}
-
-variable "sg_db_rule" {
-  description = "List of open ports for inbound connections"
-  type        = list(string)
-}
-*/
 
 variable "map_cluster_admin_users" {
   description = "Map of full admin users on EKS"

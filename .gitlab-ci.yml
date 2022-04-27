@@ -25,6 +25,8 @@ run-security-scan:
     PATH_TO_SCAN: "modules/"
   script: 
     - echo "Starting Terraform module security scan"
+  tags:
+    - infra-aws
 
 # Run terraform template job from noah-pipelines-templates project
 # Crate infra for DEV env
@@ -38,6 +40,9 @@ infrastructure-dev:
     - terraform init
     - terraform plan -var-file=dev.tfvars
     - terraform apply -var-file=dev.tfvars -auto-approve
+  tags:
+    - infra-aws
+    - prod
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
@@ -58,18 +63,21 @@ infrastructure-prod:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  tags:
+    - infra-aws
+    - prod
 
-trigger-durable:
-  stage: trigger-durable
-  needs: 
-    - infrastructure-prod
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      when: never
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  trigger:
-    project: noah-energy/infranoah/durable-resources-aws
-    branch: main
+#trigger-durable:
+#  stage: trigger-durable
+#  needs: 
+#    - infrastructure-prod
+#  rules:
+#    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+#      when: never
+#    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+#  trigger:
+#    project: noah-energy/infranoah/durable-resources-aws
+#    branch: main
 
 # Deploy the Terraform Documentation to GitLab pages
 pages:
@@ -86,6 +94,9 @@ pages:
       changes:
         - docs/*/*
         - mkdocs.yml
+  tags:
+    - infra-aws
+    - prod
 
 # Trigger Orchestrator pipeline project
 # to install the monitoring system

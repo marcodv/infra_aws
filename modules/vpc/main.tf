@@ -217,7 +217,7 @@ resource "aws_security_group" "bastions_sg" {
   }
 
   tags = {
-    Name = "SG Bastions ${var.environment} environment"
+    Name = "bastions-sg-${var.environment}-environment"
   }
 }
 
@@ -326,7 +326,7 @@ resource "aws_security_group" "eks_sg" {
 
   }
   tags = {
-    Name                                               = "SG EKS nodes for ${var.environment} environment"
+    Name                                               = "eks-nodes-sg-${var.environment}-environment"
     "kubernetes.io/cluster/eks-${var.environment}-env" = "owned"
   }
 }
