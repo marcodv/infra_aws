@@ -123,9 +123,6 @@ prod-monitoring-system:
   trigger:
     project: noah-energy/orchestration/cluster-management-charts
     branch: production
-  tags:
-    - infra-aws
-    - prod
 
 #.kube-config-file:
 #  stage: kube-config
