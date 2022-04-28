@@ -68,11 +68,13 @@ read_only_user_permissions = [
 ]
 
 read_only_eks_users = {
-  users = [/*{
-    userarn  = "arn:aws:iam::848481299679:user/username@noah.energy"
-    username = "username@noah.energy"
-    groups   = ["cluster-read-only-group"]
-  }*/]
+  users = [
+    {
+      userarn  = "arn:aws:iam::848481299679:user/Lens_User_dev_Env"
+      username = "username@noah.energy"
+      groups   = ["cluster-read-only-group"]
+    }
+  ]
 }
 
 map_cluster_admin_users = {
