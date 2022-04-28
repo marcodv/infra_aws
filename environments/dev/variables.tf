@@ -201,3 +201,8 @@ variable "eks_logs_type" {
   description = "List of logs types enabled on the EKS"
   type        = list(string)
 }
+
+variable "zone_id" {
+  description = "Zone ID where to create DNS record"
+  type        = string
+}
