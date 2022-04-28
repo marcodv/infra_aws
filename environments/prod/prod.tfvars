@@ -4,7 +4,7 @@ bastions-ami                   = "ami-04dd4500af104442f"
 vpc_cidr_block                 = "20.0.0.0/16"
 public_subnets_cidr            = ["20.0.0.0/20", "20.0.16.0/20"]  //, "10.0.32.0/20"]
 private_subnets_cidr           = ["20.0.48.0/20", "20.0.64.0/20"] //, "10.0.80.0/20"]
-availability_zones             = ["eu-west-1a", "eu-west-1b"] //, "eu-west-1c"]
+availability_zones             = ["eu-west-1a", "eu-west-1b"]     //, "eu-west-1c"]
 alb_ingress_rule               = [80, 443]
 eks_ingress_rule               = [22, 53, 80, 443]
 bastion_ingress_rule           = [22, 80, 443]
@@ -130,11 +130,13 @@ read_only_user_permissions = [
 ]
 
 read_only_eks_users = {
-  users = [/*{
-    userarn  = "arn:aws:iam::848481299679:user/username@noah.energy"
-    username = "username@noah.energy"
-    groups   = ["cluster-read-only-group"]
-  }*/]
+  users = [
+    {
+      userarn  = "arn:aws:iam::848481299679:user/Lens_User_prod_Env"
+      username = "username@noah.energy"
+      groups   = ["cluster-read-only-group"]
+    }
+  ]
 }
 
 map_cluster_admin_users = {
@@ -179,4 +181,4 @@ eks_ingress_controller_port_path = {
 
 worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoleprodEnv"
 
-eks_logs_type = ["api",  "controllerManager", "audit"]
+eks_logs_type = ["api", "controllerManager", "audit"]
