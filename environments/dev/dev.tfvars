@@ -121,4 +121,4 @@ worker_node_role = "arn:aws:iam::848481299679:role/WorkerNodeRoledevEnv"
 
 eks_logs_type = ["api",  "controllerManager", "scheduler"]
 
-zone_id = "Z01304463KRQDVTLL27OH"
+zone_id = "Z01432692YENOFU1EN1BH"
