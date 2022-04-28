@@ -133,7 +133,7 @@ read_only_eks_users = {
   users = [
     {
       userarn  = "arn:aws:iam::848481299679:user/Lens_User_prod_Env"
-      username = "username@noah.energy"
+      username = "Lens_User_prod_Env@noah.energy"
       groups   = ["cluster-read-only-group"]
     }
   ]
