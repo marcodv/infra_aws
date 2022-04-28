@@ -78,3 +78,11 @@ module "k8s" {
   //eks_sg                      = module.networking.eks_sg
   //eks_subnets                 = module.networking.private_subnets_id
 }
+
+module "bastionDnsEntries" {
+  depends_on = [module.jump_host]
+  source = "../../modules/dnsBastions"
+
+  environment                 = var.environment
+  zone_id = var.zone_id
+}
