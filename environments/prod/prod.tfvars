@@ -130,7 +130,7 @@ read_only_user_permissions = [
   {
     api_groups = ["extensions"]
     resources  = ["*"]
-    verbs      = [["get", "list", "watch", "describe"]
+    verbs      = ["get", "list", "watch", "describe"]
   }
 ]
 
