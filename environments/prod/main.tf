@@ -31,39 +31,18 @@ provider "aws" {
   }
 }
 
-/*
-module "networking" {
-  source = "../../modules/vpc/"
-
-  environment                    = var.environment
-  vpc_cidr_block                 = var.vpc_cidr_block
-  public_subnets_cidr            = var.public_subnets_cidr
-  private_subnets_cidr           = var.private_subnets_cidr
-  availability_zones             = var.availability_zones
-  alb_ingress_rule               = var.alb_ingress_rule
-  eks_ingress_rule               = var.eks_ingress_rule
-  bastion_ingress_rule           = var.bastion_ingress_rule
-  private_instances_ingress_rule = var.private_instances_ingress_rule
-  acl_public_subnet_rule         = var.acl_public_subnet_rule
-  acl_private_subnet_rule        = var.acl_private_subnet_rule
-}*/
-
-
 module "jump_host" {
   source = "../../modules/bastions"
 
   environment        = var.environment
-  bastions-ami       = var.bastions-ami
+  //bastions-ami       = var.bastions-ami
   availability_zones = var.availability_zones
-  //public_subnets_id  = module.networking.public_subnets_id
-  //bastions_sg        = [module.networking.bastions_sg, module.networking.eks_sg]
 }
 
 module "k8s" {
   source = "../../modules/eks"
 
   environment                 = var.environment
-  //vpc_id                      = var.vpc_id
   map_cluster_admin_users     = var.map_cluster_admin_users
   namespaces                  = var.namespaces
   read_only_eks_users         = var.read_only_eks_users
@@ -75,8 +54,6 @@ module "k8s" {
   eks_version                 = var.eks_version
   worker_node_role            = var.worker_node_role
   eks_logs_type               = var.eks_logs_type
-  //eks_sg                      = module.networking.eks_sg
-  //eks_subnets                 = module.networking.private_subnets_id
 }
 
 module "bastionDnsEntries" {

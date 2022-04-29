@@ -31,11 +31,22 @@ data "aws_subnets" "public_subnet" {
   }
 }
 
+data "aws_ami" "bastion" {
+  most_recent = true
+
+  filter {
+    name  = "tag:Name"
+    values = ["bastion-${var.environment}"]
+  }
+
+  owners = ["848481299679"]
+}
+
 
 /*==== Bastions for each AZ ======*/
 resource "aws_instance" "bastions" {
   count                  = length(data.aws_subnets.public_subnet.ids)
-  ami                    = var.bastions-ami
+  ami                    = data.aws_ami.bastion.id
   availability_zone      = element(var.availability_zones, count.index)
   subnet_id              = element(data.aws_subnets.public_subnet.ids, count.index)
   key_name               = "ssh-key-bastion-${var.environment}-env"
