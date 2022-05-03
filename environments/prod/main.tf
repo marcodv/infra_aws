@@ -31,6 +31,7 @@ provider "aws" {
   }
 }
 
+/*
 module "jump_host" {
   source = "../../modules/bastions"
 
@@ -56,10 +57,11 @@ module "k8s" {
   eks_logs_type               = var.eks_logs_type
 }
 
+/*
 module "bastionDnsEntries" {
   depends_on = [module.jump_host]
   source = "../../modules/dnsBastions"
 
   environment                 = var.environment
   zone_id = var.zone_id
-}
+} */
